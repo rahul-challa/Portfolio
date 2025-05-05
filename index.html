@@ -35,6 +35,7 @@
                     <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
                     <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
                     <li class="nav-item"><a href="#skills" class="nav-link">Skills</a></li>
+                    <li class="nav-item"><a href="#profiles" class="nav-link">Profiles</a></li>
                     <li class="nav-item"><a href="#projects" class="nav-link">Projects</a></li>
                     <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
                 </ul>
@@ -54,16 +55,18 @@
                 <div class="home-text fade-in">
                     <p class="greeting">Hello, I'm</p>
                     <h1 class="name">Rahul Challa</h1>
-                    <h2 class="profession">Aspiring Software Developer</h2>
-                    <p class="brief-intro">Aspiring software developer passionate about building impactful and efficient tech solutions.
+                    <h2 class="profession">Software Developer</h2>
+                    <p class="brief-intro">Software developer passionate about building impactful and efficient tech solutions.
 					</p>
                     <div class="home-buttons">
-                        <a href="#projects" class="btn primary-btn">View My Work</a>
+                        <a href="https://drive.google.com/file/d/1F7l3IAqMlgYXCG8_c4LzXeNZ20trwzTG/view?usp=sharing" class="btn primary-btn" target="_blank" rel="noopener noreferrer">Resume</a>
+                        <a href="#projects" class="btn secondary-btn">View My Work</a>
                         <a href="#contact" class="btn secondary-btn">Contact Me</a>
                     </div>
                 </div>
                 <div class="home-img fade-in-delayed">
-                    <div class="Profile-img">
+                    <div class="profile-img-animated">
+                        <canvas id="codeRainCanvas"></canvas>
                         <img src="assets/images/Profile.png" alt="Logo" class="rounded-image" />
                     </div>
                 </div>
@@ -81,186 +84,150 @@
     
     <!-- About Section -->
     <section class="about section" id="about">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">About Me</h2>
-            </div>
-            <div class="about-content">
-                <div class="about-img">
-                    <div class="img-About">
-                        <img src="assets/images/About.jpeg" alt="Logo">
-                    </div>
-                </div>
-                <div class="about-text">
-                    <p>I'm a full-stack developer and AI enthusiast with a strong computer science foundation and a drive to build meaningful digital solutions. From developing AI-powered web apps at Headstarter AI to creating fraud detection systems and real-time sign language converters, I bring both creativity and technical depth to every project. My toolkit includes Python, React, TensorFlow, AWS, and more—enabling me to engineer smart, scalable systems that deliver results.</p>
-                    <p>Currently pursuing my Master's in Computer Science at UC Riverside, I've led and collaborated on over a dozen projects spanning AI, data science, and cloud development. Whether it's optimizing traffic systems or automating content generation, I'm always seeking new challenges that blend innovation with impact.</p>
-                    <div class="about-info">
-                        <div class="info-item">
-                            <span class="info-title">05+</span>
-                            <span class="info-name">Years of<br> Project experience</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-title">15+</span>
-                            <span class="info-name">AI, Data and Web <br> projects</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-title">8+</span>
-                            <span class="info-name">Teams & Companies <br> worked with</span>
-                        </div>
-                    </div>
-                    <a href="https://drive.google.com/file/d/1YdRyyOjesF47_clzVZPXJi6QPw04ScjY/view?usp=sharing" class="btn primary-btn download-cv" target="_blank" rel="noopener noreferrer">Download CV</a>
-                </div>
-            </div>
+      <div class="container about-container-new">
+        <div class="about-img-card">
+          <img src="assets/images/About.jpeg" alt="Rahul Challa" class="about-img" />
         </div>
+        <div class="about-content-new">
+          <div class="about-tagline">Turning ideas into impactful digital solutions</div>
+          <p class="about-intro">
+            Hi, I'm <span class="highlight">Rahul Challa</span> — a software developer with a passion for building smart, scalable tech. From AI-powered web apps to real-time data dashboards, I love solving real-world problems with code and creativity.
+          </p>
+          <div class="about-stats-row">
+            <div class="about-stat-card">
+              <div class="info-title" style="color: #FFB81C; font-weight: 800; font-size: 2rem;">1+</div>
+              <div class="stat-label">Years of project and internship experience</div>
+            </div>
+            <div class="about-stat-card">
+              <div class="info-title" style="color: #FFB81C; font-weight: 800; font-size: 2rem;">15+</div>
+              <div class="stat-label">AI, data, and web development projects</div>
+            </div>
+            <div class="about-stat-card">
+              <div class="info-title" style="color: #FFB81C; font-weight: 800; font-size: 2rem;">8+</div>
+              <div class="stat-label">Teams & organizations worked with</div>
+            </div>
+          </div>
+          <div class="about-funfact">
+            <i data-feather="coffee"></i> When I'm not coding, I'm creating art, experimenting in the kitchen, or enjoying a great cup of coffee!
+          </div>
+          <a href="https://drive.google.com/file/d/1F7l3IAqMlgYXCG8_c4LzXeNZ20trwzTG/view?usp=sharing" class="btn primary-btn download-cv" target="_blank" rel="noopener noreferrer">Download Resume</a>
+        </div>
+      </div>
+      <div class="scroll-down">
+        <a href="#skills" class="mouse-wrapper">
+          <span class="mouse">
+            <span class="wheel"></span>
+          </span>
+          <span class="mouse-label">Scroll Down</span>
+        </a>
+      </div>
     </section>
 
-<!
     <!-- Skills Section -->
     <section class="skills section" id="skills">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Skills</h2>
-                <span class="section-subtitle">My Technical Level</span>
+                <span class="section-subtitle">What I Work With</span>
             </div>
-            <div class="skills-container">
-                <div class="skills-content">
-                    <div class="skill-box">
-                        <div class="skill-header">
-                            <i data-feather="code"></i>
-                            <h3 class="skill-title">Frontend Development</h3>
-                            <i data-feather="chevron-down" class="skill-arrow"></i>
+            <div class="skills-list-new">
+                <div class="skill-group">
+                    <span class="skill-label"><strong>Programming:</strong></span>
+                    <div class="skill-items-list">
+                        <span class="skill-item">Python</span>
+                        <span class="skill-item">C</span>
+                        <span class="skill-item">C++</span>
+                        <span class="skill-item">Java</span>
+                        <span class="skill-item">JavaScript</span>
+                        <span class="skill-item">SQL</span>
+                                </div>
+                            </div>
+                <div class="skill-group">
+                    <span class="skill-label"><strong>Web/Cloud:</strong></span>
+                    <div class="skill-items-list">
+                        <span class="skill-item">Flask</span>
+                        <span class="skill-item">Django</span>
+                        <span class="skill-item">React.js</span>
+                        <span class="skill-item">Next.js</span>
+                        <span class="skill-item">AWS</span>
+                        <span class="skill-item">GCP</span>
+                        <span class="skill-item">Docker</span>
+                        <span class="skill-item">Kubernetes</span>
+                                </div>
+                            </div>
+                <div class="skill-group">
+                    <span class="skill-label"><strong>ML/Data:</strong></span>
+                    <div class="skill-items-list">
+                        <span class="skill-item">TensorFlow</span>
+                        <span class="skill-item">PyTorch</span>
+                        <span class="skill-item">Scikit-learn</span>
+                        <span class="skill-item">Pandas</span>
+                        <span class="skill-item">NumPy</span>
+                        <span class="skill-item">OpenCV</span>
+                                </div>
+                            </div>
+                <div class="skill-group">
+                    <span class="skill-label"><strong>Systems:</strong></span>
+                    <div class="skill-items-list">
+                        <span class="skill-item">Linux</span>
+                        <span class="skill-item">Distributed Systems</span>
+                        <span class="skill-item">OS</span>
+                        <span class="skill-item">Multithreading</span>
+                        <span class="skill-item">Networking</span>
+                                </div>
+                            </div>
+                <div class="skill-group">
+                    <span class="skill-label"><strong>Databases:</strong></span>
+                    <div class="skill-items-list">
+                        <span class="skill-item">PostgreSQL</span>
+                        <span class="skill-item">MySQL</span>
+                        <span class="skill-item">MongoDB</span>
+                        <span class="skill-item">DynamoDB</span>
+                    </div>
                         </div>
-                        <div class="skill-list">
-                            <div class="skill-data">
-                                <div class="skill-name">
-                                    <h3>HTML</h3>
-                                    <span class="skill-percentage">95%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <span class="skill-percentage-bar" style="width: 95%"></span>
-                                </div>
-                            </div>
-                            <div class="skill-data">
-                                <div class="skill-name">
-                                    <h3>CSS</h3>
-                                    <span class="skill-percentage">90%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <span class="skill-percentage-bar" style="width: 90%"></span>
-                                </div>
-                            </div>
-                            <div class="skill-data">
-                                <div class="skill-name">
-                                    <h3>JavaScript</h3>
-                                    <span class="skill-percentage">85%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <span class="skill-percentage-bar" style="width: 85%"></span>
-                                </div>
-                            </div>
-                            <div class="skill-data">
-                                <div class="skill-name">
-                                    <h3>React</h3>
-                                    <span class="skill-percentage">80%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <span class="skill-percentage-bar" style="width: 80%"></span>
+                <div class="skill-group">
+                    <span class="skill-label"><strong>Tools:</strong></span>
+                    <div class="skill-items-list">
+                        <span class="skill-item">Git</span>
+                        <span class="skill-item">REST APIs</span>
+                        <span class="skill-item">Figma</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="skill-box">
-                        <div class="skill-header">
-                            <i data-feather="server"></i>
-                            <h3 class="skill-title">Backend Development</h3>
-                            <i data-feather="chevron-down" class="skill-arrow"></i>
+        <div class="scroll-down">
+            <a href="#profiles" class="mouse-wrapper">
+                <span class="mouse">
+                    <span class="wheel"></span>
+                </span>
+                <span class="mouse-label">Scroll Down</span>
+            </a>
                         </div>
-                        <div class="skill-list">
-                            <div class="skill-data">
-                                <div class="skill-name">
-                                    <h3>Node.js</h3>
-                                    <span class="skill-percentage">85%</span>
+    </section>
+    
+    <!-- Profiles Section -->
+    <section class="profiles section" id="profiles">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Profiles</h2>
+                <span class="section-subtitle">My Coding Platforms</span>
                                 </div>
-                                <div class="skill-bar">
-                                    <span class="skill-percentage-bar" style="width: 85%"></span>
+            <div class="profiles-container">
+                <div class="profile-card github-profile">
+                    <!-- GitHub profile info will be loaded here -->
                                 </div>
-                            </div>
-                            <div class="skill-data">
-                                <div class="skill-name">
-                                    <h3>Python</h3>
-                                    <span class="skill-percentage">80%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <span class="skill-percentage-bar" style="width: 80%"></span>
-                                </div>
-                            </div>
-                            <div class="skill-data">
-                                <div class="skill-name">
-                                    <h3>SQL</h3>
-                                    <span class="skill-percentage">75%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <span class="skill-percentage-bar" style="width: 75%"></span>
-                                </div>
-                            </div>
-                            <div class="skill-data">
-                                <div class="skill-name">
-                                    <h3>MongoDB</h3>
-                                    <span class="skill-percentage">70%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <span class="skill-percentage-bar" style="width: 70%"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="skill-box">
-                        <div class="skill-header">
-                            <i data-feather="tool"></i>
-                            <h3 class="skill-title">Design & Tools</h3>
-                            <i data-feather="chevron-down" class="skill-arrow"></i>
-                        </div>
-                        <div class="skill-list">
-                            <div class="skill-data">
-                                <div class="skill-name">
-                                    <h3>Figma</h3>
-                                    <span class="skill-percentage">80%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <span class="skill-percentage-bar" style="width: 80%"></span>
-                                </div>
-                            </div>
-                            <div class="skill-data">
-                                <div class="skill-name">
-                                    <h3>Git</h3>
-                                    <span class="skill-percentage">85%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <span class="skill-percentage-bar" style="width: 85%"></span>
-                                </div>
-                            </div>
-                            <div class="skill-data">
-                                <div class="skill-name">
-                                    <h3>Responsive Design</h3>
-                                    <span class="skill-percentage">90%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <span class="skill-percentage-bar" style="width: 90%"></span>
-                                </div>
-                            </div>
-                            <div class="skill-data">
-                                <div class="skill-name">
-                                    <h3>Docker</h3>
-                                    <span class="skill-percentage">65%</span>
-                                </div>
-                                <div class="skill-bar">
-                                    <span class="skill-percentage-bar" style="width: 65%"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="profile-card leetcode-profile">
+                    <!-- LeetCode profile info will be loaded here -->
                 </div>
             </div>
+        </div>
+        <div class="scroll-down">
+            <a href="#projects" class="mouse-wrapper">
+                <span class="mouse">
+                    <span class="wheel"></span>
+                </span>
+                <span class="mouse-label">Scroll Down</span>
+            </a>
         </div>
     </section>
     
@@ -271,241 +238,96 @@
                 <h2 class="section-title">Projects</h2>
                 <span class="section-subtitle">My Recent Work</span>
             </div>
-                            <i data-feather="layout"></i>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">E-commerce Website</h3>
-                        <p class="project-description">Modern responsive e-commerce platform with product catalog, shopping cart, and secure checkout process.</p>
+            <div class="projects-grid">
+                <!-- Portfolio Website Project Card -->
+                <div class="project-card dashboard-card">
+                    <div class="project-info">
+                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">Portfolio Website</h3>
+                        <p class="project-description">A modern, responsive portfolio website designed and developed from scratch to showcase my skills, projects, and professional background. Features a custom dashboard UI, animated code rain, dynamic profiles integration (GitHub, LeetCode), and modular project cards. Built for performance, accessibility, and easy future expansion.</p>
                         <div class="project-tech">
                             <span class="tech-tag">HTML</span>
                             <span class="tech-tag">CSS</span>
                             <span class="tech-tag">JavaScript</span>
-                            <span class="tech-tag">Node.js</span>
+                            <span class="tech-tag">Feather Icons</span>
+                            <span class="tech-tag">GitHub API</span>
+                            <span class="tech-tag">LeetCode API</span>
                         </div>
                         <div class="project-links">
-                            <a href="#" class="project-link" target="_blank">
-                                <i data-feather="github"></i>
-                            </a>
-                            <a href="#" class="project-link" target="_blank">
-                                <i data-feather="external-link"></i>
-                            </a>
+                            <a href="https://github.com/rahul-challa/Portfolio" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
+                            <a href="#" class="project-link" target="_blank" aria-label="Live Site"><i data-feather="external-link"></i></a>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Project 2 -->
-                <div class="project-card" >
-                    <div class="project-img">
-                        <div class="img-placeholder">
-                            <i data-feather="smartphone"></i>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Task Management App</h3>
-                        <p class="project-description">Productivity application for organizing tasks, setting deadlines, and tracking progress with intuitive UI.</p>
+                <!-- Stock Dashboard Project Card -->
+                <div class="project-card dashboard-card">
+                    <div class="project-info">
+                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">Stock Dashboard</h3>
+                        <p class="project-description">A real-time stock price dashboard that empowers users to track and visualize stock market data interactively. Built with React and TypeScript, the dashboard features responsive design, live data fetching from the Alpha Vantage API, and beautiful data visualizations with Chart.js. Includes advanced error handling, loading states, and is fully deployed on GitHub Pages for public access.</p>
                         <div class="project-tech">
                             <span class="tech-tag">React</span>
-                            <span class="tech-tag">CSS</span>
-                            <span class="tech-tag">Express</span>
-                            <span class="tech-tag">MongoDB</span>
+                            <span class="tech-tag">TypeScript</span>
+                            <span class="tech-tag">Tailwind CSS</span>
+                            <span class="tech-tag">Chart.js</span>
+                            <span class="tech-tag">Vite</span>
+                            <span class="tech-tag">Alpha Vantage API</span>
+                            <span class="tech-tag">GitHub Pages</span>
                         </div>
                         <div class="project-links">
-                            <a href="#" class="project-link" target="_blank">
-                                <i data-feather="github"></i>
-                            </a>
-                            <a href="#" class="project-link" target="_blank">
-                                <i data-feather="external-link"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Project 3 -->
-                <div class="project-card" >
-                    <div class="project-img">
-                        <div class="img-placeholder">
-                            <i data-feather="pen-tool"></i>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Brand Identity Design</h3>
-                        <p class="project-description">Complete brand identity package including logo design, color palette, typography, and brand guidelines.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Figma</span>
-                            <span class="tech-tag">Illustrator</span>
-                            <span class="tech-tag">Photoshop</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link" target="_blank">
-                                <i data-feather="github"></i>
-                            </a>
-                            <a href="#" class="project-link" target="_blank">
-                                <i data-feather="external-link"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Project 4 -->
-                <div class="project-card" >
-                    <div class="project-img">
-                        <div class="img-placeholder">
-                            <i data-feather="bar-chart-2"></i>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Analytics Dashboard</h3>
-                        <p class="project-description">Interactive data visualization dashboard with real-time analytics, custom charts, and filterable reports.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">D3.js</span>
-                            <span class="tech-tag">Node.js</span>
-                            <span class="tech-tag">SQL</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link" target="_blank">
-                                <i data-feather="github"></i>
-                            </a>
-                            <a href="#" class="project-link" target="_blank">
-                                <i data-feather="external-link"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Project 5 -->
-                <div class="project-card" >
-                    <div class="project-img">
-                        <div class="img-placeholder">
-                            <i data-feather="message-circle"></i>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Chat Application</h3>
-                        <p class="project-description">Real-time messaging application with private chats, group conversations, and file sharing capabilities.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">JavaScript</span>
-                            <span class="tech-tag">Socket.io</span>
-                            <span class="tech-tag">Express</span>
-                            <span class="tech-tag">MongoDB</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link" target="_blank">
-                                <i data-feather="github"></i>
-                            </a>
-                            <a href="#" class="project-link" target="_blank">
-                                <i data-feather="external-link"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Project 6 -->
-                <div class="project-card" >
-                    <div class="project-img">
-                        <div class="img-placeholder">
-                            <i data-feather="monitor"></i>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Portfolio Website Design</h3>
-                        <p class="project-description">Modern and responsive portfolio website design with clean aesthetics and intuitive navigation.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Figma</span>
-                            <span class="tech-tag">HTML</span>
-                            <span class="tech-tag">CSS</span>
-                            <span class="tech-tag">JavaScript</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link" target="_blank">
-                                <i data-feather="github"></i>
-                            </a>
-                            <a href="#" class="project-link" target="_blank">
-                                <i data-feather="external-link"></i>
-                            </a>
+                            <a href="https://github.com/rahul-challa/Stock-Dashboard" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
+                            <a href="https://rahul-challa.github.io/Stock-Dashboard/" class="project-link" target="_blank" aria-label="Live Site"><i data-feather="external-link"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
->
+    <div class="scroll-down">
+        <a href="#contact" class="mouse-wrapper">
+            <span class="mouse">
+                <span class="wheel"></span>
+            </span>
+            <span class="mouse-label">Scroll Down</span>
+        </a>
+    </div>
     <!-- Contact Section -->
     <section class="contact section" id="contact">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Contact Me</h2>
-                <span class="section-subtitle">Get in Touch</span>
+                <span class="section-subtitle">Let's connect! Reach out via email or socials, or find me in Riverside, California.</span>
             </div>
-            <div class="contact-container">
-                <div class="contact-info">
+            <div class="contact-info contact-tiles-row">
                     <div class="contact-card">
                         <i data-feather="mail" class="contact-icon"></i>
                         <h3 class="contact-title">Email</h3>
-                        <span class="contact-data">example@email.com</span>
-                        <a href="mailto:example@email.com" class="contact-link">Write to me</a>
+                    <a href="mailto:challaviswanadhrahul@gmail.com" class="contact-link">Write to me</a>
+                </div>
+                <div class="contact-card">
+                    <i data-feather="linkedin" class="contact-icon"></i>
+                    <h3 class="contact-title">LinkedIn</h3>
+                    <span class="contact-data">@rahulchalla13</span>
+                    <a href="https://www.linkedin.com/in/rahulchalla13/" class="contact-link" target="_blank" rel="noopener noreferrer">Connect</a>
                     </div>
                     <div class="contact-card">
-                        <i data-feather="message-circle" class="contact-icon"></i>
-                        <h3 class="contact-title">Messaging</h3>
-                        <span class="contact-data">@username</span>
-                        <a href="#" class="contact-link">Message me</a>
+                    <i data-feather="github" class="contact-icon"></i>
+                    <h3 class="contact-title">GitHub</h3>
+                    <span class="contact-data">@rahul-challa</span>
+                    <a href="https://github.com/rahul-challa" class="contact-link" target="_blank" rel="noopener noreferrer">View Profile</a>
                     </div>
                     <div class="contact-card">
                         <i data-feather="map-pin" class="contact-icon"></i>
                         <h3 class="contact-title">Location</h3>
-                        <span class="contact-data">City, Country</span>
-                        <a href="#" class="contact-link">View on map</a>
-                    </div>
+                    <span class="contact-data">Riverside, California</span>
+                    <a href="https://www.google.com/maps/place/Riverside,+CA" class="contact-link" target="_blank" rel="noopener noreferrer">View on map</a>
                 </div>
-                <form action="#" class="contact-form" id="contact-form">
-                    <div class="form-group">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" id="name" name="name" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" id="email" name="email" class="form-input" required>
-                    </div>
-                    <div class="form-group form-area">
-                        <label for="message" class="form-label">Message</label>
-                        <textarea id="message" name="message" class="form-input" required></textarea>
-                    </div>
-                    <button type="submit" class="btn primary-btn send-button">
-                        <i data-feather="send" class="send-icon"></i>
-                        Send Message
-                    </button>
-                </form>
             </div>
         </div>
     </section>
     
     <!-- Footer Section -->
-    <footer class="footer">
+    <footer class="footer thankyou-footer-alt">
         <div class="container">
-            <div class="footer-container">
-                <div class="footer-content">
-                    <h1 class="footer-title">Portfolio</h1>
-                    <span class="footer-subtitle">Full Stack Developer</span>
-                </div>
-                <div class="footer-social">
-                    <a href="#" class="footer-social-link" target="_blank">
-                        <i data-feather="github"></i>
-                    </a>
-                    <a href="#" class="footer-social-link" target="_blank">
-                        <i data-feather="linkedin"></i>
-                    </a>
-                    <a href="#" class="footer-social-link" target="_blank">
-                        <i data-feather="twitter"></i>
-                    </a>
-                    <a href="#" class="footer-social-link" target="_blank">
-                        <i data-feather="instagram"></i>
-                    </a>
-                </div>
-            </div>
-            <p class="footer-copy">&#169; 2023 All rights reserved</p>
+            <p class="thankyou-message-alt">Thanks for stopping by! 🚀</p>
         </div>
     </footer>
     
@@ -525,3 +347,4 @@
 </body>
 </html>
 <!-- End of HTML Document -->
+

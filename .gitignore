@@ -1,0 +1,36 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Node modules (if ever used)
+node_modules/
+
+# Build output (if any)
+dist/
+build/
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.*
+
+# Mac system files
+__MACOSX/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Misc
+*.swp
+*.bak
+
+# Do not ignore assets/Resume/Rahul_Challa.pdf or any project assets 

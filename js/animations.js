@@ -72,50 +72,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Counter animation for about info items
-    function animateCounter(element, target, duration) {
-        let start = 0;
-        const increment = target / (duration / 16); // 16ms is roughly one frame at 60fps
-        
-        function updateCount() {
-            start += increment;
-            if (start >= target) {
-                element.textContent = target + '+';
-            } else {
-                element.textContent = Math.floor(start) + '+';
-                requestAnimationFrame(updateCount);
-            }
-        }
-        
-        updateCount();
-    }
-    
-    // Intersection observer for counter animation
-    const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const counterElement = entry.target.querySelector('.info-title');
-                const targetValue = parseInt(counterElement.textContent);
-                
-                // Reset the content temporarily for animation
-                counterElement.textContent = '0+';
-                
-                // Start counter animation
-                animateCounter(counterElement, targetValue, 1500);
-                
-                // Unobserve after animation
-                counterObserver.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.7
-    });
-    
-    // Observe all info items for counter animation
-    document.querySelectorAll('.info-item').forEach(item => {
-        counterObserver.observe(item);
-    });
-    
     // Skill bar animation
     const skillObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {

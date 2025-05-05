@@ -154,4 +154,70 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.section-header, .info-item, .skill-box, .project-card, .contact-card').forEach(el => {
         observer.observe(el);
     });
+
+    // Code Rain Animation for Profile Image
+    const canvas = document.getElementById('codeRainCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    // Set canvas size
+    function resizeCanvas() {
+        const style = getComputedStyle(canvas);
+        canvas.width = parseInt(style.width);
+        canvas.height = parseInt(style.height);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Code rain settings
+    const fontSize = 16;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
+    const codeChars = '01<>/={}[]();$#@&%';
+    const yellow = '#FFB81C';
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = fontSize + 'px monospace';
+        ctx.fillStyle = yellow;
+        ctx.globalAlpha = 0.85;
+        for (let i = 0; i < drops.length; i++) {
+            const text = codeChars[Math.floor(Math.random() * codeChars.length)];
+            const x = i * fontSize;
+            const y = drops[i] * fontSize;
+            // Only draw if inside the circle
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const r = canvas.width / 2;
+            if (Math.pow(x - cx, 2) + Math.pow(y - cy, 2) < Math.pow(r, 2)) {
+                ctx.fillText(text, x, y);
+            }
+            if (y > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+        ctx.globalAlpha = 1.0;
+    }
+    setInterval(draw, 60);
+
+    // ========== PROFILES SECTION: GITHUB & LEETCODE ========== //
+    // GitHub
+    const githubLogoImg = 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
+    fetch('https://api.github.com/users/rahul-challa')
+      .then(res => res.json())
+      .then(data => {
+        document.querySelector('.github-profile').innerHTML = `
+          <div class=\"profile-info\">\n            <img src=\"${githubLogoImg}\" alt=\"GitHub Logo\" class=\"profile-avatar\" style=\"background:#fff;padding:10px;\"/>\n            <h3>${data.login}</h3>\n            <p>Repos: ${data.public_repos} | Followers: ${data.followers}</p>\n            <a href=\"${data.html_url}\" target=\"_blank\" class=\"btn primary-btn\">View GitHub</a>\n          </div>\n          <div class=\"profile-heatmap\">\n            <img src=\"https://ghchart.rshah.org/FFB81C/rahul-challa\" alt=\"GitHub Contribution Heatmap\" class=\"github-heatmap\"/>\n            <img src=\"https://github-readme-stats.vercel.app/api?username=rahul-challa&show_icons=true&theme=dark&hide_title=true&icon_color=FFB81C&title_color=FFB81C&text_color=eeeeee\" alt=\"GitHub Stats\" class=\"github-heatmap\"/>\n          </div>\n        `;
+      });
+
+    // LeetCode (using leetcode-stats-api.herokuapp.com)
+    const leetcodeUsername = 'Rahul_Challa';
+    const leetcodeDisplayName = 'Rahul Challa';
+    const leetcodeLogoImg = 'https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png';
+    fetch('https://leetcode-stats-api.herokuapp.com/' + leetcodeUsername)
+      .then(res => res.json())
+      .then(data => {
+        document.querySelector('.leetcode-profile').innerHTML = `
+          <div class=\"profile-info\">\n            <img src=\"${leetcodeLogoImg}\" alt=\"LeetCode Logo\" class=\"profile-avatar\" style=\"background:#fff;padding:10px;\"/>\n            <h3>${leetcodeDisplayName}</h3>\n            <p>Total Solved: ${data.totalSolved} | Ranking: ${data.ranking}</p>\n            <a href=\"https://leetcode.com/${leetcodeUsername}/\" target=\"_blank\" class=\"btn primary-btn\">View LeetCode</a>\n          </div>\n          <div class=\"profile-heatmap\">\n            <img src=\"https://leetcard.jacoblin.cool/${leetcodeUsername}?theme=dark&font=baloo&ext=heatmap\" alt=\"LeetCode Stats\" class=\"leetcode-heatmap\"/>\n          </div>\n        `;
+      });
 });
