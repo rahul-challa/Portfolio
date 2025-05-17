@@ -35,8 +35,8 @@
                     <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
                     <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
                     <li class="nav-item"><a href="#skills" class="nav-link">Skills</a></li>
-                    <li class="nav-item"><a href="#profiles" class="nav-link">Profiles</a></li>
                     <li class="nav-item"><a href="#projects" class="nav-link">Projects</a></li>
+                    <li class="nav-item"><a href="#profiles" class="nav-link">Profiles</a></li>
                     <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
                 </ul>
             </nav>
@@ -205,32 +205,6 @@
                         </div>
     </section>
     
-    <!-- Profiles Section -->
-    <section class="profiles section" id="profiles">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Profiles</h2>
-                <span class="section-subtitle">My Coding Platforms</span>
-                                </div>
-            <div class="profiles-container">
-                <div class="profile-card github-profile">
-                    <!-- GitHub profile info will be loaded here -->
-                                </div>
-                <div class="profile-card leetcode-profile">
-                    <!-- LeetCode profile info will be loaded here -->
-                </div>
-            </div>
-        </div>
-        <div class="scroll-down">
-            <a href="#projects" class="mouse-wrapper">
-                <span class="mouse">
-                    <span class="wheel"></span>
-                </span>
-                <span class="mouse-label">Scroll Down</span>
-            </a>
-        </div>
-    </section>
-    
     <!-- Projects Section -->
     <section class="projects section" id="projects">
         <div class="container">
@@ -239,49 +213,18 @@
                 <span class="section-subtitle">My Recent Work</span>
             </div>
             <div class="projects-grid">
-                <!-- Portfolio Website Project Card -->
-                <div class="project-card dashboard-card">
-                    <div class="project-info">
-                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">Portfolio Website</h3>
-                        <p class="project-description">A modern, responsive portfolio website designed and developed from scratch to showcase my skills, projects, and professional background. Features a custom dashboard UI, animated code rain, dynamic profiles integration (GitHub, LeetCode), and modular project cards. Built for performance, accessibility, and easy future expansion.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">HTML</span>
-                            <span class="tech-tag">CSS</span>
-                            <span class="tech-tag">JavaScript</span>
-                            <span class="tech-tag">Feather Icons</span>
-                            <span class="tech-tag">GitHub API</span>
-                            <span class="tech-tag">LeetCode API</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/rahul-challa/Portfolio" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
-                            <a href="https://rahul-challa.github.io/Portfolio/" class="project-link" target="_blank" aria-label="Live Site"><i data-feather="external-link"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Stock Dashboard Project Card -->
-                <div class="project-card dashboard-card">
-                    <div class="project-info">
-                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">Stock Dashboard</h3>
-                        <p class="project-description">A real-time stock price dashboard that empowers users to track and visualize stock market data interactively. Built with React and TypeScript, the dashboard features responsive design, live data fetching from the Alpha Vantage API, and beautiful data visualizations with Chart.js. Includes advanced error handling, loading states, and is fully deployed on GitHub Pages for public access.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">TypeScript</span>
-                            <span class="tech-tag">Tailwind CSS</span>
-                            <span class="tech-tag">Chart.js</span>
-                            <span class="tech-tag">Vite</span>
-                            <span class="tech-tag">Alpha Vantage API</span>
-                            <span class="tech-tag">GitHub Pages</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/rahul-challa/Stock-Dashboard" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
-                            <a href="https://rahul-challa.github.io/Stock-Dashboard/" class="project-link" target="_blank" aria-label="Live Site"><i data-feather="external-link"></i></a>
-                        </div>
-                    </div>
-                </div>
                 <!-- TexMex: LaTeX Live Preview for VS Code -->
                 <div class="project-card dashboard-card">
                     <div class="project-info">
-                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">TexMex</h3>
+                        <div class="project-header-flex">
+                          <img src="assets/images/TexMex.png" alt="TexMex Logo" class="project-logo" />
+                          <h3 class="project-title" style="color: #FFB81C; font-weight: 700; margin: 0;">TexMex</h3>
+                        </div>
+                        <div class="project-badges" style="margin: 0.5rem 0 1rem 0;">
+                          <img id="texmex-installs" src="https://img.shields.io/visual-studio-marketplace/i/RahulChalla.texmex?label=Installs&color=FFB81C&labelColor=121212&style=flat" alt="Installs" style="margin-right: 0.3rem;"/>
+                          <img id="texmex-version" src="https://img.shields.io/visual-studio-marketplace/v/RahulChalla.texmex?label=Version&color=FFB81C&labelColor=121212&style=flat" alt="Version" style="margin-right: 0.3rem;"/>
+                          <img id="texmex-rating" src="https://img.shields.io/visual-studio-marketplace/r/RahulChalla.texmex?label=Rating&color=FFB81C&labelColor=121212&style=flat" alt="Rating"/>
+                        </div>
                         <p class="project-description">A powerful VS Code extension that brings Overleaf-style LaTeX editing directly to your local editor. TexMex enables real-time PDF preview, automatic recompilation on save, and inline error reporting without needing to leave VS Code. Designed for smooth academic writing and technical documentation, the extension offers a configurable setup for compiler paths and preview delays.</p>
                         <div class="project-tech">
                             <span class="tech-tag">VS Code Extension API</span>
@@ -316,17 +259,67 @@
                         </div>
                     </div>
                 </div>
+                <!-- Stock Dashboard Project Card -->
+                <div class="project-card dashboard-card">
+                    <div class="project-info">
+                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">Stock Dashboard</h3>
+                        <p class="project-description">A real-time stock price dashboard that empowers users to track and visualize stock market data interactively. Built with React and TypeScript, the dashboard features responsive design, live data fetching from the Alpha Vantage API, and beautiful data visualizations with Chart.js. Includes advanced error handling, loading states, and is fully deployed on GitHub Pages for public access.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">TypeScript</span>
+                            <span class="tech-tag">Tailwind CSS</span>
+                            <span class="tech-tag">Chart.js</span>
+                            <span class="tech-tag">Vite</span>
+                            <span class="tech-tag">Alpha Vantage API</span>
+                            <span class="tech-tag">GitHub Pages</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/rahul-challa/Stock-Dashboard" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
+                            <a href="https://rahul-challa.github.io/Stock-Dashboard/" class="project-link" target="_blank" aria-label="Live Site"><i data-feather="external-link"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Portfolio Website Project Card -->
+                <div class="project-card dashboard-card">
+                    <div class="project-info">
+                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">Portfolio Website</h3>
+                        <p class="project-description">A modern, responsive portfolio website designed and developed from scratch to showcase my skills, projects, and professional background. Features a custom dashboard UI, animated code rain, dynamic profiles integration (GitHub, LeetCode), and modular project cards. Built for performance, accessibility, and easy future expansion.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">HTML</span>
+                            <span class="tech-tag">CSS</span>
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">Feather Icons</span>
+                            <span class="tech-tag">GitHub API</span>
+                            <span class="tech-tag">LeetCode API</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/rahul-challa/Portfolio" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
+                            <a href="https://rahul-challa.github.io/Portfolio/" class="project-link" target="_blank" aria-label="Live Site"><i data-feather="external-link"></i></a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
-    <div class="scroll-down">
-        <a href="#contact" class="mouse-wrapper">
-            <span class="mouse">
-                <span class="wheel"></span>
-            </span>
-            <span class="mouse-label">Scroll Down</span>
-        </a>
-    </div>
+    
+    <!-- Profiles Section -->
+    <section class="profiles section" id="profiles">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Profiles</h2>
+                <span class="section-subtitle">My Digital Footprint</span>
+            </div>
+            <div class="profiles-container">
+                <div class="profile-card leetcode-profile">
+                    <!-- LeetCode profile info will be loaded here -->
+                </div>
+                <div class="profile-card github-profile">
+                    <!-- GitHub profile info will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </section>
+    
     <!-- Contact Section -->
     <section class="contact section" id="contact">
         <div class="container">
@@ -365,7 +358,7 @@
     <!-- Footer Section -->
     <footer class="footer thankyou-footer-alt">
         <div class="container">
-            <p class="thankyou-message-alt">Thanks for stopping by! 🚀</p>
+            <p class="thankyou-message-alt">Thanks for stopping by!</p>
         </div>
     </footer>
     
@@ -381,6 +374,66 @@
     <!-- Initialize Feather Icons -->
     <script>
         feather.replace();
+    </script>
+    <script>
+    function setFallbackBadge(id, label, value) {
+      const badge = document.getElementById(id);
+      if (badge) {
+        badge.style.display = "none";
+        let fallback = document.getElementById(id+"-fallback");
+        if (!fallback) {
+          fallback = document.createElement("span");
+          fallback.id = id+"-fallback";
+          fallback.className = "badge-fallback";
+          fallback.style.cssText = "background:#121212;color:#FFB81C;border-radius:4px;padding:2px 8px;margin-right:0.3rem;font-weight:600;";
+          badge.parentNode.insertBefore(fallback, badge.nextSibling);
+        }
+        fallback.innerText = `${label}: ${value}`;
+      }
+    }
+    function saveBadgeValue(key, value) {
+      try { localStorage.setItem(key, value); } catch(e) {}
+    }
+    function getBadgeValue(key) {
+      try { return localStorage.getItem(key); } catch(e) { return null; }
+    }
+    function extractValueFromSVG(svgText) {
+      // Try to extract the value from the SVG badge text
+      const match = svgText.match(/>([^<>]+)<\/text>\s*<\/g/);
+      if (match && match.length > 0) {
+        // The last <text> is usually the value
+        return match[match.length-1].replace(/.*>([^<>]+)<.*/, '$1').trim();
+      }
+      // Fallback: try to get the last <text> value
+      const allText = [...svgText.matchAll(/<text[^>]*>([^<]+)<\/text>/g)].map(m => m[1]);
+      return allText.length ? allText[allText.length-1].trim() : null;
+    }
+    function checkBadge(id, label, storageKey) {
+      const badge = document.getElementById(id);
+      if (!badge) return;
+      badge.onerror = () => {
+        const last = getBadgeValue(storageKey);
+        if (last) setFallbackBadge(id, label, last);
+      };
+      badge.onload = () => {
+        fetch(badge.src)
+          .then(res => res.text())
+          .then(text => {
+            if (text.includes("rate limited by upstream service")) {
+              const last = getBadgeValue(storageKey);
+              if (last) setFallbackBadge(id, label, last);
+            } else {
+              const value = extractValueFromSVG(text);
+              if (value && !isNaN(value.replace(/,/g, '')) && value.length < 20) {
+                saveBadgeValue(storageKey, value);
+              }
+            }
+          });
+      };
+    }
+    checkBadge("texmex-installs", "Installs", "texmex-installs");
+    checkBadge("texmex-version", "Version", "texmex-version");
+    checkBadge("texmex-rating", "Rating", "texmex-rating");
     </script>
 </body>
 </html>

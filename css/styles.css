@@ -145,11 +145,12 @@ button, input, textarea {
 
 .primary-btn {
     background-color: var(--primary-color);
-    color: #ffffff;
+    color: #000000;
 }
 
 .primary-btn:hover {
     background-color: var(--primary-color-alt);
+    color: #000000;
 }
 
 .secondary-btn {
@@ -723,7 +724,7 @@ button, input, textarea {
 
 .tech-tag:hover {
     background: var(--primary-color);
-    color: #181818;
+    color: #000000;
     border-color: #fff;
     transform: scale(1.07);
 }
@@ -1103,7 +1104,7 @@ button, input, textarea {
 }
 .skill-item:hover {
   background: var(--primary-color);
-  color: #181818;
+  color: #000000;
   box-shadow: 0 4px 16px rgba(255,184,28,0.15);
 }
 @media (max-width: 600px) {
@@ -1231,10 +1232,18 @@ button, input, textarea {
   max-width: 900px;
   margin: 0 0 0 0;
   border-radius: 0.7rem;
-  background: #222;
+  background: #0d1117;  /* GitHub's dark theme background */
   display: block;
-  box-shadow: 0 2px 12px rgba(255,184,28,0.09);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
 }
+
+/* Add GitHub contribution colors */
+.github-heatmap rect[data-level="0"] { fill: #161b22; }  /* No contributions */
+.github-heatmap rect[data-level="1"] { fill: #0e4429; }  /* 1-3 contributions */
+.github-heatmap rect[data-level="2"] { fill: #006d32; }  /* 4-6 contributions */
+.github-heatmap rect[data-level="3"] { fill: #26a641; }  /* 7-9 contributions */
+.github-heatmap rect[data-level="4"] { fill: #39d353; }  /* 10+ contributions */
+
 .profile-avatar {
   width: 110px;
   height: 110px;
@@ -1357,7 +1366,7 @@ button, input, textarea {
   transition: background 0.2s, color 0.2s;
 }
 .contact-card:hover .contact-link {
-  color: #fff;
+  color: #000000;
   background: var(--primary-color);
   border-radius: 0.3rem;
   padding: 0.1rem 0.5rem;
@@ -1388,6 +1397,82 @@ button, input, textarea {
 @media (max-width: 700px) {
   .thankyou-message-alt {
     font-size: 1.2rem;
-    padding: 0 0.5rem;
+    padding: 2rem 1rem;
+  }
+}
+
+.art-btn {
+    background: var(--primary-color);
+    color: #000000;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-radius: 0.7rem;
+    padding: 0.9rem 1.6rem;
+    box-shadow: 0 2px 8px rgba(255,184,28,0.08);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    text-decoration: none;
+    border: none;
+}
+
+.art-btn:hover {
+    background: var(--primary-color);
+    color: #000000;
+    transform: translateY(-2px) scale(1.04);
+}
+
+/* Force GitHub heatmap to use green/black colors */
+.github-heatmap rect[fill="#ebedf0"],
+.github-heatmap rect[fill="#fff"],
+.github-heatmap rect[fill="#ffffff"] {
+  fill: #161b22 !important; /* background/no contributions */
+}
+.github-heatmap rect[fill="#f9d423"],
+.github-heatmap rect[fill="#fbc02d"],
+.github-heatmap rect[fill="#ffe066"],
+.github-heatmap rect[fill="#ffeb3b"],
+.github-heatmap rect[fill="#ffd600"],
+.github-heatmap rect[fill="#ffb81c"],
+.github-heatmap rect[fill="#ff0"] {
+  fill: #0e4429 !important; /* low contributions */
+}
+.github-heatmap rect[fill="#ffd700"] {
+  fill: #006d32 !important; /* medium contributions */
+}
+.github-heatmap rect[fill="#ffe066"] {
+  fill: #26a641 !important; /* high contributions */
+}
+.github-heatmap rect[fill="#fffde7"] {
+  fill: #39d353 !important; /* very high contributions */
+}
+
+.project-header-flex {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.project-logo {
+  width: 128px;
+  height: 128px;
+  object-fit: contain;
+  margin-right: 1rem;
+  margin-bottom: 0;
+  border: 4px solid var(--primary-color);
+  border-radius: 0.5rem;
+}
+.project-header-flex .project-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #FFB81C;
+  line-height: 1.1;
+}
+
+@media (max-width: 600px) {
+  .project-logo {
+    width: 40px;
+    height: 40px;
   }
 }
