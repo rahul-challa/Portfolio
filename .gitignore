@@ -33,4 +33,9 @@ __pycache__/
 *.swp
 *.bak
 
-# Do not ignore assets/Resume/Rahul_Challa.pdf or any project assets 
+# Do not ignore assets/Resume/Rahul_Challa.pdf or any project assets
+node_modules/
+.env
+.DS_Store
+npm-debug.log
+assets/data/*.bak 

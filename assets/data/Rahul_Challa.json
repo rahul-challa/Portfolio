@@ -1,0 +1,64 @@
+{
+  "userContestRanking": {
+    "attendedContestsCount": 4,
+    "rating": 1481.0447604191127,
+    "globalRanking": 346737,
+    "totalParticipants": 697019,
+    "topPercentage": 50.3,
+    "badge": null
+  },
+  "userContestRankingHistory": [
+    {
+      "attended": true,
+      "trendDirection": "DOWN",
+      "problemsSolved": 1,
+      "totalProblems": 4,
+      "finishTimeInSeconds": 1368,
+      "rating": 1471.041,
+      "ranking": 16742,
+      "contest": {
+        "title": "Weekly Contest 409",
+        "startTime": 1722738600
+      }
+    },
+    {
+      "attended": true,
+      "trendDirection": "DOWN",
+      "problemsSolved": 1,
+      "totalProblems": 4,
+      "finishTimeInSeconds": 561,
+      "rating": 1464.925,
+      "ranking": 16034,
+      "contest": {
+        "title": "Weekly Contest 410",
+        "startTime": 1723343400
+      }
+    },
+    {
+      "attended": true,
+      "trendDirection": "DOWN",
+      "problemsSolved": 0,
+      "totalProblems": 4,
+      "finishTimeInSeconds": 0,
+      "rating": 1412.107,
+      "ranking": 23856,
+      "contest": {
+        "title": "Weekly Contest 411",
+        "startTime": 1723948200
+      }
+    },
+    {
+      "attended": true,
+      "trendDirection": "UP",
+      "problemsSolved": 2,
+      "totalProblems": 4,
+      "finishTimeInSeconds": 1316,
+      "rating": 1481.045,
+      "ranking": 4116,
+      "contest": {
+        "title": "Weekly Contest 450",
+        "startTime": 1747535400
+      }
+    }
+  ]
+}
