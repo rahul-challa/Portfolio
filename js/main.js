@@ -215,247 +215,90 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class=\"profile-info\">\n            <img src=\"${githubLogoImg}\" alt=\"GitHub Logo\" class=\"profile-avatar\" style=\"background:#fff;padding:10px;\"/>\n            <h3>${data.login}</h3>\n            <p>Repos: ${data.public_repos} | Followers: ${data.followers}</p>\n            <a href=\"${data.html_url}\" target=\"_blank\" class=\"btn primary-btn\">View GitHub</a>\n          </div>\n          <div class=\"profile-heatmap\">\n            <img src=\"https://ghchart.rshah.org/26a641/rahul-challa\" alt=\"GitHub Contribution Heatmap\" class=\"github-heatmap\"/>\n            <img src=\"https://github-readme-stats.vercel.app/api?username=rahul-challa&show_icons=true&theme=dark&hide_title=true&icon_color=FFB81C&title_color=FFB81C&text_color=eeeeee\" alt=\"GitHub Stats\" class=\"github-heatmap\"/>\n          </div>\n        `;
       });
 
-    // Add retry mechanism with exponential backoff
-    async function fetchWithRetry(url, maxRetries = 3, initialDelay = 1000) {
-      let retries = 0;
-      let delay = initialDelay;
-
-      while (retries < maxRetries) {
-        try {
-          const response = await fetch(url);
-          if (response.ok) {
-            return await response.json();
-          }
-          if (response.status === 429) {
-            console.log(`Rate limited, retrying in ${delay}ms...`);
-            await new Promise(resolve => setTimeout(resolve, delay));
-            delay *= 2; // Exponential backoff
-            retries++;
-            continue;
-          }
-          throw new Error(`HTTP error! status: ${response.status}`);
-        } catch (error) {
-          if (retries === maxRetries - 1) throw error;
-          console.log(`Error fetching ${url}, retrying in ${delay}ms...`);
-          await new Promise(resolve => setTimeout(resolve, delay));
-          delay *= 2;
-          retries++;
-        }
-      }
-    }
-
-    // LeetCode (using leetcode-stats-api.herokuapp.com)
+    // LeetCode (using local data file only)
     const leetcodeUsername = 'Rahul_Challa';
     const leetcodeDisplayName = 'Rahul Challa';
     const leetcodeLogoImg = 'https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png';
     
-    // Add a function to fetch fallback stats from the local JSON file
-    async function getFallbackLeetCodeStats() {
-      try {
-        const res = await fetch('assets/data/Rahul_Challa.json');
-        if (res.ok) {
-          const data = await res.json();
-          return data.userContestRanking || {};
-        }
-      } catch (e) {
-        // Ignore errors
-      }
-      return {};
-    }
-
-    // Modify renderLeetCodeProfile to use fallback stats if API data is missing
+    // Modify renderLeetCodeProfile to use real data only
     async function renderLeetCodeProfile(data, contestData, contestHistory, isCached = false) {
       let stats = contestData && contestData.data ? contestData.data.userContestRanking : null;
       if (!stats || Object.keys(stats).length === 0) {
-        stats = await getFallbackLeetCodeStats();
+        stats = null; // Don't use dummy data, just show what we have
       }
+      
+      // Only proceed if we have real contest data
+      if (!contestHistory || !contestHistory.userContestRankingHistory || contestHistory.userContestRankingHistory.length === 0) {
+        if (leetcodeProfileContainer) {
+          leetcodeProfileContainer.innerHTML = `<div style="width:100%;text-align:center;padding:2.5rem 0;color:#FFB81C;font-size:1.3rem;">LeetCode data will be updated soon...</div>`;
+        }
+        return;
+      }
+      
       // Create the new LeetCode profile HTML (2x2 grid of 4 cards, improved layout)
       const leetcodeProfileHTML = `
         <div class="leetcode-grid">
-          <!-- Card 1: Info Card -->
+          <!-- Card 1: LeetCode Profile Info -->
           <div class="leetcode-card card-info card-info-twocol">
-            <div class="info-cols">
-              <div class="info-col-left">
-                <img src="${leetcodeLogoImg}" alt="LeetCode Logo" class="leetcode-logo-large twocol-logo"/>
-              </div>
-              <div class="center-bar"></div>
-              <div class="info-col-right">
+            <div class="leetcode-profile-header">
+              <img src="${leetcodeLogoImg}" alt="LeetCode Logo" class="leetcode-logo-large twocol-logo"/>
+              <div class="leetcode-profile-info">
                 <div class="leetcode-username-main twocol-username">${leetcodeDisplayName}</div>
                 <div class="leetcode-rating-block twocol-rating-block">
-                  <div class="rating-label">Contest Rating</div>
-                  <div class="rating-value">${stats && stats.rating ? Math.round(stats.rating) : '--'}</div>
-                  <div class="rank-label">Global Rank</div>
-                  <div class="rank-value">${stats && stats.globalRanking ? stats.globalRanking.toLocaleString() : '--'}</div>
+                  <span class="leetcode-rating-label">Rating:</span>
+                  <span class="leetcode-rating-value">${stats ? stats.rating.toFixed(0) : 'N/A'}</span>
                 </div>
               </div>
             </div>
             <a href="https://leetcode.com/${leetcodeUsername}" target="_blank" class="btn primary-btn leetcode-btn info-btn long-btn">View LeetCode</a>
-            ${isCached ? '<div style="color:#ffb800;font-size:0.95rem;margin-top:0.7rem;">(Showing cached data)</div>' : ''}
           </div>
-          <!-- Card 3: Problem Pie Chart, Stats (moved up) -->
+
+          <!-- Card 2: Contest Stats -->
           <div class="leetcode-card card-pie-chart">
-            <div class="pie-and-stats">
-              <div class="pie-chart-container">
-                <canvas id="problemStatsChart" width="110" height="110"></canvas>
+            <div class="leetcode-card-header">
+              <h3>Contest Performance</h3>
+            </div>
+            <div class="leetcode-stats-grid">
+              <div class="leetcode-stat-item">
+                <div class="stat-number">${stats ? stats.attendedContestsCount : 'N/A'}</div>
+                <div class="stat-label">Contests</div>
               </div>
-              <div class="center-bar"></div>
-              <div class="problem-stats-list">
-                <div class="stat-row easy"><span>Easy:</span> <span>${data.easySolved}/${data.totalEasy}</span></div>
-                <div class="stat-row medium"><span>Medium:</span> <span>${data.mediumSolved}/${data.totalMedium}</span></div>
-                <div class="stat-row hard"><span>Hard:</span> <span>${data.hardSolved}/${data.totalHard}</span></div>
+              <div class="leetcode-stat-item">
+                <div class="stat-number">${stats ? stats.globalRanking.toLocaleString() : 'N/A'}</div>
+                <div class="stat-label">Global Rank</div>
+              </div>
+              <div class="leetcode-stat-item">
+                <div class="stat-number">${stats ? stats.topPercentage.toFixed(1) + '%' : 'N/A'}</div>
+                <div class="stat-label">Top %</div>
               </div>
             </div>
           </div>
-          <!-- Card 2: Contest Rating Over Time Chart (Minimal, moved down) -->
+
+          <!-- Card 3: Contest Rating Chart -->
           <div class="leetcode-card card-line-chart">
-            <div class="contest-stats-row" style="display: flex; justify-content: flex-start; align-items: flex-end; gap: 1.2rem; margin-bottom: 0.2rem; width: 100%;">
-              <div style="display: flex; flex-direction: column; align-items: flex-start; min-width: 0;">
-                <span style="color: #b3b3b3; font-size: 0.92rem; font-weight: 500; line-height: 1.1;">Contest Rating</span>
-                <span style="color: #fff; font-size: 1.13rem; font-weight: 700; letter-spacing: 0.01em; line-height: 1.1;">${stats && stats.rating ? Math.round(stats.rating) : '--'}</span>
-              </div>
-              <div style="display: flex; flex-direction: column; align-items: flex-start; min-width: 0;">
-                <span style="color: #b3b3b3; font-size: 0.92rem; font-weight: 500; line-height: 1.1;">Global Ranking</span>
-                <span style="color: #fff; font-size: 1.02rem; font-weight: 700; letter-spacing: 0.01em; line-height: 1.1;">
-                  ${stats && stats.globalRanking ? stats.globalRanking.toLocaleString() : '--'}
-                  <span style="color: #666; font-size: 0.92rem; font-weight: 500;">/${stats && stats.totalParticipants ? stats.totalParticipants.toLocaleString() : '--'}</span>
-                </span>
-              </div>
-              <div style="display: flex; flex-direction: column; align-items: flex-start; min-width: 0;">
-                <span style="color: #b3b3b3; font-size: 0.92rem; font-weight: 500; line-height: 1.1;">Attended</span>
-                <span style="color: #fff; font-size: 1.02rem; font-weight: 700; letter-spacing: 0.01em; line-height: 1.1;">${stats && stats.attendedContestsCount ? stats.attendedContestsCount : '--'}</span>
-              </div>
+            <div class="leetcode-card-header">
+              <h3>Rating Trend</h3>
             </div>
-            <canvas id="contestRatingChart" width="320" height="180"></canvas>
+            <canvas id="contestRatingChart"></canvas>
           </div>
+
           <!-- Card 4: LeetCode Activity Heatmap -->
           <div class="leetcode-card card-bar-chart">
+            <div class="leetcode-card-header">
+              <h3>Activity</h3>
+            </div>
             <div class="leetcode-heatmap-svg">
               <!-- LeetCode Activity Heatmap SVG will be dynamically inserted here -->
             </div>
           </div>
         </div>
       `;
+      
       document.querySelector('.leetcode-profile').innerHTML = leetcodeProfileHTML;
-
-      // Initialize Problem Stats Chart (LeetCode-style: Easy, Medium, Hard)
-      const totalSolved = data.easySolved + data.mediumSolved + data.hardSolved;
-      const problemStatsCtx = document.getElementById('problemStatsChart').getContext('2d');
-      new Chart(problemStatsCtx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Easy', 'Medium', 'Hard'],
-          datasets: [{
-            data: [data.easySolved, data.mediumSolved, data.hardSolved],
-            backgroundColor: ['#00af9b', '#ffb800', '#ff2d55'],
-            borderWidth: 0,
-            borderRadius: 18,
-            cutout: '88%',
-            hoverOffset: 0,
-            spacing: 4
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          layout: { padding: 0 },
-          animation: false
-        }
-      });
-      // Overlay center text for total solved
-      const pieChartContainer = document.querySelector('.pie-chart-container');
-      if (pieChartContainer) {
-        const centerTextDiv = document.createElement('div');
-        centerTextDiv.className = 'chart-center-text';
-        centerTextDiv.innerHTML = `
-          <div class="acceptance-main">${totalSolved}</div>
-          <div class="acceptance-label">Solved</div>
-        `;
-        pieChartContainer.appendChild(centerTextDiv);
-      }
-      // Contest Rating Chart
-      let rankingHistory = [];
-      if (contestHistory && Array.isArray(contestHistory)) {
-        rankingHistory = contestHistory;
-      } else if (contestHistory && Array.isArray(contestHistory.userContestRankingHistory)) {
-        rankingHistory = contestHistory.userContestRankingHistory;
-      }
-      // Only use attended contests
-      let attendedContests = rankingHistory.filter(c => c.attended);
-      // Sort by contest start time (oldest to newest)
-      attendedContests.sort((a, b) => a.contest.startTime - b.contest.startTime);
-      if (attendedContests.length > 0) {
-        // Only show first and last year labels
-        const years = attendedContests.map(contest => {
-          const date = new Date(contest.contest.startTime * 1000);
-          return `${date.getFullYear()}`;
-        });
-        const labels = years.map((year, idx, arr) => {
-          if (idx === 0 || idx === arr.length - 1) return year;
-          return '';
-        });
-        const ratings = attendedContests.map(contest => contest.rating);
-        const contestRatingCanvas = document.getElementById('contestRatingChart');
-        const contestRatingCtx = contestRatingCanvas?.getContext('2d');
-        if (typeof Chart !== 'undefined' && contestRatingCtx) {
-          new Chart(contestRatingCtx, {
-            type: 'line',
-            data: {
-              labels: labels,
-              datasets: [{
-                data: ratings,
-                borderColor: '#ffb800',
-                borderWidth: 2,
-                fill: false,
-                tension: 0, // Make it a straight line graph
-                pointRadius: 0, // No points
-                pointHoverRadius: 0, // No hover points
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: { display: false },
-                tooltip: { enabled: false }, // No tooltips
-                title: { display: false }
-              },
-              layout: { padding: { top: 20, bottom: 20, left: 10, right: 10 } },
-              scales: {
-                y: { display: false }, // Hide y-axis
-                x: {
-                  grid: { display: false },
-                  ticks: {
-                    color: '#e0e0e0',
-                    font: { size: 14 },
-                    autoSkip: false,
-                    maxRotation: 0,
-                    minRotation: 0,
-                    padding: 10
-                  },
-                  border: { display: false },
-                }
-              },
-              interaction: { intersect: false, mode: 'index' },
-              elements: { line: { tension: 0 } },
-              backgroundColor: 'transparent',
-            }
-          });
-        } else {
-          console.error('Chart.js not loaded or contestRatingChart canvas missing');
-        }
-      } else {
-        console.warn('No attended contests found for chart rendering:', rankingHistory);
-        const contestChartContainer = document.querySelector('.leetcode-card.card-line-chart');
-        if (contestChartContainer) {
-          // Do not display any message if there is no contest history
-        }
-      }
-      // Always attempt to render the contest chart (fallback)
-      if (typeof renderContestChart === 'function') {
-        setTimeout(renderContestChart, 0);
-      }
-      // LeetCode Activity Heatmap (SVG, using API, true LeetCode chronological style, last n days from today)
+      
+      // Initialize Contest Rating Chart
+      setTimeout(renderContestChart, 0);
+      // LeetCode Activity Heatmap (SVG, using local data only)
       renderLeetCodeHeatmap();
     }
 
@@ -478,99 +321,43 @@ document.addEventListener('DOMContentLoaded', function() {
       return null;
     }
 
-    fetchWithRetry('https://leetcode-stats-api.herokuapp.com/' + leetcodeUsername)
-      .then(data => {
-        console.log('Initial LeetCode stats:', data); // Debug log
-        if (!data || !data.totalSolved) {
-          throw new Error('Invalid LeetCode stats data');
-        }
-        // Fetch contest data
-        return Promise.all([
-          data,
-          fetchWithRetry('https://alfa-leetcode-api.onrender.com/userContestRankingInfo/' + leetcodeUsername)
-            .catch(() => null),
-          fetchWithRetry('https://alfa-leetcode-api.onrender.com/' + leetcodeUsername + '/contest/history')
-            .catch(error => {
-              console.error('Error fetching contest history:', error);
-              return null;
-            })
-        ]);
-      })
-      .then(([data, contestData, contestHistory]) => {
-        // Cache the latest successful stats and contest history
-        try {
-          localStorage.setItem('leetcodeStats', JSON.stringify(data));
-          localStorage.setItem('leetcodeContestHistory', JSON.stringify(contestHistory));
-        } catch (e) { console.warn('Could not cache LeetCode data:', e); }
-        renderLeetCodeProfile(data, contestData, contestHistory, false);
-      })
-      .catch(async error => {
-        console.error('Error fetching LeetCode stats:', error);
-        // Try to use cached data if available
-        let cachedStats = null, cachedContestHistory = null;
-        try {
-          cachedStats = localStorage.getItem('leetcodeStats');
-          cachedContestHistory = localStorage.getItem('leetcodeContestHistory');
-        } catch (e) { console.warn('Could not access localStorage:', e); }
-        if (cachedStats && cachedContestHistory) {
-          const data = JSON.parse(cachedStats);
-          const contestHistory = JSON.parse(cachedContestHistory);
-          renderLeetCodeProfile(data, null, contestHistory, true);
+    // Load LeetCode data from local file only
+    async function loadLeetCodeData() {
+      try {
+        // Load from local file only - no API calls
+        const fileCache = await loadLeetCodeCacheFromFile();
+        if (fileCache && fileCache.leetcodeContestHistory && fileCache.leetcodeContestHistory.length > 0) {
+          console.log('Loading LeetCode data from local file');
+          // Use the real contest data and history
+          renderLeetCodeProfile(
+            fileCache.leetcodeStats || {}, 
+            { data: { userContestRanking: fileCache.leetcodeContestData } }, 
+            { userContestRankingHistory: fileCache.leetcodeContestHistory }, 
+            true
+          );
         } else {
-          // Try to load from local file (for dev/testing)
-          const fileCache = await loadLeetCodeCacheFromFile();
-          console.log('DEBUG: fileCache', fileCache);
-          if (fileCache && fileCache.leetcodeContestHistory) {
-            // Use the fallback contest data and history, and provide dummy stats for the pie chart
-            renderLeetCodeProfile({
-              easySolved: 0,
-              mediumSolved: 0,
-              hardSolved: 0,
-              totalEasy: 0,
-              totalMedium: 0,
-              totalHard: 0
-            }, { data: { userContestRanking: fileCache.leetcodeContestData } }, { userContestRankingHistory: fileCache.leetcodeContestHistory }, true);
-          } else if (leetcodeProfileContainer) {
-            // Do not display any API failure message in the card UI
+          // If no real data is available, show a message
+          if (leetcodeProfileContainer) {
+            leetcodeProfileContainer.innerHTML = `<div style="width:100%;text-align:center;padding:2.5rem 0;color:#FFB81C;font-size:1.3rem;">LeetCode data will be updated soon...</div>`;
           }
         }
-      });
+      } catch (error) {
+        console.error('Error loading LeetCode data:', error);
+        if (leetcodeProfileContainer) {
+          leetcodeProfileContainer.innerHTML = `<div style="width:100%;text-align:center;padding:2.5rem 0;color:#FFB81C;font-size:1.3rem;">LeetCode data will be updated soon...</div>`;
+        }
+      }
+    }
+
+    // Call the new loading function
+    loadLeetCodeData();
 
     // ========== NEW LEETCODE CONTEST RATING CHART LOGIC ========== //
     async function fetchContestHistory() {
       console.log('LeetCode contest chart logic running');
-      // Try API first
+      // Load from local JSON only
       try {
-        console.log('Attempting to fetch from API...');
-        const apiRes = await fetch('https://alfa-leetcode-api.onrender.com/Rahul_Challa/contest/history');
-        if (apiRes.ok) {
-          const apiData = await apiRes.json();
-          console.log('API contest history data:', apiData); // Debug log
-          let contestArray = null;
-          if (Array.isArray(apiData)) {
-            contestArray = apiData;
-          } else if (apiData && typeof apiData === 'object') {
-            // Try to find the first array property in the object
-            for (const key in apiData) {
-              if (Array.isArray(apiData[key])) {
-                contestArray = apiData[key];
-                break;
-              }
-            }
-          }
-          if (Array.isArray(contestArray)) {
-            const attended = contestArray.filter(c => c.attended);
-            if (attended.length > 0) return attended;
-          }
-          // If API returns empty, fall through to fallback
-          console.warn('API returned no attended contests, trying fallback...');
-        }
-      } catch (e) {
-        console.warn('API failed, will try fallback:', e);
-      }
-      // Fallback to local JSON
-      try {
-        console.log('Attempting to fetch from local JSON...');
+        console.log('Loading contest history from local JSON...');
         const fallbackRes = await fetch('assets/data/Rahul_Challa.json');
         if (fallbackRes.ok) {
           const fallbackData = await fallbackRes.json();
@@ -580,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         }
       } catch (e) {
-        console.error('Both API and fallback failed:', e);
+        console.error('Could not load local contest data:', e);
       }
       return [];
     }
@@ -649,32 +436,22 @@ document.addEventListener('DOMContentLoaded', function() {
       canvas._chartInstance = chart;
     }
 
-    // LeetCode Activity Heatmap (SVG, using API, true LeetCode chronological style, last n days from today)
+    // LeetCode Activity Heatmap (SVG, using local data only)
     async function renderLeetCodeHeatmap() {
       const heatmapCard = document.querySelector('.leetcode-card.card-bar-chart');
       if (!heatmapCard) return;
-      // Fetch calendar data from API
+      // Load calendar data from local JSON only
       let calendarData = {};
       try {
-        const res = await fetch('https://alfa-leetcode-api.onrender.com/Rahul_Challa/calendar');
-        if (res.ok) {
-          const apiData = await res.json();
-          if (apiData.submissionCalendar) {
-            calendarData = JSON.parse(apiData.submissionCalendar);
+        const fallbackRes = await fetch('assets/data/Rahul_Challa.json');
+        if (fallbackRes.ok) {
+          const fallbackData = await fallbackRes.json();
+          if (fallbackData.submissionCalendar) {
+            calendarData = fallbackData.submissionCalendar;
           }
         }
-      } catch (e) { /* ignore */ }
-      // Fallback to local JSON if API fails or is empty
-      if (!calendarData || Object.keys(calendarData).length === 0) {
-        try {
-          const fallbackRes = await fetch('assets/data/Rahul_Challa.json');
-          if (fallbackRes.ok) {
-            const fallbackData = await fallbackRes.json();
-            if (fallbackData.submissionCalendar) {
-              calendarData = fallbackData.submissionCalendar;
-            }
-          }
-        } catch (e) { /* ignore */ }
+      } catch (e) { 
+        console.warn('Could not load local calendar data:', e);
       }
       // Grid size: weeks x rows
       const rows = 7;

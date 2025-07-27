@@ -1,110 +1,77 @@
-# Portfolio Website: Rahul Challa
+# Rahul Challa - Portfolio Website
 
-A modern, responsive portfolio website featuring:
-- Automated LeetCode stats, contest graph, and activity heatmap (with API fallback)
-- GitHub profile and contribution heatmap
-- Fully responsive dashboard UI
-- Automated data updates via GitHub Actions
+A modern, responsive portfolio website showcasing my projects, skills, and experience.
 
 ## Features
-- **LeetCode Section:**
-  - Contest rating, global ranking, attended count
-  - Minimalist contest rating graph (auto-updating)
-  - Activity heatmap (auto-updating, API fallback)
-- **GitHub Section:**
-  - Profile info, repo/follower stats
-  - Contribution heatmap
-- **Automation:**
-  - GitHub Actions workflow updates LeetCode data daily and on push
-  - Local fallback JSON ensures site always works, even if API is down
 
-## Setup
-1. Clone the repo
-2. Run `npm install`
-3. To update LeetCode data locally: `node scripts/update_leetcode.js`
-4. Deploy to GitHub Pages or your preferred static host
+- **Responsive Design**: Works perfectly on all devices
+- **Modern UI**: Clean, professional design with smooth animations
+- **Dynamic Content**: Auto-updating GitHub and LeetCode statistics
+- **Performance Optimized**: Fast loading with optimized assets
 
-## Automation
-- `.github/workflows/update_leetcode.yml` runs daily and on push to update LeetCode data
-- Data is stored in `assets/data/Rahul_Challa.json`
+## LeetCode Integration
 
-## Credits
-- [alfa-leetcode-api](https://github.com/alfaarghya/alfa-leetcode-api) for LeetCode data
-- [Chart.js](https://www.chartjs.org/) for charts
-- [Feather Icons](https://feathericons.com/) for icons
+The website includes a dynamic LeetCode profile section that displays:
+- Contest ranking and rating
+- Contest history with rating trends
+- Activity heatmap
+- Problem-solving statistics
 
----
-MIT License
+### Data Update System
 
-# Rahul Challa | Portfolio Website
+- **Automatic Updates**: GitHub Actions runs daily at 2:00 AM UTC to fetch fresh LeetCode data
+- **Local Data Storage**: All LeetCode data is stored in `assets/data/Rahul_Challa.json`
+- **No API Calls**: The website only loads data from the local file, ensuring reliability
+- **Rate Limit Safe**: Updates happen once per day to avoid API rate limiting
 
-[Live Site](https://rahul-challa.github.io/Portfolio/)  |  [Download Resume](assets/Resume/Rahul_Challa.pdf)
+### How It Works
 
-## Overview
-A modern, responsive portfolio website to showcase my skills, projects, and professional background. Features a custom dashboard UI, animated code rain, dynamic coding profiles (GitHub, LeetCode), and modular project cards. Built for performance, accessibility, and easy future expansion.
+1. **Daily Update**: GitHub Actions automatically runs the update script
+2. **Multiple APIs**: Script tries multiple LeetCode API endpoints with retry logic
+3. **Local Storage**: Fresh data is saved to `assets/data/Rahul_Challa.json`
+4. **Website Display**: Portfolio loads data from the local file only
+5. **Fallback System**: If APIs fail, existing data is preserved
 
-## Features
-- Responsive dashboard UI
-- Animated code rain background
-- Skills as interactive tags
-- Dynamic GitHub & LeetCode profile integration
-- Modular, filterable project cards
-- Accessible, SEO-optimized, and fast
-- Contact section with direct links
+## Technologies Used
 
-## Tech Stack
-- HTML5, CSS3 (custom, responsive)
-- JavaScript (vanilla)
-- Feather Icons
-- GitHub & LeetCode APIs
-- [See full tech list in Skills section](#skills)
+- HTML5, CSS3, JavaScript (ES6+)
+- Chart.js for data visualization
+- GitHub Actions for CI/CD
+- Node.js for data processing
 
-## Getting Started
-1. **Clone the repo:**
-   ```bash
-   git clone https://github.com/rahul-challa/Portfolio.git
-   cd Portfolio
-   ```
-2. **Open `index.html` in your browser**
-   - Or use a local server (e.g. Python):
-     ```bash
-     python -m http.server
-     ```
-3. **Edit content:**
-   - Update your info in `index.html`, `css/`, and `js/` as needed.
+## Local Development
+
+1. Clone the repository
+2. Open `index.html` in your browser
+3. The website will load LeetCode data from the local JSON file
 
 ## Deployment
-- Hosted on [GitHub Pages](https://rahul-challa.github.io/Portfolio/)
-- To deploy your own fork:
-  1. Push to your GitHub repo
-  2. Enable GitHub Pages in repo settings (root or `/docs`)
 
-## Folder Structure
+The website is designed to be deployed on any static hosting service:
+- GitHub Pages
+- Netlify
+- Vercel
+- Any web server
+
+## File Structure
+
 ```
-/Portfolio
-  |-- index.html
-  |-- css/
-  |-- js/
-  |-- assets/
-      |-- images/
-      |-- Resume/
-  |-- README.md
-  |-- .gitignore
-  |-- LICENSE
+Portfolio/
+├── index.html              # Main website
+├── assets/
+│   ├── data/
+│   │   └── Rahul_Challa.json  # LeetCode data (auto-updated)
+│   ├── images/             # Website images
+│   └── css/               # Stylesheets
+├── js/
+│   └── main.js            # Main JavaScript
+├── scripts/
+│   ├── update_leetcode.mjs    # Daily data update script
+│   └── update_leetcode_backup.js  # Backup update script
+└── .github/workflows/
+    └── update-leetcode.yml    # GitHub Actions workflow
 ```
 
-## Credits
-- [Feather Icons](https://feathericons.com/)
-- [Google Fonts](https://fonts.google.com/)
-- [GitHub API](https://docs.github.com/en/rest)
-- [LeetCode API (unofficial)](https://leetcode.com/api/)
+## License
 
-## Contact
-- **Email:** challaviswanadhrahul@gmail.com
-- **LinkedIn:** [rahulchalla13](https://www.linkedin.com/in/rahulchalla13/)
-- **GitHub:** [rahul-challa](https://github.com/rahul-challa)
-- **Location:** Riverside, California
-
----
-
-> Thanks for visiting my portfolio! 🚀 
+This project is open source and available under the [MIT License](LICENSE). 

@@ -2,12 +2,13 @@ name: Update LeetCode Data
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # Every 6 hours
+    - cron: '0 2 * * *'  # Every day at 2:00 AM UTC
   workflow_dispatch:
 
 jobs:
   update-leetcode:
     runs-on: ubuntu-latest
+    timeout-minutes: 10  # Add timeout to prevent hanging
     steps:
       - uses: actions/checkout@v3
 
@@ -21,11 +22,29 @@ jobs:
 
       - name: Update LeetCode Data
         run: npm run update-leetcode
+        env:
+          NODE_OPTIONS: "--max-old-space-size=512"  # Limit memory usage
+
+      - name: Check if data was updated
+        id: check-data
+        run: |
+          if git diff --quiet assets/data/Rahul_Challa.json; then
+            echo "no_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "no_changes=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Commit and push changes
+        if: steps.check-data.outputs.no_changes == 'false'
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add assets/data/Rahul_Challa.json
-          git commit -m 'Update LeetCode data [auto]' || echo 'No changes to commit'
-          git push 
+          git commit -m 'Update LeetCode data [auto]'
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Log success
+        if: steps.check-data.outputs.no_changes == 'true'
+        run: echo "No changes to commit - data is up to date" 

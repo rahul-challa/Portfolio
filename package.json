@@ -4,6 +4,7 @@
     "node-fetch": "^3.3.1"
   },
   "scripts": {
-    "update-leetcode": "node scripts/update_leetcode.mjs"
+    "update-leetcode": "node scripts/update_leetcode.mjs",
+    "update-leetcode-backup": "node scripts/update_leetcode_backup.js"
   }
 }
