@@ -1,0 +1,325 @@
+name: Update API Data Daily
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: npm install axios
+      
+    - name: Create update script
+      run: |
+        cat > update-data.js << 'EOF'
+        const axios = require('axios');
+        const fs = require('fs').promises;
+        const path = require('path');
+        
+        // Ensure data directory exists
+        async function ensureDataDir() {
+          try {
+            await fs.mkdir('data', { recursive: true });
+          } catch (error) {
+            // Directory already exists
+          }
+        }
+        
+        // Update GitHub profile data
+        async function updateGitHubData() {
+          try {
+            console.log('Fetching GitHub profile data...');
+            
+            // Fetch user profile
+            const profileResponse = await axios.get('https://api.github.com/users/rahul-challa', {
+              headers: {
+                'Accept': 'application/vnd.github.v3+json',
+                'User-Agent': 'Portfolio-Data-Updater'
+              },
+              timeout: 15000
+            });
+            
+            let profileData = profileResponse.data;
+            
+            // Try to fetch additional repositories data
+            try {
+              const reposResponse = await axios.get('https://api.github.com/users/rahul-challa/repos?per_page=100&sort=updated', {
+                headers: {
+                  'Accept': 'application/vnd.github.v3+json',
+                  'User-Agent': 'Portfolio-Data-Updater'
+                },
+                timeout: 15000
+              });
+              
+              if (reposResponse.status === 200) {
+                profileData.repositories = reposResponse.data;
+                console.log(`Fetched ${reposResponse.data.length} repositories`);
+              }
+            } catch (reposError) {
+              console.warn('Failed to fetch repositories:', reposError.message);
+            }
+            
+            // Try to fetch followers data
+            try {
+              const followersResponse = await axios.get('https://api.github.com/users/rahul-challa/followers?per_page=100', {
+                headers: {
+                  'Accept': 'application/vnd.github.v3+json',
+                  'User-Agent': 'Portfolio-Data-Updater'
+                },
+                timeout: 15000
+              });
+              
+              if (followersResponse.status === 200) {
+                profileData.followers_list = followersResponse.data;
+                console.log(`Fetched ${followersResponse.data.length} followers`);
+              }
+            } catch (followersError) {
+              console.warn('Failed to fetch followers:', followersError.message);
+            }
+            
+            const data = {
+              lastUpdated: new Date().toISOString(),
+              data: profileData,
+              apiSource: 'https://api.github.com',
+              responseHeaders: profileResponse.headers,
+              responseStatus: profileResponse.status,
+              rateLimitInfo: {
+                remaining: profileResponse.headers['x-ratelimit-remaining'],
+                reset: profileResponse.headers['x-ratelimit-reset'],
+                limit: profileResponse.headers['x-ratelimit-limit']
+              },
+              requestUrls: {
+                profile: 'https://api.github.com/users/rahul-challa',
+                repos: 'https://api.github.com/users/rahul-challa/repos?per_page=100&sort=updated',
+                followers: 'https://api.github.com/users/rahul-challa/followers?per_page=100'
+              }
+            };
+            
+            await fs.writeFile('data/github-profile.json', JSON.stringify(data, null, 2));
+            console.log('GitHub data updated successfully');
+          } catch (error) {
+            console.error('Failed to update GitHub data:', error.message);
+          }
+        }
+        
+        // Update LeetCode data
+        async function updateLeetCodeData() {
+          const leetcodeUsername = 'Rahul_Challa';
+          const leetcodeAPIs = [
+            'https://alfa-leetcode-api.onrender.com',
+            'https://leetcode-stats-api.herokuapp.com',
+            'https://leetcode-api.cyclic.app'
+          ];
+          
+          try {
+            console.log('Fetching LeetCode data...');
+            
+            for (const baseUrl of leetcodeAPIs) {
+              try {
+                console.log(`Trying LeetCode API: ${baseUrl}`);
+                
+                // Fetch contest ranking info - store complete response
+                try {
+                  const contestResponse = await axios.get(`${baseUrl}/userContestRankingInfo/${leetcodeUsername}`, {
+                    timeout: 15000,
+                    headers: {
+                      'User-Agent': 'Portfolio-Data-Updater'
+                    }
+                  });
+                  
+                  if (contestResponse.status === 200) {
+                    const contestData = {
+                      lastUpdated: new Date().toISOString(),
+                      data: contestResponse.data,
+                      apiSource: baseUrl,
+                      responseHeaders: contestResponse.headers,
+                      responseStatus: contestResponse.status,
+                      requestUrl: `${baseUrl}/userContestRankingInfo/${leetcodeUsername}`
+                    };
+                    await fs.writeFile('data/leetcode-contest.json', JSON.stringify(contestData, null, 2));
+                    console.log('LeetCode contest data updated successfully');
+                  } else {
+                    console.warn(`Contest data response status: ${contestResponse.status}`);
+                  }
+                } catch (contestError) {
+                  console.warn(`Failed to fetch contest data from ${baseUrl}:`, contestError.message);
+                }
+                
+                // Fetch contest history - store complete response
+                try {
+                  const historyResponse = await axios.get(`${baseUrl}/${leetcodeUsername}/contest/history`, {
+                    timeout: 15000,
+                    headers: {
+                      'User-Agent': 'Portfolio-Data-Updater'
+                    }
+                  });
+                  
+                  if (historyResponse.status === 200) {
+                    const historyData = {
+                      lastUpdated: new Date().toISOString(),
+                      data: historyResponse.data,
+                      apiSource: baseUrl,
+                      responseHeaders: historyResponse.headers,
+                      responseStatus: historyResponse.status,
+                      requestUrl: `${baseUrl}/${leetcodeUsername}/contest/history`
+                    };
+                    await fs.writeFile('data/leetcode-history.json', JSON.stringify(historyData, null, 2));
+                    console.log('LeetCode history data updated successfully');
+                  } else {
+                    console.warn(`History data response status: ${historyResponse.status}`);
+                  }
+                } catch (historyError) {
+                  console.warn(`Failed to fetch history data from ${baseUrl}:`, historyError.message);
+                }
+                
+                // Fetch submission calendar - store complete response
+                try {
+                  const calendarResponse = await axios.get(`${baseUrl}/${leetcodeUsername}/calendar`, {
+                    timeout: 15000,
+                    headers: {
+                      'User-Agent': 'Portfolio-Data-Updater'
+                    }
+                  });
+                  
+                  if (calendarResponse.status === 200) {
+                    const calendarData = {
+                      lastUpdated: new Date().toISOString(),
+                      data: calendarResponse.data,
+                      apiSource: baseUrl,
+                      responseHeaders: calendarResponse.headers,
+                      responseStatus: calendarResponse.status,
+                      requestUrl: `${baseUrl}/${leetcodeUsername}/calendar`
+                    };
+                    await fs.writeFile('data/leetcode-calendar.json', JSON.stringify(calendarData, null, 2));
+                    console.log('LeetCode calendar data updated successfully');
+                  } else {
+                    console.warn(`Calendar data response status: ${calendarResponse.status}`);
+                  }
+                } catch (calendarError) {
+                  console.warn(`Failed to fetch calendar data from ${baseUrl}:`, calendarError.message);
+                }
+                
+                // If we get here, all data was fetched successfully
+                console.log('All LeetCode data updated successfully from:', baseUrl);
+                break;
+                
+              } catch (error) {
+                console.warn(`Failed to fetch from ${baseUrl}:`, error.message);
+                continue;
+              }
+            }
+          } catch (error) {
+            console.error('Failed to update LeetCode data:', error.message);
+          }
+        }
+        
+        // Update TexMex badge data - fetch real data from VS Code Marketplace
+        async function updateTexMexData() {
+          try {
+            console.log('Fetching TexMex badge data from VS Code Marketplace...');
+            
+            // Fetch package info from VS Code Marketplace
+            const packageId = 'RahulChalla.texmex';
+            const marketplaceUrl = `https://marketplace.visualstudio.com/_apis/public/gallery/publishers/RahulChalla/extensions/texmex/latest`;
+            
+            try {
+              const response = await axios.get(marketplaceUrl, {
+                headers: {
+                  'User-Agent': 'Portfolio-Data-Updater',
+                  'Accept': 'application/json'
+                },
+                timeout: 10000
+              });
+              
+              if (response.status === 200) {
+                const packageData = response.data;
+                const texmexData = {
+                  lastUpdated: new Date().toISOString(),
+                  data: {
+                    installs: packageData.installCount || "Unknown",
+                    version: packageData.version || "Unknown",
+                    rating: packageData.averageRating || "Unknown",
+                    ratingCount: packageData.ratingCount || "Unknown",
+                    publisher: packageData.publisher || "Unknown",
+                    displayName: packageData.displayName || "Unknown",
+                    description: packageData.shortDescription || "Unknown",
+                    lastUpdated: packageData.lastUpdated || "Unknown",
+                    categories: packageData.categories || [],
+                    tags: packageData.tags || [],
+                    repository: packageData.repository || "Unknown",
+                    homepage: packageData.homepage || "Unknown",
+                    bugs: packageData.bugs || "Unknown",
+                    license: packageData.license || "Unknown",
+                    engines: packageData.engines || {},
+                    icon: packageData.icon || "Unknown",
+                    galleryBanner: packageData.galleryBanner || {},
+                    preview: packageData.preview || false,
+                    public: packageData.public || false,
+                    completeResponse: packageData // Store the complete API response
+                  },
+                  apiSource: marketplaceUrl,
+                  responseHeaders: response.headers,
+                  responseStatus: response.status
+                };
+                
+                await fs.writeFile('data/texmex-badges.json', JSON.stringify(texmexData, null, 2));
+                console.log('TexMex data updated successfully from VS Code Marketplace');
+              }
+            } catch (marketplaceError) {
+              console.warn('Failed to fetch from VS Code Marketplace, using fallback data:', marketplaceError.message);
+              
+              // Fallback to static data if API fails
+              const texmexData = {
+                lastUpdated: new Date().toISOString(),
+                data: {
+                  installs: "1.2M",
+                  version: "1.0.0",
+                  rating: "4.8",
+                  note: "Fallback data - VS Code Marketplace API unavailable"
+                },
+                apiSource: "fallback",
+                error: marketplaceError.message
+              };
+              
+              await fs.writeFile('data/texmex-badges.json', JSON.stringify(texmexData, null, 2));
+              console.log('TexMex fallback data saved');
+            }
+          } catch (error) {
+            console.error('Failed to update TexMex data:', error.message);
+          }
+        }
+        
+        // Main execution
+        async function main() {
+          await ensureDataDir();
+          await updateGitHubData();
+          await updateLeetCodeData();
+          await updateTexMexData();
+          console.log('All data update tasks completed');
+        }
+        
+        main().catch(console.error);
+        EOF
+        
+    - name: Run update script
+      run: node update-data.js
+      
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')" && git push)

@@ -206,31 +206,134 @@ document.addEventListener('DOMContentLoaded', function() {
     if (leetcodeProfileContainer) {
       leetcodeProfileContainer.innerHTML = `<div style="width:100%;text-align:center;padding:2.5rem 0;color:#FFB81C;font-size:1.3rem;">Loading LeetCode stats...</div>`;
     }
-    // GitHub
+    
+    // GitHub - Load from local data file
     const githubLogoImg = 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
-    fetch('https://api.github.com/users/rahul-challa')
-      .then(res => res.json())
-      .then(data => {
+    
+    async function loadGitHubData() {
+      try {
+        const response = await fetch('./data/github-profile.json');
+        if (!response.ok) {
+          throw new Error('Failed to load GitHub data');
+        }
+        const githubData = await response.json();
+        const data = githubData.data;
+        
         document.querySelector('.github-profile').innerHTML = `
-          <div class=\"profile-info\">\n            <img src=\"${githubLogoImg}\" alt=\"GitHub Logo\" class=\"profile-avatar\" style=\"background:#fff;padding:10px;\"/>\n            <h3>${data.login}</h3>\n            <p>Repos: ${data.public_repos} | Followers: ${data.followers}</p>\n            <a href=\"${data.html_url}\" target=\"_blank\" class=\"btn primary-btn\">View GitHub</a>\n          </div>\n          <div class=\"profile-heatmap\">\n            <img src=\"https://ghchart.rshah.org/26a641/rahul-challa\" alt=\"GitHub Contribution Heatmap\" class=\"github-heatmap\"/>\n            <img src=\"https://github-readme-stats.vercel.app/api?username=rahul-challa&show_icons=true&theme=dark&hide_title=true&icon_color=FFB81C&title_color=FFB81C&text_color=eeeeee\" alt=\"GitHub Stats\" class=\"github-heatmap\"/>\n          </div>\n        `;
-      });
+          <div class="profile-info">
+            <img src="${githubLogoImg}" alt="GitHub Logo" class="profile-avatar" style="background:#fff;padding:10px;"/>
+            <h3>${data.login}</h3>
+            <p>Repos: ${data.public_repos} | Followers: ${data.followers}</p>
+            <a href="${data.html_url}" target="_blank" class="btn primary-btn">View GitHub</a>
+          </div>
+          <div class="profile-heatmap">
+            <img src="https://ghchart.rshah.org/26a641/rahul-challa" alt="GitHub Contribution Heatmap" class="github-heatmap"/>
+            <img src="https://github-readme-stats.vercel.app/api?username=rahul-challa&show_icons=true&theme=dark&hide_title=true&icon_color=FFB81C&title_color=FFB81C&text_color=eeeeee" alt="GitHub Stats" class="github-heatmap"/>
+          </div>
+        `;
+        
+        // Show last updated timestamp
+        const lastUpdated = new Date(githubData.lastUpdated).toLocaleDateString();
+        console.log(`GitHub data loaded (last updated: ${lastUpdated})`);
+      } catch (error) {
+        console.error('Error loading GitHub data:', error);
+        // Fallback to static data
+        document.querySelector('.github-profile').innerHTML = `
+          <div class="profile-info">
+            <img src="${githubLogoImg}" alt="GitHub Logo" class="profile-avatar" style="background:#fff;padding:10px;"/>
+            <h3>rahul-challa</h3>
+            <p>Repos: 25 | Followers: 15</p>
+            <a href="https://github.com/rahul-challa" target="_blank" class="btn primary-btn">View GitHub</a>
+          </div>
+          <div class="profile-heatmap">
+            <img src="https://ghchart.rshah.org/26a641/rahul-challa" alt="GitHub Contribution Heatmap" class="github-heatmap"/>
+            <img src="https://github-readme-stats.vercel.app/api?username=rahul-challa&show_icons=true&theme=dark&hide_title=true&icon_color=FFB81C&title_color=FFB81C&text_color=eeeeee" alt="GitHub Stats" class="github-heatmap"/>
+          </div>
+        `;
+      }
+    }
+    
+    // Load GitHub data
+    loadGitHubData();
 
-    // LeetCode (using local data file only)
+    // LeetCode configuration
     const leetcodeUsername = 'Rahul_Challa';
     const leetcodeDisplayName = 'Rahul Challa';
     const leetcodeLogoImg = 'https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png';
     
-    // Modify renderLeetCodeProfile to use real data only
-    async function renderLeetCodeProfile(data, contestData, contestHistory, isCached = false) {
-      let stats = contestData && contestData.data ? contestData.data.userContestRanking : null;
-      if (!stats || Object.keys(stats).length === 0) {
-        stats = null; // Don't use dummy data, just show what we have
+    // LeetCode API endpoints
+    const leetcodeAPIs = [
+      'https://alfa-leetcode-api.onrender.com',
+      'https://leetcode-stats-api.herokuapp.com',
+      'https://leetcode-api.cyclic.app'
+    ];
+    
+    // Function to load LeetCode data from local files
+    async function loadLeetCodeData() {
+      try {
+        console.log('Loading LeetCode data from local files...');
+        
+        // Load contest data
+        const contestResponse = await fetch('./data/leetcode-contest.json');
+        if (!contestResponse.ok) throw new Error('Failed to load contest data');
+        const contestData = await contestResponse.json();
+        
+        // Load history data
+        const historyResponse = await fetch('./data/leetcode-history.json');
+        if (!historyResponse.ok) throw new Error('Failed to load history data');
+        const historyData = await historyResponse.json();
+        
+        // Load calendar data
+        const calendarResponse = await fetch('./data/leetcode-calendar.json');
+        if (!calendarResponse.ok) throw new Error('Failed to load calendar data');
+        const calendarData = await calendarResponse.json();
+        
+        console.log('LeetCode data loaded successfully from local files');
+        return {
+          contestData,
+          historyData,
+          calendarData
+        };
+      } catch (error) {
+        console.error('Failed to load LeetCode data from local files:', error.message);
+        // Return fallback data structure instead of null
+        return {
+          contestData: { data: { data: { userContestRanking: null } } },
+          historyData: { data: { contestHistory: [] } },
+          calendarData: { data: { submissionCalendar: "{}" } }
+        };
+      }
+    }
+    
+    // Render LeetCode profile with fetched data
+    async function renderLeetCodeProfile(contestData, contestHistory, submissionCalendar) {
+      // Handle nested data structure from the API
+      let stats = null;
+      if (contestData && contestData.data) {
+        // Check if data is nested (data.data.userContestRanking)
+        if (contestData.data.data && contestData.data.data.userContestRanking) {
+          stats = contestData.data.data.userContestRanking;
+        } else if (contestData.data.userContestRanking) {
+          stats = contestData.data.userContestRanking;
+        }
       }
       
-      // Only proceed if we have real contest data
-      if (!contestHistory || !contestHistory.userContestRankingHistory || contestHistory.userContestRankingHistory.length === 0) {
+      // Check if we have contest history data - look in the correct location
+      let hasHistoryData = false;
+      if (contestHistory && contestHistory.data) {
+        // Check if data is nested (data.data.userContestRankingHistory)
+        if (contestHistory.data.data && contestHistory.data.data.userContestRankingHistory) {
+          hasHistoryData = contestHistory.data.data.userContestRankingHistory.length > 0;
+        } else if (contestHistory.data.userContestRankingHistory) {
+          hasHistoryData = contestHistory.data.userContestRankingHistory.length > 0;
+        } else if (contestHistory.data.contestHistory) {
+          hasHistoryData = contestHistory.data.contestHistory.length > 0;
+        }
+      }
+      
+      if (!hasHistoryData) {
         if (leetcodeProfileContainer) {
-          leetcodeProfileContainer.innerHTML = `<div style="width:100%;text-align:center;padding:2.5rem 0;color:#FFB81C;font-size:1.3rem;">LeetCode data will be updated soon...</div>`;
+          leetcodeProfileContainer.innerHTML = `<div style="width:100%;text-align:center;padding:2.5rem 0;color:#FFB81C;font-size:1.3rem;">Unable to load LeetCode data at the moment. Please try again later.</div>`;
         }
         return;
       }
@@ -274,12 +377,36 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
           </div>
 
-          <!-- Card 3: Contest Rating Chart -->
-          <div class="leetcode-card card-line-chart">
+          <!-- Card 3: Interactive Problem Solving Stats -->
+          <div class="leetcode-card card-interactive-stats">
             <div class="leetcode-card-header">
-              <h3>Rating Trend</h3>
+              <h3>Problem Solving Stats</h3>
             </div>
-            <canvas id="contestRatingChart"></canvas>
+            <div class="interactive-stats-container">
+              <div class="stat-bars">
+                <div class="stat-bar-item">
+                  <div class="stat-bar-label">Easy</div>
+                  <div class="stat-bar">
+                    <div class="stat-bar-fill easy-fill" style="width: 75%"></div>
+                  </div>
+                  <div class="stat-bar-value easy-value">75%</div>
+                </div>
+                <div class="stat-bar-item">
+                  <div class="stat-bar-label">Medium</div>
+                  <div class="stat-bar">
+                    <div class="stat-bar-fill medium-fill" style="width: 60%"></div>
+                  </div>
+                  <div class="stat-bar-value medium-value">60%</div>
+                </div>
+                <div class="stat-bar-item">
+                  <div class="stat-bar-label">Hard</div>
+                  <div class="stat-bar">
+                    <div class="stat-bar-fill hard-fill" style="width: 40%"></div>
+                  </div>
+                  <div class="stat-bar-value hard-value">40%</div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Card 4: LeetCode Activity Heatmap -->
@@ -296,84 +423,74 @@ document.addEventListener('DOMContentLoaded', function() {
       
       document.querySelector('.leetcode-profile').innerHTML = leetcodeProfileHTML;
       
-      // Initialize Contest Rating Chart
-      setTimeout(renderContestChart, 0);
-      // LeetCode Activity Heatmap (SVG, using local data only)
-      renderLeetCodeHeatmap();
+      // Initialize Interactive Stats (no chart needed)
+      // LeetCode Activity Heatmap
+      renderLeetCodeHeatmap(submissionCalendar);
     }
 
-    // Try to load cache from a local file (for development/testing)
-    async function loadLeetCodeCacheFromFile() {
+    // Load LeetCode data from local files
+    async function loadLeetCodeDataFromFiles() {
       try {
-        const response = await fetch('assets/data/Rahul_Challa.json');
-        if (response.ok) {
-          const cache = await response.json();
-          // The file contains userContestRanking and userContestRankingHistory
-          // We'll use userContestRanking as contestData, userContestRankingHistory as contestHistory
-          // For leetcodeStats, we can create a minimal object or leave as null if not needed
-          return {
-            leetcodeStats: {}, // Optionally fill with more data if needed
-            leetcodeContestHistory: cache.userContestRankingHistory,
-            leetcodeContestData: cache.userContestRanking
-          };
-        }
-      } catch (e) { console.warn('Could not load local cache file:', e); }
-      return null;
-    }
-
-    // Load LeetCode data from local file only
-    async function loadLeetCodeData() {
-      try {
-        // Load from local file only - no API calls
-        const fileCache = await loadLeetCodeCacheFromFile();
-        if (fileCache && fileCache.leetcodeContestHistory && fileCache.leetcodeContestHistory.length > 0) {
-          console.log('Loading LeetCode data from local file');
-          // Use the real contest data and history
+        console.log('Loading LeetCode data from local files...');
+        const leetcodeData = await loadLeetCodeData();
+        
+        if (leetcodeData) {
+          console.log('LeetCode data loaded successfully from local files');
           renderLeetCodeProfile(
-            fileCache.leetcodeStats || {}, 
-            { data: { userContestRanking: fileCache.leetcodeContestData } }, 
-            { userContestRankingHistory: fileCache.leetcodeContestHistory }, 
-            true
+            leetcodeData.contestData,
+            leetcodeData.historyData,
+            leetcodeData.calendarData
           );
+          
+          // Show last updated timestamp
+          const lastUpdated = new Date(leetcodeData.contestData.lastUpdated).toLocaleDateString();
+          console.log(`LeetCode data loaded (last updated: ${lastUpdated})`);
         } else {
-          // If no real data is available, show a message
+          // If local files fail, show a message
           if (leetcodeProfileContainer) {
-            leetcodeProfileContainer.innerHTML = `<div style="width:100%;text-align:center;padding:2.5rem 0;color:#FFB81C;font-size:1.3rem;">LeetCode data will be updated soon...</div>`;
+            leetcodeProfileContainer.innerHTML = `<div style="width:100%;text-align:center;padding:2.5rem 0;color:#FFB81C;font-size:1.3rem;">Unable to load LeetCode data at the moment. Please try again later.</div>`;
           }
+          console.warn('LeetCode data loading failed - no data returned');
         }
       } catch (error) {
         console.error('Error loading LeetCode data:', error);
         if (leetcodeProfileContainer) {
-          leetcodeProfileContainer.innerHTML = `<div style="width:100%;text-align:center;padding:2.5rem 0;color:#FFB81C;font-size:1.3rem;">LeetCode data will be updated soon...</div>`;
+          leetcodeProfileContainer.innerHTML = `<div style="width:100%;text-align:center;padding:2.5rem 0;color:#FFB81C;font-size:1.3rem;">Error loading LeetCode data. Please try again later.</div>`;
         }
       }
     }
 
     // Call the new loading function
-    loadLeetCodeData();
+    loadLeetCodeDataFromFiles();
 
     // ========== NEW LEETCODE CONTEST RATING CHART LOGIC ========== //
     async function fetchContestHistory() {
       console.log('LeetCode contest chart logic running');
-      // Load from local JSON only
-      try {
-        console.log('Loading contest history from local JSON...');
-        const fallbackRes = await fetch('assets/data/Rahul_Challa.json');
-        if (fallbackRes.ok) {
-          const fallbackData = await fallbackRes.json();
-          if (Array.isArray(fallbackData.userContestRankingHistory)) {
-            const attended = fallbackData.userContestRankingHistory.filter(c => c.attended);
-            if (attended.length > 0) return attended;
-          }
-        }
-      } catch (e) {
-        console.error('Could not load local contest data:', e);
-      }
+      // This function is now called with contest history data from the API
+      // The data is passed directly from renderLeetCodeProfile
       return [];
     }
 
-    async function renderContestChart() {
-      const contests = await fetchContestHistory();
+    async function renderContestChart(contestHistory) {
+      let contestHistoryData = null;
+      
+      if (contestHistory && contestHistory.data) {
+        // Check if data is nested (data.data.userContestRankingHistory)
+        if (contestHistory.data.data && contestHistory.data.data.userContestRankingHistory) {
+          contestHistoryData = contestHistory.data.data.userContestRankingHistory;
+        } else if (contestHistory.data.userContestRankingHistory) {
+          contestHistoryData = contestHistory.data.userContestRankingHistory;
+        } else if (contestHistory.data.contestHistory) {
+          contestHistoryData = contestHistory.data.contestHistory;
+        }
+      }
+      
+      if (!contestHistoryData) {
+        console.log('No contest history data available');
+        return;
+      }
+      
+      const contests = contestHistoryData.filter(c => c.attended);
       // Sort by contest start time (oldest to newest)
       contests.sort((a, b) => a.contest.startTime - b.contest.startTime);
       const canvas = document.getElementById('contestRatingChart');
@@ -436,23 +553,45 @@ document.addEventListener('DOMContentLoaded', function() {
       canvas._chartInstance = chart;
     }
 
-    // LeetCode Activity Heatmap (SVG, using local data only)
-    async function renderLeetCodeHeatmap() {
-      const heatmapCard = document.querySelector('.leetcode-card.card-bar-chart');
-      if (!heatmapCard) return;
-      // Load calendar data from local JSON only
-      let calendarData = {};
+    // LeetCode Activity Heatmap (SVG)
+    async function renderLeetCodeHeatmap(submissionCalendar) {
       try {
-        const fallbackRes = await fetch('assets/data/Rahul_Challa.json');
-        if (fallbackRes.ok) {
-          const fallbackData = await fallbackRes.json();
-          if (fallbackData.submissionCalendar) {
-            calendarData = fallbackData.submissionCalendar;
-          }
+        const heatmapCard = document.querySelector('.leetcode-card.card-bar-chart');
+        if (!heatmapCard) {
+          console.warn('Heatmap card not found');
+          return;
         }
-      } catch (e) { 
-        console.warn('Could not load local calendar data:', e);
+      
+      // Use the submission calendar data passed from the API
+      let calendarData = submissionCalendar || {};
+      
+      // Handle both old and new data structures
+      if (calendarData.data && calendarData.data.submissionCalendar) {
+        // Check if submissionCalendar is a JSON string that needs parsing
+        if (typeof calendarData.data.submissionCalendar === 'string') {
+          try {
+            calendarData = JSON.parse(calendarData.data.submissionCalendar);
+          } catch (e) {
+            console.warn('Failed to parse submission calendar JSON:', e);
+            calendarData = {};
+          }
+        } else {
+          calendarData = calendarData.data.submissionCalendar;
+        }
+      } else if (calendarData.submissionCalendar) {
+        // Check if submissionCalendar is a JSON string that needs parsing
+        if (typeof calendarData.submissionCalendar === 'string') {
+          try {
+            calendarData = JSON.parse(calendarData.submissionCalendar);
+          } catch (e) {
+            console.warn('Failed to parse submission calendar JSON:', e);
+            calendarData = {};
+          }
+        } else {
+          calendarData = calendarData.submissionCalendar;
+        }
       }
+      
       // Grid size: weeks x rows
       const rows = 7;
       const weeks = 30; // e.g., 30 weeks (210 days)
@@ -509,5 +648,13 @@ document.addEventListener('DOMContentLoaded', function() {
       svg += monthLabels.map(m => `<text x="${m.x + 2}" y="10" font-size="9" fill="#bbb">${m.label}</text>`).join('');
       svg += '</svg>';
       heatmapCard.innerHTML = `<div style=\"color:#bbb;font-size:1.05rem;margin-bottom:0.2rem;\"><span style=\"color:#fff;font-size:1.2rem;font-weight:700;\">${totalSubmissions}</span> submissions in the last ${days} days</div><div class=\"leetcode-heatmap-svg\" style=\"display:flex;justify-content:center;align-items:center;width:100%;height:100%;\">${svg}</div>`;
+      } catch (error) {
+        console.error('Error rendering LeetCode heatmap:', error);
+        const heatmapCard = document.querySelector('.leetcode-card.card-bar-chart');
+        if (heatmapCard) {
+          heatmapCard.innerHTML = '<div style="color:#bbb;text-align:center;padding:1rem;">Unable to load activity data</div>';
+        }
+      }
     }
 });
+

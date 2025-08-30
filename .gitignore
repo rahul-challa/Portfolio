@@ -8,19 +8,15 @@ Thumbs.db
 *.sublime-workspace
 *.sublime-project
 
-# Node modules (if ever used)
-node_modules/
+# OS files
+.DS_Store
+Thumbs.db
 
-# Build output (if any)
-dist/
-build/
-
-# Logs
-*.log
-
-# Environment files
-.env
-.env.*
+# IDE files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
 
 # Mac system files
 __MACOSX/
@@ -31,11 +27,4 @@ __pycache__/
 
 # Misc
 *.swp
-*.bak
-
-# Do not ignore assets/Resume/Rahul_Challa.pdf or any project assets
-node_modules/
-.env
-.DS_Store
-npm-debug.log
-assets/data/*.bak 
+*.bak 
