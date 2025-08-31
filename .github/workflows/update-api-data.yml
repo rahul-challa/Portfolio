@@ -6,6 +6,11 @@ on:
     - cron: '0 2 * * *'
   workflow_dispatch: # Allow manual trigger
 
+# Add permissions to allow the workflow to write to the repository
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   update-data:
     runs-on: ubuntu-latest
@@ -13,6 +18,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Set up Node.js
       uses: actions/setup-node@v4
@@ -316,10 +323,45 @@ jobs:
         
     - name: Run update script
       run: node update-data.js
+      continue-on-error: false
+      
+    - name: Check for changes
+      id: check_changes
+      run: |
+        if git diff --quiet && git diff --staged --quiet; then
+          echo "no_changes=true" >> $GITHUB_OUTPUT
+          echo "No changes detected, skipping commit"
+        else
+          echo "no_changes=false" >> $GITHUB_OUTPUT
+          echo "Changes detected, will commit and push"
+          git status --porcelain
+        fi
       
     - name: Commit and push changes
+      if: steps.check_changes.outputs.no_changes == 'false'
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        echo "Setting up git configuration..."
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        
+        echo "Adding data files to git..."
         git add data/
-        git diff --quiet && git diff --staged --quiet || (git commit -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')" && git push)
+        
+        echo "Checking git status..."
+        git status --porcelain
+        
+        echo "Committing changes..."
+        git commit -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+        
+        echo "Pushing changes to repository..."
+        git push origin HEAD:${{ github.ref }}
+        
+        echo "Successfully pushed changes!"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+    - name: Skip commit (no changes)
+      if: steps.check_changes.outputs.no_changes == 'true'
+      run: |
+        echo "No changes detected, skipping commit and push"
+        echo "Workflow completed successfully"
