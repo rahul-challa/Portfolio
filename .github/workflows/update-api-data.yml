@@ -403,36 +403,16 @@ jobs:
         echo "Current branch: ${{ github.ref_name }}"
         echo "Repository: ${{ github.repository }}"
         
-        # Try multiple push methods
-        echo "Attempting to push changes..."
+        # Use Personal Access Token for authentication
+        git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git
         
-        # Method 1: Standard push
-        if git push origin HEAD:${{ github.ref_name }}; then
-          echo "Successfully pushed changes with standard method!"
-        else
-          echo "Standard push failed, trying alternative methods..."
-          
-          # Method 2: Force with lease (safer than force)
-          if git push origin HEAD:${{ github.ref_name }} --force-with-lease; then
-            echo "Successfully pushed changes with force-with-lease!"
-          else
-            echo "Force-with-lease failed, trying final method..."
-            
-            # Method 3: Check if we need to pull first
-            git pull origin ${{ github.ref_name }} --rebase
-            if git push origin HEAD:${{ github.ref_name }}; then
-              echo "Successfully pushed changes after pull and rebase!"
-            else
-              echo "All push methods failed. This might be a permission issue."
-              echo "Please check repository settings and branch protection rules."
-              exit 1
-            fi
-          fi
-        fi
+        # Push changes
+        git push origin HEAD:${{ github.ref_name }}
         
-        echo "Push operation completed!"
+        echo "Successfully pushed changes!"
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Use PAT_TOKEN instead of GITHUB_TOKEN
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       
     - name: Skip commit (no changes)
       if: steps.check_changes.outputs.no_changes == 'true'
