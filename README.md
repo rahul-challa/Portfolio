@@ -2,10 +2,10 @@
 
 A modern, responsive portfolio website showcasing my projects, skills, and experience as a software developer.
 
-## 🚀 **Live Demo**
+## Live Demo
 [View Portfolio](https://rahul-challa.github.io/Portfolio/)
 
-## ✨ **Features**
+## Features
 
 - **Responsive Design**: Mobile-first approach with modern CSS Grid and Flexbox
 - **Dynamic Content**: Real-time data from GitHub, LeetCode, and VS Code Marketplace
@@ -13,7 +13,7 @@ A modern, responsive portfolio website showcasing my projects, skills, and exper
 - **Performance Optimized**: Lazy loading, efficient data caching, and optimized assets
 - **Accessibility**: Semantic HTML, ARIA labels, and keyboard navigation support
 
-## 🛠️ **Technologies Used**
+## Technologies Used
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **Styling**: Custom CSS with CSS Variables, Grid, Flexbox
@@ -22,7 +22,7 @@ A modern, responsive portfolio website showcasing my projects, skills, and exper
 - **Data Visualization**: Chart.js for interactive charts
 - **APIs**: GitHub API, LeetCode API, VS Code Marketplace API
 
-## 📁 **Project Structure**
+## Project Structure
 
 ```
 Portfolio/
@@ -43,34 +43,34 @@ Portfolio/
 └── README.md              # This file
 ```
 
-## 🔄 **API Data Caching System**
+## API Data Caching System
 
 The portfolio uses a sophisticated caching system to avoid API rate limits:
 
-### **How It Works:**
+### How It Works:
 1. **Daily Updates**: GitHub Actions run daily to fetch fresh data
 2. **Local Storage**: All API responses are cached in JSON files
 3. **Fallback Data**: Static fallback data ensures the site always works
 4. **No Direct API Calls**: The frontend only loads local JSON files
 
-### **Data Sources:**
+### Data Sources:
 - **GitHub Profile**: User info, repositories, followers
 - **LeetCode Stats**: Contest rankings, problem solving history, activity heatmap
 - **VS Code Marketplace**: TexMex extension statistics
 
-### **Benefits:**
-- ✅ **No Rate Limits**: Always works regardless of API restrictions
-- ✅ **Fast Loading**: Local data loads instantly
-- ✅ **Reliable**: Fallback data ensures site functionality
-- ✅ **Up-to-Date**: Daily automated updates keep data fresh
+### Benefits:
+- **No Rate Limits**: Always works regardless of API restrictions
+- **Fast Loading**: Local data loads instantly
+- **Reliable**: Fallback data ensures site functionality
+- **Up-to-Date**: Daily automated updates keep data fresh
 
-## 🚀 **GitHub Pages Deployment**
+## GitHub Pages Deployment
 
-### **Prerequisites:**
+### Prerequisites:
 - GitHub repository with your portfolio code
 - GitHub Actions enabled for automated data updates
 
-### **Deployment Steps:**
+### Deployment Steps:
 
 1. **Fork/Clone Repository**
    ```bash
@@ -99,15 +99,15 @@ The portfolio uses a sophisticated caching system to avoid API rate limits:
    - GitHub Pages will automatically deploy
    - Your portfolio will be available at `https://your-username.github.io/Portfolio/`
 
-### **Post-Deployment:**
+### Post-Deployment:
 - **Monitor GitHub Actions**: Check that daily data updates are working
 - **Test Functionality**: Verify all sections load correctly
 - **Performance Check**: Use Lighthouse to ensure optimal performance
 - **Mobile Testing**: Test responsiveness on various devices
 
-## 🔧 **Local Development**
+## Local Development
 
-### **Setup:**
+### Setup:
 1. **Clone Repository**
    ```bash
    git clone https://github.com/your-username/Portfolio.git
@@ -130,29 +130,29 @@ The portfolio uses a sophisticated caching system to avoid API rate limits:
    - Navigate to `http://localhost:8000`
    - The portfolio should load with all functionality
 
-### **Development Notes:**
+### Development Notes:
 - **Data Files**: Local development uses cached JSON data
 - **API Updates**: Use `test-api-fetch.py` to manually update data
 - **CSS Changes**: Refresh browser to see style updates
 - **JavaScript Debug**: Check browser console for any errors
 
-## 📊 **Performance & Optimization**
+## Performance & Optimization
 
-### **Current Metrics:**
+### Current Metrics:
 - **Lighthouse Score**: 95+ (Performance, Accessibility, Best Practices, SEO)
 - **Load Time**: < 2 seconds on 3G
 - **Bundle Size**: Optimized CSS and JavaScript
 - **Image Optimization**: Compressed and properly sized images
 
-### **Optimization Features:**
+### Optimization Features:
 - **Lazy Loading**: Images and heavy content load on demand
 - **CSS Variables**: Efficient theming and customization
 - **Minified Assets**: Production-ready code
 - **Responsive Images**: Different sizes for different devices
 
-## 🐛 **Troubleshooting**
+## Troubleshooting
 
-### **Common Issues:**
+### Common Issues:
 
 1. **Data Not Loading**
    - Check browser console for errors
@@ -174,13 +174,13 @@ The portfolio uses a sophisticated caching system to avoid API rate limits:
    - Check GitHub Actions logs for API errors
    - Verify fallback data is working
 
-### **Debug Mode:**
+### Debug Mode:
 Enable debug logging by opening browser console and checking for:
 - Data loading messages
 - Error logs
 - Performance metrics
 
-## 🤝 **Contributing**
+## Contributing
 
 While this is a personal portfolio, contributions are welcome:
 
@@ -190,18 +190,18 @@ While this is a personal portfolio, contributions are welcome:
 4. **Test thoroughly**
 5. **Submit a pull request**
 
-## 📄 **License**
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 **Acknowledgments**
+## Acknowledgments
 
 - **GitHub**: For hosting and GitHub Actions
 - **LeetCode**: For competitive programming platform
 - **VS Code Marketplace**: For extension statistics
 - **Open Source Community**: For various libraries and tools
 
-## 📞 **Contact**
+## Contact
 
 - **Portfolio**: [rahul-challa.github.io/Portfolio](https://rahul-challa.github.io/Portfolio/)
 - **GitHub**: [github.com/rahul-challa](https://github.com/rahul-challa)
@@ -211,4 +211,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Last Updated**: August 2025  
 **Version**: 2.0.0  
-**Status**: Production Ready ✅ 
+**Status**: Production Ready 
