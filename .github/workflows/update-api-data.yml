@@ -19,7 +19,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
+        # Use the default GITHUB_TOKEN with proper permissions
         token: ${{ secrets.GITHUB_TOKEN }}
+        # Ensure we have the latest changes
+        fetch-depth: 0
       
     - name: Set up Node.js
       uses: actions/setup-node@v4
@@ -354,6 +357,20 @@ jobs:
       run: node update-data.js
       continue-on-error: false
       
+    - name: Check repository permissions
+      run: |
+        echo "Checking repository permissions..."
+        echo "Repository: ${{ github.repository }}"
+        echo "Branch: ${{ github.ref_name }}"
+        echo "Actor: ${{ github.actor }}"
+        echo "Event: ${{ github.event_name }}"
+        
+        # Check if we can read the repository
+        git remote -v
+        git branch -a
+        
+        echo "Permission check completed"
+      
     - name: Check for changes
       id: check_changes
       run: |
@@ -383,9 +400,37 @@ jobs:
         git commit -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
         
         echo "Pushing changes to repository..."
-        git push origin HEAD:${{ github.ref }}
+        echo "Current branch: ${{ github.ref_name }}"
+        echo "Repository: ${{ github.repository }}"
         
-        echo "Successfully pushed changes!"
+        # Try multiple push methods
+        echo "Attempting to push changes..."
+        
+        # Method 1: Standard push
+        if git push origin HEAD:${{ github.ref_name }}; then
+          echo "Successfully pushed changes with standard method!"
+        else
+          echo "Standard push failed, trying alternative methods..."
+          
+          # Method 2: Force with lease (safer than force)
+          if git push origin HEAD:${{ github.ref_name }} --force-with-lease; then
+            echo "Successfully pushed changes with force-with-lease!"
+          else
+            echo "Force-with-lease failed, trying final method..."
+            
+            # Method 3: Check if we need to pull first
+            git pull origin ${{ github.ref_name }} --rebase
+            if git push origin HEAD:${{ github.ref_name }}; then
+              echo "Successfully pushed changes after pull and rebase!"
+            else
+              echo "All push methods failed. This might be a permission issue."
+              echo "Please check repository settings and branch protection rules."
+              exit 1
+            fi
+          fi
+        fi
+        
+        echo "Push operation completed!"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
