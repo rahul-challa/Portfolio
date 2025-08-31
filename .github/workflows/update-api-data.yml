@@ -238,74 +238,103 @@ jobs:
           try {
             console.log('Fetching TexMex badge data from VS Code Marketplace...');
             
-            // Fetch package info from VS Code Marketplace
-            const packageId = 'RahulChalla.texmex';
-            const marketplaceUrl = `https://marketplace.visualstudio.com/_apis/public/gallery/publishers/RahulChalla/extensions/texmex/latest`;
+            // Try multiple VS Code Marketplace API endpoints
+            const marketplaceEndpoints = [
+              'https://marketplace.visualstudio.com/_apis/public/gallery/publishers/RahulChalla/extensions/texmex/latest',
+              'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery',
+              'https://marketplace.visualstudio.com/_apis/public/gallery/publishers/RahulChalla/extensions/texmex'
+            ];
             
-            try {
-              const response = await axios.get(marketplaceUrl, {
-                headers: {
-                  'User-Agent': 'Portfolio-Data-Updater',
-                  'Accept': 'application/json'
-                },
-                timeout: 10000
-              });
-              
-              if (response.status === 200) {
-                const packageData = response.data;
-                const texmexData = {
-                  lastUpdated: new Date().toISOString(),
-                  data: {
-                    installs: packageData.installCount || "Unknown",
-                    version: packageData.version || "Unknown",
-                    rating: packageData.averageRating || "Unknown",
-                    ratingCount: packageData.ratingCount || "Unknown",
-                    publisher: packageData.publisher || "Unknown",
-                    displayName: packageData.displayName || "Unknown",
-                    description: packageData.shortDescription || "Unknown",
-                    lastUpdated: packageData.lastUpdated || "Unknown",
-                    categories: packageData.categories || [],
-                    tags: packageData.tags || [],
-                    repository: packageData.repository || "Unknown",
-                    homepage: packageData.homepage || "Unknown",
-                    bugs: packageData.bugs || "Unknown",
-                    license: packageData.license || "Unknown",
-                    engines: packageData.engines || {},
-                    icon: packageData.icon || "Unknown",
-                    galleryBanner: packageData.galleryBanner || {},
-                    preview: packageData.preview || false,
-                    public: packageData.public || false,
-                    completeResponse: packageData // Store the complete API response
-                  },
-                  apiSource: marketplaceUrl,
-                  responseHeaders: response.headers,
-                  responseStatus: response.status
-                };
+            let packageData = null;
+            let successfulEndpoint = null;
+            
+            for (const endpoint of marketplaceEndpoints) {
+              try {
+                console.log(`Trying VS Code Marketplace endpoint: ${endpoint}`);
                 
-                await fs.writeFile('data/texmex-badges.json', JSON.stringify(texmexData, null, 2));
-                console.log('TexMex data updated successfully from VS Code Marketplace');
+                let response;
+                if (endpoint.includes('extensionquery')) {
+                  // Use extension query endpoint
+                  response = await axios.post(endpoint, {
+                    filters: [{
+                      criteria: [{ filterType: 7, value: 'RahulChalla.texmex' }]
+                    }],
+                    flags: 0x1
+                  }, {
+                    headers: {
+                      'User-Agent': 'Portfolio-Data-Updater',
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json'
+                    },
+                    timeout: 15000
+                  });
+                  
+                  if (response.status === 200 && response.data.results && response.data.results[0] && response.data.results[0].extensions) {
+                    packageData = response.data.results[0].extensions[0];
+                    successfulEndpoint = endpoint;
+                    break;
+                  }
+                } else {
+                  // Use direct endpoint
+                  response = await axios.get(endpoint, {
+                    headers: {
+                      'User-Agent': 'Portfolio-Data-Updater',
+                      'Accept': 'application/json'
+                    },
+                    timeout: 15000
+                  });
+                  
+                  if (response.status === 200) {
+                    packageData = response.data;
+                    successfulEndpoint = endpoint;
+                    break;
+                  }
+                }
+              } catch (endpointError) {
+                console.warn(`Failed to fetch from ${endpoint}:`, endpointError.message);
+                continue;
               }
-            } catch (marketplaceError) {
-              console.warn('Failed to fetch from VS Code Marketplace, using fallback data:', marketplaceError.message);
-              
-              // Fallback to static data if API fails
+            }
+            
+            if (packageData && successfulEndpoint) {
               const texmexData = {
                 lastUpdated: new Date().toISOString(),
                 data: {
-                  installs: "1.2M",
-                  version: "1.0.0",
-                  rating: "4.8",
-                  note: "Fallback data - VS Code Marketplace API unavailable"
+                  installs: packageData.installCount || packageData.installCount || null,
+                  version: packageData.version || null,
+                  rating: packageData.averageRating || null,
+                  ratingCount: packageData.ratingCount || null,
+                  publisher: packageData.publisher || packageData.publisherName || null,
+                  displayName: packageData.displayName || null,
+                  description: packageData.shortDescription || null,
+                  lastUpdated: packageData.lastUpdated || null,
+                  categories: packageData.categories || [],
+                  tags: packageData.tags || [],
+                  repository: packageData.repository || null,
+                  homepage: packageData.homepage || null,
+                  bugs: packageData.bugs || null,
+                  license: packageData.license || null,
+                  engines: packageData.engines || {},
+                  icon: packageData.icon || null,
+                  galleryBanner: packageData.galleryBanner || {},
+                  preview: packageData.preview || false,
+                  public: packageData.public || false,
+                  completeResponse: packageData // Store the complete API response
                 },
-                apiSource: "fallback",
-                error: marketplaceError.message
+                apiSource: successfulEndpoint,
+                responseHeaders: null, // Not available for all endpoints
+                responseStatus: 200
               };
               
               await fs.writeFile('data/texmex-badges.json', JSON.stringify(texmexData, null, 2));
-              console.log('TexMex fallback data saved');
+              console.log('TexMex data updated successfully from VS Code Marketplace');
+            } else {
+              console.warn('All VS Code Marketplace API endpoints failed');
+              // Don't write any data if all APIs fail - let the frontend handle missing data gracefully
             }
           } catch (error) {
-            console.error('Failed to update TexMex data:', error.message);
+            console.error('Failed to fetch TexMex data from VS Code Marketplace:', error.message);
+            // Don't write fallback data - let the frontend handle missing data gracefully
           }
         }
         

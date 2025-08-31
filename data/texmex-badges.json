@@ -1,11 +1,27 @@
 {
-  "lastUpdated": "2025-08-30T14:36:55.029097",
+  "lastUpdated": null,
   "data": {
-    "installs": "1.2M",
-    "version": "1.0.0",
-    "rating": "4.8",
-    "note": "Fallback data - VS Code Marketplace API unavailable"
+    "installs": null,
+    "version": null,
+    "rating": null,
+    "ratingCount": null,
+    "publisher": null,
+    "displayName": null,
+    "description": null,
+    "lastUpdated": null,
+    "categories": [],
+    "tags": [],
+    "repository": null,
+    "homepage": null,
+    "bugs": null,
+    "license": null,
+    "engines": {},
+    "icon": null,
+    "galleryBanner": {},
+    "preview": false,
+    "public": false
   },
-  "apiSource": "fallback",
-  "error": "Marketplace API returned status 404"
+  "apiSource": null,
+  "responseHeaders": null,
+  "responseStatus": null
 }

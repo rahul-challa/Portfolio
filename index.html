@@ -418,21 +418,43 @@
         const texmexData = await response.json();
         const data = texmexData.data;
         
-        // Set fallback badges for all TexMex stats
-        setFallbackBadge("texmex-installs", "Installs", data.installs);
-        setFallbackBadge("texmex-version", "Version", data.version);
-        setFallbackBadge("texmex-rating", "Rating", data.rating);
-        
-        // Show last updated timestamp
-        const lastUpdated = new Date(texmexData.lastUpdated).toLocaleDateString();
-        console.log(`TexMex data loaded (last updated: ${lastUpdated})`);
+        // Only display data if it's real (not fallback)
+        if (texmexData.apiSource !== 'fallback' && data.installs && data.version && data.rating) {
+          // Set fallback badges for all TexMex stats with real data
+          setFallbackBadge("texmex-installs", "Installs", data.installs);
+          setFallbackBadge("texmex-version", "Version", data.version);
+          setFallbackBadge("texmex-rating", "Rating", data.rating);
+          
+          // Show last updated timestamp
+          const lastUpdated = new Date(texmexData.lastUpdated).toLocaleDateString();
+          console.log(`TexMex data loaded (last updated: ${lastUpdated})`);
+        } else {
+          // Hide badges if no real data is available
+          hideTexMexBadges();
+          console.log('TexMex: No real data available, badges hidden');
+        }
       } catch (error) {
         console.error('Error loading TexMex data:', error);
-        // Use fallback values if local data fails
-        setFallbackBadge("texmex-installs", "Installs", "1.2M");
-        setFallbackBadge("texmex-version", "Version", "1.0.0");
-        setFallbackBadge("texmex-rating", "Rating", "4.8");
+        // Hide badges if data loading fails
+        hideTexMexBadges();
+        console.log('TexMex: Data loading failed, badges hidden');
       }
+    }
+    
+    // Function to hide TexMex badges when no real data is available
+    function hideTexMexBadges() {
+      const badges = ['texmex-installs', 'texmex-version', 'texmex-rating'];
+      badges.forEach(id => {
+        const badge = document.getElementById(id);
+        if (badge) {
+          badge.style.display = 'none';
+        }
+        // Remove any existing fallback badges
+        const fallback = document.getElementById(id + '-fallback');
+        if (fallback) {
+          fallback.remove();
+        }
+      });
     }
     
     // Load TexMex badges
