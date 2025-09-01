@@ -234,45 +234,12 @@ jobs:
             # Don't exit on failure for this one as it's less critical
         "
     
-    - name: Check for meaningful changes
-      run: |
-        # Check if the API data has actually changed (excluding just timestamps)
-        echo "Checking if API data has meaningful changes..."
-        
-        # Create a temporary file with current data (without timestamps)
-        mkdir -p temp
-        for file in data/*.json; do
-          if [ -f "$file" ]; then
-            # Remove timestamp fields and create a hash
-            jq 'del(.lastUpdated)' "$file" > "temp/$(basename "$file")"
-          fi
-        done
-        
-        # Check if there are actual changes in the data
-        if git diff --quiet data/ temp/; then
-          echo "No meaningful changes detected - API data is identical"
-          echo "SKIP_COMMIT=true" >> $GITHUB_ENV
-        else
-          echo "Meaningful changes detected in API data"
-          echo "SKIP_COMMIT=false" >> $GITHUB_ENV
-        fi
-        
-        # Clean up temp files
-        rm -rf temp/
-    
     - name: Commit and push changes
-      if: env.SKIP_COMMIT == 'false'
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
         git add data/
-        git commit -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+        git commit --allow-empty -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
         git push origin main
         echo "Successfully updated and pushed API data"
-    
-    - name: Skip commit - no changes
-      if: env.SKIP_COMMIT == 'true'
-      run: |
-        echo "Skipping commit - no meaningful changes in API data"
-        echo "This is normal when APIs return the same data"
