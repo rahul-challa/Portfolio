@@ -238,5 +238,18 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        
+        # Check if there are changes to commit
         git add data/
-        git diff --quiet && git diff --staged --quiet || (git commit -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')" && git push)
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          # Commit the changes
+          git commit -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+          
+          # Pull latest changes and rebase our commit on top
+          git pull --rebase origin main
+          
+          # Push the changes
+          git push origin main
+        fi
