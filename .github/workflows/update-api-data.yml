@@ -239,17 +239,26 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # First, pull the latest changes to avoid conflicts
-        git pull origin main
-        
-        # Check if there are changes to commit
+        # Check if there are actual changes to commit
         git add data/
         if git diff --staged --quiet; then
-          echo "No changes to commit"
+          echo "No changes to commit - data is already up to date"
         else
+          # Check if the changes are meaningful (not just timestamp updates)
+          # Get the list of changed files
+          changed_files=$(git diff --name-only --staged)
+          echo "Changed files: $changed_files"
+          
           # Commit the changes
           git commit -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
           
-          # Push the changes
-          git push origin main
+          # Try to push normally first
+          if git push origin main; then
+            echo "Successfully pushed changes"
+          else
+            echo "Push failed, trying to pull and push again..."
+            # If push fails, pull the latest and try again
+            git pull origin main
+            git push origin main
+          fi
         fi
