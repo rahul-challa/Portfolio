@@ -239,6 +239,9 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
+        # First, pull the latest changes to avoid conflicts
+        git pull origin main
+        
         # Check if there are changes to commit
         git add data/
         if git diff --staged --quiet; then
@@ -246,9 +249,6 @@ jobs:
         else
           # Commit the changes
           git commit -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-          
-          # Pull latest changes and rebase our commit on top
-          git pull --rebase origin main
           
           # Push the changes
           git push origin main
