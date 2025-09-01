@@ -1,201 +1,242 @@
-name: Update API Data Daily
+name: Update API Data
 
 on:
   schedule:
-    - cron: '0 2 * * *'   # daily at 02:00 UTC
-  workflow_dispatch:
-
-# Requires: Settings → Actions → General → Workflow permissions → Read and write
-# (If branch is protected, allow GitHub Actions to push or switch to PR flow.)
-
-permissions:
-  contents: write
-  pull-requests: write
-
-concurrency:
-  group: api-data-update-${{ github.ref }}
-  cancel-in-progress: false
+    # Run daily at 2:00 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual triggering
 
 jobs:
   update-data:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0          # we need history for rebase
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install axios
-
-      - name: Create update script
-        run: |
-          cat > update-data.js << 'EOF'
-          const axios = require('axios');
-          const fs = require('fs').promises;
-
-          async function ensureDataDir() {
-            await fs.mkdir('data', { recursive: true }).catch(() => {});
-          }
-
-          async function updateGitHubData() {
-            try {
-              const profileResponse = await axios.get('https://api.github.com/users/rahul-challa', {
-                headers: { 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Portfolio-Data-Updater' },
-                timeout: 15000
-              });
-              const profileData = profileResponse.data;
-
-              try {
-                const reposResponse = await axios.get('https://api.github.com/users/rahul-challa/repos?per_page=100&sort=updated', {
-                  headers: { 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Portfolio-Data-Updater' },
-                  timeout: 15000
-                });
-                profileData.repositories = reposResponse.data;
-              } catch (e) { console.warn('repos fetch failed:', e.message); }
-
-              try {
-                const followersResponse = await axios.get('https://api.github.com/users/rahul-challa/followers?per_page=100', {
-                  headers: { 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Portfolio-Data-Updater' },
-                  timeout: 15000
-                });
-                profileData.followers_list = followersResponse.data;
-              } catch (e) { console.warn('followers fetch failed:', e.message); }
-
-              const out = {
-                lastUpdated: new Date().toISOString(),
-                data: profileData
-              };
-              await fs.writeFile('data/github-profile.json', JSON.stringify(out, null, 2));
-              console.log('GitHub data updated');
-            } catch (e) {
-              console.error('GitHub data update failed:', e.message);
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+    
+    - name: Update GitHub Profile Data
+      run: |
+        python -c "
+        import requests
+        import json
+        import datetime
+        
+        # GitHub API endpoint for user profile
+        username = 'rahul-challa'
+        api_url = f'https://api.github.com/users/{username}'
+        
+        # Make request to GitHub API
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            user_data = response.json()
+            
+            # Get repositories
+            repos_response = requests.get(f'{api_url}/repos?per_page=100&sort=updated')
+            if repos_response.status_code == 200:
+                user_data['repositories'] = repos_response.json()
+            
+            # Get followers list
+            followers_response = requests.get(f'{api_url}/followers?per_page=100')
+            if followers_response.status_code == 200:
+                user_data['followers_list'] = followers_response.json()
+            
+            # Create final data structure
+            final_data = {
+                'lastUpdated': datetime.datetime.now().isoformat(),
+                'data': user_data
             }
-          }
-
-          async function updateLeetCodeData() {
-            const user = 'Rahul_Challa';
-            const apis = [
-              'https://alfa-leetcode-api.onrender.com',
-              'https://leetcode-stats-api.herokuapp.com',
-              'https://leetcode-api.cyclic.app'
-            ];
-            for (const base of apis) {
-              try {
-                const common = { timeout: 15000, headers: { 'User-Agent': 'Portfolio-Data-Updater' } };
-
-                try {
-                  const r = await axios.get(`${base}/userContestRankingInfo/${user}`, common);
-                  await fs.writeFile('data/leetcode-contest.json', JSON.stringify({ lastUpdated: new Date().toISOString(), data: r.data }, null, 2));
-                } catch (e) { console.warn('contest failed @', base, e.message); }
-
-                try {
-                  const r = await axios.get(`${base}/${user}/contest/history`, common);
-                  await fs.writeFile('data/leetcode-history.json', JSON.stringify({ lastUpdated: new Date().toISOString(), data: r.data }, null, 2));
-                } catch (e) { console.warn('history failed @', base, e.message); }
-
-                try {
-                  const r = await axios.get(`${base}/${user}/calendar`, common);
-                  await fs.writeFile('data/leetcode-calendar.json', JSON.stringify({ lastUpdated: new Date().toISOString(), data: r.data }, null, 2));
-                } catch (e) { console.warn('calendar failed @', base, e.message); }
-
-                console.log('LeetCode data updated via', base);
-                break; // stop after first successful API
-              } catch (e) {
-                console.warn('LeetCode base failed:', base, e.message);
-              }
+            
+            # Write to file
+            with open('data/github-profile.json', 'w') as f:
+                json.dump(final_data, f, indent=2)
+            
+            print('GitHub profile data updated successfully')
+        else:
+            print(f'Failed to fetch GitHub data: {response.status_code}')
+            exit(1)
+        "
+    
+    - name: Update LeetCode Calendar Data
+      run: |
+        python -c "
+        import requests
+        import json
+        import datetime
+        
+        # LeetCode API endpoint
+        username = 'Rahul_Challa'
+        api_url = f'https://alfa-leetcode-api.onrender.com/{username}/calendar'
+        
+        # Make request to LeetCode API
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            data = response.json()
+            
+            # Create final data structure
+            final_data = {
+                'lastUpdated': datetime.datetime.now().isoformat(),
+                'data': data,
+                'apiSource': api_url,
+                'responseHeaders': dict(response.headers),
+                'responseStatus': response.status_code,
+                'requestUrl': api_url
             }
-          }
-
-          async function updateTexMexData() {
-            try {
-              const endpoints = [
-                'https://marketplace.visualstudio.com/_apis/public/gallery/publishers/RahulChalla/extensions/texmex/latest',
-                'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery',
-                'https://marketplace.visualstudio.com/_apis/public/gallery/publishers/RahulChalla/extensions/texmex'
-              ];
-              let pkg = null;
-
-              for (const ep of endpoints) {
-                try {
-                  if (ep.includes('extensionquery')) {
-                    const r = await axios.post(ep, {
-                      filters: [{ criteria: [{ filterType: 7, value: 'RahulChalla.texmex' }] }],
-                      flags: 0x1
-                    }, { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, timeout: 15000 });
-                    if (r.status === 200 && r.data?.results?.[0]?.extensions?.[0]) {
-                      pkg = r.data.results[0].extensions[0];
-                      break;
-                    }
-                  } else {
-                    const r = await axios.get(ep, { headers: { 'Accept': 'application/json' }, timeout: 15000 });
-                    if (r.status === 200) { pkg = r.data; break; }
-                  }
-                } catch { /* try next */ }
-              }
-
-              if (pkg) {
-                await fs.writeFile('data/texmex-badges.json', JSON.stringify({
-                  lastUpdated: new Date().toISOString(),
-                  data: pkg
-                }, null, 2));
-                console.log('TexMex data updated');
-              } else {
-                console.warn('VS Code Marketplace endpoints failed');
-              }
-            } catch (e) {
-              console.error('TexMex update failed:', e.message);
+            
+            # Write to file
+            with open('data/leetcode-calendar.json', 'w') as f:
+                json.dump(final_data, f, indent=2)
+            
+            print('LeetCode calendar data updated successfully')
+        else:
+            print(f'Failed to fetch LeetCode calendar data: {response.status_code}')
+            exit(1)
+        "
+    
+    - name: Update LeetCode Contest Data
+      run: |
+        python -c "
+        import requests
+        import json
+        import datetime
+        
+        # LeetCode API endpoint for contest data
+        username = 'Rahul_Challa'
+        api_url = f'https://alfa-leetcode-api.onrender.com/{username}/contest'
+        
+        # Make request to LeetCode API
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            data = response.json()
+            
+            # Create final data structure
+            final_data = {
+                'lastUpdated': datetime.datetime.now().isoformat(),
+                'data': data,
+                'apiSource': api_url,
+                'responseHeaders': dict(response.headers),
+                'responseStatus': response.status_code,
+                'requestUrl': api_url
             }
-          }
-
-          (async () => {
-            await ensureDataDir();
-            await updateGitHubData();
-            await updateLeetCodeData();
-            await updateTexMexData();
-            console.log('All data tasks complete');
-          })();
-          EOF
-
-      - name: Run update script
-        run: node update-data.js
-
-      - name: Check for changes
-        id: check_changes
-        run: |
-          if git diff --quiet && git diff --staged --quiet; then
-            echo "no_changes=true" >> $GITHUB_OUTPUT
-            echo "No changes detected"
-          else
-            echo "no_changes=false" >> $GITHUB_OUTPUT
-            echo "Changes detected"
-            git status --porcelain
-          fi
-
-      - name: Commit & rebase & push
-        if: steps.check_changes.outputs.no_changes == 'false'
-        run: |
-          BRANCH='${{ github.ref_name }}'
-
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config user.name  "github-actions[bot]"
-
-          git add data/
-          git commit -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')" || echo "Nothing to commit"
-
-          # Rebase on latest remote to avoid non-FF push rejections
-          git fetch origin "${BRANCH}"
-          git config --global rebase.autoStash true
-          git pull --rebase origin "${BRANCH}"
-
-          git push origin HEAD:"${BRANCH}"
-
-      - name: Done (no changes)
-        if: steps.check_changes.outputs.no_changes == 'true'
-        run: echo "Workflow completed (no changes)"
+            
+            # Write to file
+            with open('data/leetcode-contest.json', 'w') as f:
+                json.dump(final_data, f, indent=2)
+            
+            print('LeetCode contest data updated successfully')
+        else:
+            print(f'Failed to fetch LeetCode contest data: {response.status_code}')
+            exit(1)
+        "
+    
+    - name: Update LeetCode History Data
+      run: |
+        python -c "
+        import requests
+        import json
+        import datetime
+        
+        # LeetCode API endpoint for history data
+        username = 'Rahul_Challa'
+        api_url = f'https://alfa-leetcode-api.onrender.com/{username}/history'
+        
+        # Make request to LeetCode API
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            data = response.json()
+            
+            # Create final data structure
+            final_data = {
+                'lastUpdated': datetime.datetime.now().isoformat(),
+                'data': data,
+                'apiSource': api_url,
+                'responseHeaders': dict(response.headers),
+                'responseStatus': response.status_code,
+                'requestUrl': api_url
+            }
+            
+            # Write to file
+            with open('data/leetcode-history.json', 'w') as f:
+                json.dump(final_data, f, indent=2)
+            
+            print('LeetCode history data updated successfully')
+        else:
+            print(f'Failed to fetch LeetCode history data: {response.status_code}')
+            exit(1)
+        "
+    
+    - name: Update TexMex Package Data
+      run: |
+        python -c "
+        import requests
+        import json
+        import datetime
+        
+        # NPM API endpoint for TexMex package
+        package_name = 'texmex'
+        api_url = f'https://registry.npmjs.org/{package_name}'
+        
+        # Make request to NPM API
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            data = response.json()
+            
+            # Extract latest version info
+            latest_version = data.get('dist-tags', {}).get('latest')
+            latest_data = data.get('versions', {}).get(latest_version, {})
+            
+            # Create final data structure
+            final_data = {
+                'lastUpdated': datetime.datetime.now().isoformat(),
+                'data': {
+                    'installs': None,  # NPM doesn't provide install count in registry API
+                    'version': latest_version,
+                    'rating': None,  # NPM doesn't provide ratings
+                    'ratingCount': None,
+                    'publisher': latest_data.get('publisher', {}).get('name'),
+                    'displayName': latest_data.get('displayName'),
+                    'description': latest_data.get('description'),
+                    'categories': latest_data.get('categories', []),
+                    'tags': latest_data.get('keywords', []),
+                    'repository': latest_data.get('repository', {}).get('url'),
+                    'homepage': latest_data.get('homepage'),
+                    'bugs': latest_data.get('bugs', {}).get('url'),
+                    'license': latest_data.get('license'),
+                    'engines': latest_data.get('engines', {}),
+                    'icon': latest_data.get('icon'),
+                    'galleryBanner': latest_data.get('galleryBanner', {}),
+                    'preview': latest_data.get('preview', False),
+                    'public': True
+                },
+                'apiSource': api_url,
+                'responseHeaders': dict(response.headers),
+                'responseStatus': response.status_code
+            }
+            
+            # Write to file
+            with open('data/texmex-badges.json', 'w') as f:
+                json.dump(final_data, f, indent=2)
+            
+            print('TexMex package data updated successfully')
+        else:
+            print(f'Failed to fetch TexMex package data: {response.status_code}')
+            # Don't exit on failure for this one as it's less critical
+        "
+    
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')" && git push)
