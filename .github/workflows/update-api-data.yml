@@ -147,32 +147,42 @@ jobs:
         import json
         import datetime
         
-        # LeetCode API endpoint for history data
+        # LeetCode API endpoint for contest data (contains history information)
         username = 'Rahul_Challa'
-        api_url = f'https://alfa-leetcode-api.onrender.com/{username}/history'
+        api_url = f'https://alfa-leetcode-api.onrender.com/{username}/contest'
         
         # Make request to LeetCode API
         response = requests.get(api_url)
         if response.status_code == 200:
-            data = response.json()
+            contest_data = response.json()
+            
+            # Extract contest participation data which contains the history
+            contest_history = contest_data.get('contestParticipation', [])
+            
+            # Create history data structure similar to the original format
+            history_data = {
+                'count': len(contest_history),
+                'contestHistory': contest_history
+            }
             
             # Create final data structure
             final_data = {
                 'lastUpdated': datetime.datetime.now().isoformat(),
-                'data': data,
+                'data': history_data,
                 'apiSource': api_url,
                 'responseHeaders': dict(response.headers),
                 'responseStatus': response.status_code,
-                'requestUrl': api_url
+                'requestUrl': api_url,
+                'note': 'Data extracted from contest endpoint as history endpoint is not available'
             }
             
             # Write to file
             with open('data/leetcode-history.json', 'w') as f:
                 json.dump(final_data, f, indent=2)
             
-            print('LeetCode history data updated successfully')
+            print('LeetCode history data updated successfully from contest endpoint')
         else:
-            print(f'Failed to fetch LeetCode history data: {response.status_code}')
+            print(f'Failed to fetch LeetCode contest data: {response.status_code}')
             exit(1)
         "
     
