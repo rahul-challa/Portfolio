@@ -239,14 +239,15 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # Always pull the latest changes first to avoid conflicts
-        echo "Pulling latest changes from remote..."
-        git pull origin main
+        # Reset to match remote exactly and avoid any conflicts
+        echo "Resetting to match remote main branch..."
+        git fetch origin main
+        git reset --hard origin/main
         
         # Now add and commit our changes
         git add data/
         git commit --allow-empty -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
         
-        # Push should now work since we're up-to-date
+        # Push should now work since we're exactly matching remote
         git push origin main
         echo "Successfully updated and pushed API data"
