@@ -37,34 +37,51 @@ jobs:
         username = 'rahul-challa'
         api_url = f'https://api.github.com/users/{username}'
         
-        # Make request to GitHub API
-        response = requests.get(api_url)
-        if response.status_code == 200:
-            user_data = response.json()
+        try:
+            # Make request to GitHub API
+            print(f'Fetching GitHub profile data for: {username}')
+            response = requests.get(api_url, timeout=30)
+            print(f'Response status: {response.status_code}')
             
-            # Get repositories
-            repos_response = requests.get(f'{api_url}/repos?per_page=100&sort=updated')
-            if repos_response.status_code == 200:
-                user_data['repositories'] = repos_response.json()
-            
-            # Get followers list
-            followers_response = requests.get(f'{api_url}/followers?per_page=100')
-            if followers_response.status_code == 200:
-                user_data['followers_list'] = followers_response.json()
-            
-            # Create final data structure
-            final_data = {
-                'lastUpdated': datetime.datetime.now().isoformat(),
-                'data': user_data
-            }
-            
-            # Write to file
-            with open('data/github-profile.json', 'w') as f:
-                json.dump(final_data, f, indent=2)
-            
-            print('GitHub profile data updated successfully')
-        else:
-            print(f'Failed to fetch GitHub data: {response.status_code}')
+            if response.status_code == 200:
+                user_data = response.json()
+                print(f'User data keys: {list(user_data.keys())}')
+                
+                # Get repositories
+                print('Fetching repositories...')
+                repos_response = requests.get(f'{api_url}/repos?per_page=100&sort=updated', timeout=30)
+                if repos_response.status_code == 200:
+                    user_data['repositories'] = repos_response.json()
+                    print(f'Found {len(user_data[\"repositories\"])} repositories')
+                else:
+                    print(f'Failed to fetch repositories: {repos_response.status_code}')
+                
+                # Get followers list
+                print('Fetching followers...')
+                followers_response = requests.get(f'{api_url}/followers?per_page=100', timeout=30)
+                if followers_response.status_code == 200:
+                    user_data['followers_list'] = followers_response.json()
+                    print(f'Found {len(user_data[\"followers_list\"])} followers')
+                else:
+                    print(f'Failed to fetch followers: {followers_response.status_code}')
+                
+                # Create final data structure
+                final_data = {
+                    'lastUpdated': datetime.datetime.now().isoformat(),
+                    'data': user_data
+                }
+                
+                # Write to file
+                with open('data/github-profile.json', 'w') as f:
+                    json.dump(final_data, f, indent=2)
+                
+                print('GitHub profile data updated successfully')
+            else:
+                print(f'Failed to fetch GitHub data: {response.status_code}')
+                print(f'Response content: {response.text[:500]}')
+                exit(1)
+        except Exception as e:
+            print(f'Error fetching GitHub data: {str(e)}')
             exit(1)
         "
     
@@ -79,28 +96,37 @@ jobs:
         username = 'Rahul_Challa'
         api_url = f'https://alfa-leetcode-api.onrender.com/{username}/calendar'
         
-        # Make request to LeetCode API
-        response = requests.get(api_url)
-        if response.status_code == 200:
-            data = response.json()
+        try:
+            # Make request to LeetCode API
+            print(f'Fetching LeetCode calendar data from: {api_url}')
+            response = requests.get(api_url, timeout=30)
+            print(f'Response status: {response.status_code}')
             
-            # Create final data structure
-            final_data = {
-                'lastUpdated': datetime.datetime.now().isoformat(),
-                'data': data,
-                'apiSource': api_url,
-                'responseHeaders': dict(response.headers),
-                'responseStatus': response.status_code,
-                'requestUrl': api_url
-            }
-            
-            # Write to file
-            with open('data/leetcode-calendar.json', 'w') as f:
-                json.dump(final_data, f, indent=2)
-            
-            print('LeetCode calendar data updated successfully')
-        else:
-            print(f'Failed to fetch LeetCode calendar data: {response.status_code}')
+            if response.status_code == 200:
+                data = response.json()
+                print(f'Received data keys: {list(data.keys()) if isinstance(data, dict) else \"Not a dict\"}')
+                
+                # Create final data structure
+                final_data = {
+                    'lastUpdated': datetime.datetime.now().isoformat(),
+                    'data': data,
+                    'apiSource': api_url,
+                    'responseHeaders': dict(response.headers),
+                    'responseStatus': response.status_code,
+                    'requestUrl': api_url
+                }
+                
+                # Write to file
+                with open('data/leetcode-calendar.json', 'w') as f:
+                    json.dump(final_data, f, indent=2)
+                
+                print('LeetCode calendar data updated successfully')
+            else:
+                print(f'Failed to fetch LeetCode calendar data: {response.status_code}')
+                print(f'Response content: {response.text[:500]}')
+                exit(1)
+        except Exception as e:
+            print(f'Error fetching LeetCode calendar data: {str(e)}')
             exit(1)
         "
     
@@ -197,51 +223,119 @@ jobs:
         package_name = 'texmex'
         api_url = f'https://registry.npmjs.org/{package_name}'
         
-        # Make request to NPM API
-        response = requests.get(api_url)
-        if response.status_code == 200:
-            data = response.json()
-            
-            # Extract latest version info
-            latest_version = data.get('dist-tags', {}).get('latest')
-            latest_data = data.get('versions', {}).get(latest_version, {})
-            
-            # Create final data structure
-            final_data = {
+        try:
+            # Make request to NPM API
+            response = requests.get(api_url, timeout=30)
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Extract latest version info
+                latest_version = data.get('dist-tags', {}).get('latest')
+                latest_data = data.get('versions', {}).get(latest_version, {})
+                
+                # Create final data structure
+                final_data = {
+                    'lastUpdated': datetime.datetime.now().isoformat(),
+                    'data': {
+                        'installs': None,  # NPM doesn't provide install count in registry API
+                        'version': latest_version,
+                        'rating': None,  # NPM doesn't provide ratings
+                        'ratingCount': None,
+                        'publisher': latest_data.get('publisher', {}).get('name'),
+                        'displayName': latest_data.get('displayName'),
+                        'description': latest_data.get('description'),
+                        'categories': latest_data.get('categories', []),
+                        'tags': latest_data.get('keywords', []),
+                        'repository': latest_data.get('repository', {}).get('url'),
+                        'homepage': latest_data.get('homepage'),
+                        'bugs': latest_data.get('bugs', {}).get('url'),
+                        'license': latest_data.get('license'),
+                        'engines': latest_data.get('engines', {}),
+                        'icon': latest_data.get('icon'),
+                        'galleryBanner': latest_data.get('galleryBanner', {}),
+                        'preview': latest_data.get('preview', False),
+                        'public': True
+                    },
+                    'apiSource': api_url,
+                    'responseHeaders': dict(response.headers),
+                    'responseStatus': response.status_code
+                }
+                
+                # Write to file
+                with open('data/texmex-badges.json', 'w') as f:
+                    json.dump(final_data, f, indent=2)
+                
+                print('TexMex package data updated successfully')
+            else:
+                print(f'Failed to fetch TexMex package data: {response.status_code}')
+                # Create fallback data structure
+                fallback_data = {
+                    'lastUpdated': datetime.datetime.now().isoformat(),
+                    'data': {
+                        'installs': None,
+                        'version': None,
+                        'rating': None,
+                        'ratingCount': None,
+                        'publisher': None,
+                        'displayName': None,
+                        'description': None,
+                        'categories': [],
+                        'tags': [],
+                        'repository': None,
+                        'homepage': None,
+                        'bugs': None,
+                        'license': None,
+                        'engines': {},
+                        'icon': None,
+                        'galleryBanner': {},
+                        'preview': False,
+                        'public': False
+                    },
+                    'apiSource': api_url,
+                    'responseHeaders': None,
+                    'responseStatus': response.status_code,
+                    'error': f'API request failed with status {response.status_code}'
+                }
+                
+                with open('data/texmex-badges.json', 'w') as f:
+                    json.dump(fallback_data, f, indent=2)
+                
+                print('Created fallback TexMex data due to API failure')
+        except Exception as e:
+            print(f'Error fetching TexMex package data: {str(e)}')
+            # Create error data structure
+            error_data = {
                 'lastUpdated': datetime.datetime.now().isoformat(),
                 'data': {
-                    'installs': None,  # NPM doesn't provide install count in registry API
-                    'version': latest_version,
-                    'rating': None,  # NPM doesn't provide ratings
+                    'installs': None,
+                    'version': None,
+                    'rating': None,
                     'ratingCount': None,
-                    'publisher': latest_data.get('publisher', {}).get('name'),
-                    'displayName': latest_data.get('displayName'),
-                    'description': latest_data.get('description'),
-                    'categories': latest_data.get('categories', []),
-                    'tags': latest_data.get('keywords', []),
-                    'repository': latest_data.get('repository', {}).get('url'),
-                    'homepage': latest_data.get('homepage'),
-                    'bugs': latest_data.get('bugs', {}).get('url'),
-                    'license': latest_data.get('license'),
-                    'engines': latest_data.get('engines', {}),
-                    'icon': latest_data.get('icon'),
-                    'galleryBanner': latest_data.get('galleryBanner', {}),
-                    'preview': latest_data.get('preview', False),
-                    'public': True
+                    'publisher': None,
+                    'displayName': None,
+                    'description': None,
+                    'categories': [],
+                    'tags': [],
+                    'repository': None,
+                    'homepage': None,
+                    'bugs': None,
+                    'license': None,
+                    'engines': {},
+                    'icon': None,
+                    'galleryBanner': {},
+                    'preview': False,
+                    'public': False
                 },
                 'apiSource': api_url,
-                'responseHeaders': dict(response.headers),
-                'responseStatus': response.status_code
+                'responseHeaders': None,
+                'responseStatus': None,
+                'error': str(e)
             }
             
-            # Write to file
             with open('data/texmex-badges.json', 'w') as f:
-                json.dump(final_data, f, indent=2)
+                json.dump(error_data, f, indent=2)
             
-            print('TexMex package data updated successfully')
-        else:
-            print(f'Failed to fetch TexMex package data: {response.status_code}')
-            # Don't exit on failure for this one as it's less critical
+            print('Created error TexMex data due to exception')
         "
     
     - name: Commit and push changes
@@ -254,9 +348,24 @@ jobs:
         git fetch origin main
         git reset --hard origin/main
         
+        # Check what files we have in data directory
+        echo "Files in data directory:"
+        ls -la data/
+        
+        # Check if any data files were actually updated
+        echo "Checking for changes in data files..."
+        git status
+        
         # Now add and commit our changes
         git add data/
-        git commit --allow-empty -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+        
+        # Check if there are any changes to commit
+        if git diff --staged --quiet; then
+          echo "No changes to commit - data files are up to date"
+        else
+          git commit -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+          echo "Committed changes to data files"
+        fi
         
         # Push should now work since we're exactly matching remote
         git push origin main

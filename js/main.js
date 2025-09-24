@@ -212,11 +212,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     async function loadGitHubData() {
       try {
+        console.log('Loading GitHub data from ./data/github-profile.json');
         const response = await fetch('./data/github-profile.json');
         if (!response.ok) {
           throw new Error('Failed to load GitHub data');
         }
         const githubData = await response.json();
+        console.log('GitHub data loaded:', githubData);
         const data = githubData.data;
         
         document.querySelector('.github-profile').innerHTML = `
@@ -274,19 +276,25 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Loading LeetCode data from local files...');
         
         // Load contest data
+        console.log('Loading contest data from ./data/leetcode-contest.json');
         const contestResponse = await fetch('./data/leetcode-contest.json');
         if (!contestResponse.ok) throw new Error('Failed to load contest data');
         const contestData = await contestResponse.json();
+        console.log('Contest data loaded:', contestData);
         
         // Load history data
+        console.log('Loading history data from ./data/leetcode-history.json');
         const historyResponse = await fetch('./data/leetcode-history.json');
         if (!historyResponse.ok) throw new Error('Failed to load history data');
         const historyData = await historyResponse.json();
+        console.log('History data loaded:', historyData);
         
         // Load calendar data
+        console.log('Loading calendar data from ./data/leetcode-calendar.json');
         const calendarResponse = await fetch('./data/leetcode-calendar.json');
         if (!calendarResponse.ok) throw new Error('Failed to load calendar data');
         const calendarData = await calendarResponse.json();
+        console.log('Calendar data loaded:', calendarData);
         
         console.log('LeetCode data loaded successfully from local files');
         return {
