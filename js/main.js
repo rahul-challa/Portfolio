@@ -600,13 +600,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
       
-      // Grid size: weeks x rows
+      // Grid size: weeks x rows - Show full year (365 days)
       const rows = 7;
-      const weeks = 30; // e.g., 30 weeks (210 days)
-      const days = weeks * rows;
+      const weeks = 52; // 52 weeks = 364 days (full year)
+      const days = weeks * rows; // 364 days
       const today = new Date();
       let activity = Array(days).fill(0);
       let totalSubmissions = 0;
+      
+      console.log('Processing heatmap data for', days, 'days');
+      console.log('Calendar data entries:', Object.keys(calendarData).length);
+      
       for (const ts in calendarData) {
         const day = new Date(parseInt(ts, 10) * 1000);
         const diff = Math.floor((today - day) / (1000 * 60 * 60 * 24));
@@ -615,6 +619,19 @@ document.addEventListener('DOMContentLoaded', function() {
           totalSubmissions += calendarData[ts];
         }
       }
+      
+      console.log('Total submissions in heatmap range:', totalSubmissions);
+      console.log('Active days in heatmap range:', activity.filter(d => d > 0).length);
+      
+      // If we're missing submissions, calculate total from all calendar data
+      let totalCalendarSubmissions = 0;
+      for (const ts in calendarData) {
+        totalCalendarSubmissions += calendarData[ts];
+      }
+      console.log('Total submissions in calendar data:', totalCalendarSubmissions);
+      
+      // Use the higher count for display
+      const displaySubmissions = Math.max(totalSubmissions, totalCalendarSubmissions);
       // No padding: rightmost column is today
       // SVG grid: weeks x 7 days, small cells, minimal gap
       const cell = 11, gap = 2;
@@ -655,7 +672,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Draw month labels
       svg += monthLabels.map(m => `<text x="${m.x + 2}" y="10" font-size="9" fill="#bbb">${m.label}</text>`).join('');
       svg += '</svg>';
-      heatmapCard.innerHTML = `<div style=\"color:#bbb;font-size:1.05rem;margin-bottom:0.2rem;\"><span style=\"color:#fff;font-size:1.2rem;font-weight:700;\">${totalSubmissions}</span> submissions in the last ${days} days</div><div class=\"leetcode-heatmap-svg\" style=\"display:flex;justify-content:center;align-items:center;width:100%;height:100%;\">${svg}</div>`;
+      heatmapCard.innerHTML = `<div style=\"color:#bbb;font-size:1.05rem;margin-bottom:0.2rem;\"><span style=\"color:#fff;font-size:1.2rem;font-weight:700;\">${displaySubmissions}</span> submissions in the last year</div><div class=\"leetcode-heatmap-svg\" style=\"display:flex;justify-content:center;align-items:center;width:100%;height:100%;\">${svg}</div>`;
       } catch (error) {
         console.error('Error rendering LeetCode heatmap:', error);
         const heatmapCard = document.querySelector('.leetcode-card.card-bar-chart');
