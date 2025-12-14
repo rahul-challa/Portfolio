@@ -95,6 +95,8 @@ def update_leetcode_calendar():
     """Update LeetCode calendar data"""
     print('\n=== Updating LeetCode Calendar Data ===')
     username = 'Rahul_Challa'
+    # Prioritize alfa-leetcode-api as it's the most reliable
+    # Prioritize alfa-leetcode-api as it's the most reliable
     api_endpoints = [
         f'https://alfa-leetcode-api.onrender.com/{username}/calendar',
         f'https://leetcode-api.cyclic.app/{username}/calendar'
@@ -146,10 +148,10 @@ def update_leetcode_contest():
     """Update LeetCode contest data"""
     print('\n=== Updating LeetCode Contest Data ===')
     username = 'Rahul_Challa'
+    # Prioritize alfa-leetcode-api as it's the most reliable and returns correct format
     api_endpoints = [
         f'https://alfa-leetcode-api.onrender.com/{username}/contest',
-        f'https://leetcode-api.cyclic.app/{username}/contest',
-        f'https://leetcode-stats-api.herokuapp.com/{username}'
+        f'https://leetcode-api.cyclic.app/{username}/contest'
     ]
     
     data = None
@@ -198,6 +200,7 @@ def update_leetcode_history():
     """Update LeetCode history data"""
     print('\n=== Updating LeetCode History Data ===')
     username = 'Rahul_Challa'
+    # Prioritize alfa-leetcode-api as it's the most reliable
     api_endpoints = [
         f'https://alfa-leetcode-api.onrender.com/{username}/contest',
         f'https://leetcode-api.cyclic.app/{username}/contest'
@@ -226,18 +229,25 @@ def update_leetcode_history():
                 time.sleep(3)
     
     if contest_data:
-        # Extract contest participation data
+        # Extract contest participation data - handle alfa-leetcode-api format
+        contest_history = []
         if isinstance(contest_data, dict):
-            if 'data' in contest_data and isinstance(contest_data['data'], dict):
-                contest_history = contest_data['data'].get('userContestRankingHistory', [])
+            # alfa-leetcode-api returns contestParticipation directly in data
+            if 'contestParticipation' in contest_data:
+                contest_history = contest_data['contestParticipation']
+            elif 'data' in contest_data and isinstance(contest_data['data'], dict):
+                # Check nested data structure
+                if 'contestParticipation' in contest_data['data']:
+                    contest_history = contest_data['data']['contestParticipation']
+                elif 'userContestRankingHistory' in contest_data['data']:
+                    contest_history = contest_data['data']['userContestRankingHistory']
             else:
                 contest_history = contest_data.get('contestParticipation', []) or contest_data.get('userContestRankingHistory', [])
-        else:
-            contest_history = []
         
         history_data = {
             'count': len(contest_history),
-            'contestHistory': contest_history
+            'contestHistory': contest_history,
+            'contestParticipation': contest_history  # Also include for alfa-leetcode-api format
         }
         
         final_data = {

@@ -333,25 +333,48 @@ document.addEventListener('DOMContentLoaded', function() {
     async function renderLeetCodeProfile(contestData, contestHistory, submissionCalendar) {
       // Handle nested data structure from the API
       let stats = null;
+      let badge = null;
       if (contestData && contestData.data) {
+        // Check for alfa-leetcode-api format (contestAttend, contestRating, etc.)
+        if (contestData.data.contestAttend !== undefined) {
+          // Convert alfa-leetcode-api format to standard format
+          stats = {
+            attendedContestsCount: contestData.data.contestAttend,
+            rating: contestData.data.contestRating,
+            globalRanking: contestData.data.contestGlobalRanking,
+            topPercentage: contestData.data.contestTopPercentage
+          };
+          // Extract badge information
+          if (contestData.data.contestBadges && contestData.data.contestBadges.name) {
+            badge = contestData.data.contestBadges.name;
+          }
+        }
         // Check if data is nested (data.data.userContestRanking)
-        if (contestData.data.data && contestData.data.data.userContestRanking) {
+        else if (contestData.data.data && contestData.data.data.userContestRanking) {
           stats = contestData.data.data.userContestRanking;
         } else if (contestData.data.userContestRanking) {
           stats = contestData.data.userContestRanking;
+        }
+        // Try to get badge from nested structure
+        if (!badge && contestData.data.contestBadges && contestData.data.contestBadges.name) {
+          badge = contestData.data.contestBadges.name;
         }
       }
       
       // Check if we have contest history data - look in the correct location
       let hasHistoryData = false;
       if (contestHistory && contestHistory.data) {
+        // Check for alfa-leetcode-api format (contestParticipation array)
+        if (contestHistory.data.contestParticipation && Array.isArray(contestHistory.data.contestParticipation)) {
+          hasHistoryData = contestHistory.data.contestParticipation.length > 0;
+        } else if (contestHistory.data.contestHistory && Array.isArray(contestHistory.data.contestHistory)) {
+          hasHistoryData = contestHistory.data.contestHistory.length > 0;
+        }
         // Check if data is nested (data.data.userContestRankingHistory)
-        if (contestHistory.data.data && contestHistory.data.data.userContestRankingHistory) {
+        else if (contestHistory.data.data && contestHistory.data.data.userContestRankingHistory) {
           hasHistoryData = contestHistory.data.data.userContestRankingHistory.length > 0;
         } else if (contestHistory.data.userContestRankingHistory) {
           hasHistoryData = contestHistory.data.userContestRankingHistory.length > 0;
-        } else if (contestHistory.data.contestHistory) {
-          hasHistoryData = contestHistory.data.contestHistory.length > 0;
         }
       }
       
@@ -362,22 +385,80 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
       
+      // Create badge SVG based on badge name - LeetCode style shield badge
+      const getBadgeSVG = (badgeName) => {
+        const badgeColors = {
+          'Knight': { primary: '#4CAF50', secondary: '#2E7D32' },
+          'Guardian': { primary: '#2196F3', secondary: '#1565C0' },
+          'Master': { primary: '#9C27B0', secondary: '#6A1B9A' },
+          'Grandmaster': { primary: '#F44336', secondary: '#C62828' }
+        };
+        const colors = badgeColors[badgeName] || { primary: '#FFB81C', secondary: '#e6a600' };
+        // Create a proper shield shape with knight chess piece icon
+        return `
+          <svg class="leetcode-badge-svg" width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="badgeGrad-${badgeName}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:${colors.primary};stop-opacity:1" />
+                <stop offset="100%" style="stop-color:${colors.secondary};stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <!-- Shield shape -->
+            <path d="M16 2 L26 6 L26 14 Q26 20 16 24 Q6 20 6 14 L6 6 Z" 
+                  fill="url(#badgeGrad-${badgeName})" 
+                  stroke="#1a1a1a" 
+                  stroke-width="0.8"
+                  stroke-linejoin="round"/>
+            <!-- Knight chess piece icon (simplified) -->
+            <g transform="translate(16, 16)">
+              <!-- Knight head -->
+              <circle cx="0" cy="-4" r="2.5" fill="white" opacity="0.95"/>
+              <!-- Knight body/base -->
+              <path d="M -3 -1 L -3 3 L 3 3 L 3 -1 L 1 -1 L 1 1 L -1 1 L -1 -1 Z" fill="white" opacity="0.95"/>
+              <!-- Knight neck -->
+              <rect x="-1.5" y="-3" width="3" height="2" fill="white" opacity="0.95"/>
+              <!-- Knight mane/details -->
+              <path d="M -2.5 -2 L -2.5 -1 L 2.5 -1 L 2.5 -2 Z" fill="white" opacity="0.9"/>
+            </g>
+          </svg>
+        `;
+      };
+
       // Create the new LeetCode profile HTML (2x2 grid of 4 cards, improved layout)
       const leetcodeProfileHTML = `
         <div class="leetcode-grid">
           <!-- Card 1: LeetCode Profile Info -->
-          <div class="leetcode-card card-info card-info-twocol">
-            <div class="leetcode-profile-header">
-              <img src="${leetcodeLogoImg}" alt="LeetCode Logo" class="leetcode-logo-large twocol-logo"/>
-              <div class="leetcode-profile-info">
-                <div class="leetcode-username-main twocol-username">${leetcodeDisplayName}</div>
-                <div class="leetcode-rating-block twocol-rating-block">
-                  <span class="leetcode-rating-label">Rating:</span>
-                  <span class="leetcode-rating-value">${stats ? stats.rating.toFixed(0) : 'N/A'}</span>
+          <div class="leetcode-card card-info card-info-redesigned">
+            <div class="leetcode-profile-content">
+              <div class="leetcode-profile-main">
+                <div class="leetcode-avatar-section">
+                  <div class="leetcode-avatar-wrapper">
+                    <img src="${leetcodeLogoImg}" alt="LeetCode Logo" class="leetcode-avatar"/>
+                  </div>
+                </div>
+                <div class="leetcode-info-section">
+                  <div class="leetcode-name-badge-row">
+                    <h3 class="leetcode-username-new">${leetcodeDisplayName}</h3>
+                    ${badge ? `
+                      <div class="leetcode-badge-container">
+                        <img src="assets/images/Knight.gif" alt="${badge} Badge" class="leetcode-badge-gif" />
+                        <span class="leetcode-badge-text">${badge}</span>
+                      </div>
+                    ` : ''}
+                  </div>
+                  <div class="leetcode-rating-display">
+                    <span class="leetcode-rating-label-new">Rating</span>
+                    <span class="leetcode-rating-value-new">${stats ? stats.rating.toFixed(0) : 'N/A'}</span>
+                  </div>
                 </div>
               </div>
+              <a href="https://leetcode.com/${leetcodeUsername}" target="_blank" class="leetcode-view-btn">
+                <span>View LeetCode</span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
             </div>
-            <a href="https://leetcode.com/${leetcodeUsername}" target="_blank" class="btn primary-btn leetcode-btn info-btn long-btn">View LeetCode</a>
           </div>
 
           <!-- Card 2: Contest Stats -->
@@ -406,28 +487,54 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="leetcode-card-header">
               <h3>Problem Solving Stats</h3>
             </div>
-            <div class="interactive-stats-container">
-              <div class="stat-bars">
-                <div class="stat-bar-item">
-                  <div class="stat-bar-label">Easy</div>
-                  <div class="stat-bar">
-                    <div class="stat-bar-fill easy-fill" style="width: 75%"></div>
-                  </div>
-                  <div class="stat-bar-value easy-value">75%</div>
+            <div class="problem-stats-compact">
+              <div class="stats-left-section">
+                <div class="total-problems-compact">
+                  <div class="total-problems-label-compact">Total Solved</div>
+                  <div class="total-problems-value-compact">${(() => {
+                    // Calculate total from calendar data if available
+                    let total = 0;
+                    if (submissionCalendar && submissionCalendar.data) {
+                      const calendar = typeof submissionCalendar.data.submissionCalendar === 'string' 
+                        ? JSON.parse(submissionCalendar.data.submissionCalendar) 
+                        : submissionCalendar.data.submissionCalendar;
+                      for (const ts in calendar) {
+                        total += calendar[ts];
+                      }
+                    }
+                    return total > 0 ? total.toLocaleString() : 'N/A';
+                  })()}</div>
                 </div>
-                <div class="stat-bar-item">
-                  <div class="stat-bar-label">Medium</div>
-                  <div class="stat-bar">
-                    <div class="stat-bar-fill medium-fill" style="width: 60%"></div>
+              </div>
+              <div class="stats-right-section">
+                <div class="difficulty-compact-grid">
+                  <div class="difficulty-item-compact">
+                    <div class="difficulty-header-compact">
+                      <span class="difficulty-label-compact">Easy</span>
+                      <span class="difficulty-percentage-compact difficulty-easy-text">75%</span>
+                    </div>
+                    <div class="difficulty-bar-compact-track">
+                      <div class="difficulty-bar-compact-fill difficulty-easy" style="width: 75%"></div>
+                    </div>
                   </div>
-                  <div class="stat-bar-value medium-value">60%</div>
-                </div>
-                <div class="stat-bar-item">
-                  <div class="stat-bar-label">Hard</div>
-                  <div class="stat-bar">
-                    <div class="stat-bar-fill hard-fill" style="width: 40%"></div>
+                  <div class="difficulty-item-compact">
+                    <div class="difficulty-header-compact">
+                      <span class="difficulty-label-compact">Medium</span>
+                      <span class="difficulty-percentage-compact difficulty-medium-text">60%</span>
+                    </div>
+                    <div class="difficulty-bar-compact-track">
+                      <div class="difficulty-bar-compact-fill difficulty-medium" style="width: 60%"></div>
+                    </div>
                   </div>
-                  <div class="stat-bar-value hard-value">40%</div>
+                  <div class="difficulty-item-compact">
+                    <div class="difficulty-header-compact">
+                      <span class="difficulty-label-compact">Hard</span>
+                      <span class="difficulty-percentage-compact difficulty-hard-text">40%</span>
+                    </div>
+                    <div class="difficulty-bar-compact-track">
+                      <div class="difficulty-bar-compact-fill difficulty-hard" style="width: 40%"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -514,9 +621,28 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
       
-      const contests = contestHistoryData.filter(c => c.attended);
+      // Handle different data formats
+      let contests = [];
+      if (Array.isArray(contestHistoryData)) {
+        // alfa-leetcode-api format: filter by attended and extract rating
+        contests = contestHistoryData
+          .filter(c => c.attended !== false)
+          .map(c => ({
+            rating: c.rating || 0,
+            contest: {
+              startTime: c.contest ? c.contest.startTime : 0
+            }
+          }));
+      } else {
+        contests = contestHistoryData.filter(c => c.attended);
+      }
+      
       // Sort by contest start time (oldest to newest)
-      contests.sort((a, b) => a.contest.startTime - b.contest.startTime);
+      contests.sort((a, b) => {
+        const timeA = a.contest ? a.contest.startTime : 0;
+        const timeB = b.contest ? b.contest.startTime : 0;
+        return timeA - timeB;
+      });
       const canvas = document.getElementById('contestRatingChart');
       const ctx = canvas?.getContext('2d');
       if (!ctx) return;
@@ -577,7 +703,7 @@ document.addEventListener('DOMContentLoaded', function() {
       canvas._chartInstance = chart;
     }
 
-    // LeetCode Activity Heatmap (SVG)
+    // LeetCode Activity Heatmap (SVG) - Responsive and Dynamic
     async function renderLeetCodeHeatmap(submissionCalendar) {
       try {
         const heatmapCard = document.querySelector('.leetcode-card.card-bar-chart');
@@ -591,7 +717,6 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Handle both old and new data structures
       if (calendarData.data && calendarData.data.submissionCalendar) {
-        // Check if submissionCalendar is a JSON string that needs parsing
         if (typeof calendarData.data.submissionCalendar === 'string') {
           try {
             calendarData = JSON.parse(calendarData.data.submissionCalendar);
@@ -603,7 +728,6 @@ document.addEventListener('DOMContentLoaded', function() {
           calendarData = calendarData.data.submissionCalendar;
         }
       } else if (calendarData.submissionCalendar) {
-        // Check if submissionCalendar is a JSON string that needs parsing
         if (typeof calendarData.submissionCalendar === 'string') {
           try {
             calendarData = JSON.parse(calendarData.submissionCalendar);
@@ -616,79 +740,227 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
       
-      // Grid size: weeks x rows - Show full year (365 days)
+      // Grid size: weeks x rows - Show full year (365 days) ending at current date
       const rows = 7;
-      const weeks = 52; // 52 weeks = 364 days (full year)
-      const days = weeks * rows; // 364 days
       const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      // Calculate one year ago from today (365 days back)
+      const oneYearAgo = new Date(today);
+      oneYearAgo.setDate(oneYearAgo.getDate() - 364);
+      oneYearAgo.setHours(0, 0, 0, 0);
+      
+      // Calculate exact number of days
+      const daysDiff = Math.floor((today - oneYearAgo) / (1000 * 60 * 60 * 24)) + 1;
+      const weeks = Math.ceil(daysDiff / 7);
+      const days = weeks * rows;
+      
+      // Responsive cell sizing based on viewport
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+      const cell = isMobile ? 8 : isTablet ? 9 : 11;
+      const gap = isMobile ? 1.5 : 2;
+      
       let activity = Array(days).fill(0);
       let totalSubmissions = 0;
+      const dateMap = new Map(); // Map index to date for tooltips
       
-      console.log('Processing heatmap data for', days, 'days');
-      console.log('Calendar data entries:', Object.keys(calendarData).length);
-      
+      // Fill activity array with submission data
       for (const ts in calendarData) {
         const day = new Date(parseInt(ts, 10) * 1000);
-        const diff = Math.floor((today - day) / (1000 * 60 * 60 * 24));
+        day.setHours(0, 0, 0, 0);
+        const diff = Math.floor((day - oneYearAgo) / (1000 * 60 * 60 * 24));
         if (diff >= 0 && diff < days) {
-          activity[days - diff - 1] = calendarData[ts];
+          activity[diff] = calendarData[ts];
           totalSubmissions += calendarData[ts];
+          dateMap.set(diff, day);
         }
       }
       
-      console.log('Total submissions in heatmap range:', totalSubmissions);
-      console.log('Active days in heatmap range:', activity.filter(d => d > 0).length);
-      
-      // If we're missing submissions, calculate total from all calendar data
+      // Calculate total from all calendar data
       let totalCalendarSubmissions = 0;
       for (const ts in calendarData) {
         totalCalendarSubmissions += calendarData[ts];
       }
-      console.log('Total submissions in calendar data:', totalCalendarSubmissions);
-      
-      // Use the higher count for display
       const displaySubmissions = Math.max(totalSubmissions, totalCalendarSubmissions);
-      // No padding: rightmost column is today
-      // SVG grid: weeks x 7 days, small cells, minimal gap
-      const cell = 11, gap = 2;
+      
+      // SVG dimensions - responsive
       const svgWidth = weeks * (cell + gap);
-      const svgHeight = rows * (cell + gap) + 18;
-      // Month labels
+      const svgHeight = rows * (cell + gap) + (isMobile ? 16 : 18);
+      
+      // Month labels - calculate from left (oldest) to right (newest/today)
       let monthLabels = [];
-      let lastMonth = null;
+      const monthPositions = new Map();
+      let lastSeenMonth = null;
+      
       for (let w = 0; w < weeks; w++) {
-        // Find the date for the first cell in this week
-        const idx = days - (weeks - w) * rows;
-        const date = new Date(today.getTime() - (days - (w + 1) * rows) * 24 * 60 * 60 * 1000);
-        const month = date.toLocaleString('default', { month: 'short' });
-        if (month !== lastMonth) {
-          monthLabels.push({ x: w * (cell + gap), label: month });
-          lastMonth = month;
+        const daysFromStart = w * rows;
+        const weekDate = new Date(oneYearAgo);
+        weekDate.setDate(oneYearAgo.getDate() + daysFromStart);
+        const month = weekDate.toLocaleString('default', { month: 'short' });
+        
+        if (month !== lastSeenMonth || w === 0) {
+          monthPositions.set(month, w * (cell + gap));
+          lastSeenMonth = month;
         }
       }
-      // SVG
-      let svg = `<svg width="${svgWidth}" height="${svgHeight}">`;
-      // Draw cells
+      
+      monthLabels = Array.from(monthPositions.entries())
+        .map(([label, x]) => ({ label, x }))
+        .sort((a, b) => a.x - b.x);
+      
+      // Ensure current month is shown on the rightmost position
+      const currentMonth = today.toLocaleString('default', { month: 'short' });
+      const rightmostX = (weeks - 1) * (cell + gap);
+      
+      // Remove labels near rightmost and add current month
+      monthLabels = monthLabels.filter(m => Math.abs(m.x - rightmostX) > 10);
+      monthLabels.push({ x: rightmostX, label: currentMonth });
+      monthLabels.sort((a, b) => a.x - b.x);
+      
+      // Remove duplicate months, keeping rightmost occurrence
+      const monthMap = new Map();
+      for (const label of monthLabels) {
+        if (!monthMap.has(label.label) || label.x > monthMap.get(label.label).x) {
+          monthMap.set(label.label, label);
+        }
+      }
+      monthLabels = Array.from(monthMap.values()).sort((a, b) => a.x - b.x);
+      
+      // Create SVG with tooltips and animations
+      let svg = `<svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="xMidYMid meet" style="max-width: 100%; height: auto;">`;
+      
+      // Add CSS for animations
+      svg += `<defs>
+        <style>
+          .heatmap-cell {
+            transition: all 0.2s ease;
+            cursor: pointer;
+          }
+          .heatmap-cell:hover {
+            stroke: #fff;
+            stroke-width: 1.5;
+            filter: brightness(1.2);
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          .heatmap-cell {
+            animation: fadeIn 0.3s ease forwards;
+          }
+        </style>
+      </defs>`;
+      
+      // Draw cells with tooltips
       for (let w = 0; w < weeks; w++) {
         for (let d = 0; d < rows; d++) {
           const idx = w * rows + d;
           if (idx >= activity.length) continue;
+          
           const x = w * (cell + gap);
-          const y = d * (cell + gap) + 12;
+          const y = d * (cell + gap) + (isMobile ? 14 : 12);
           const count = activity[idx];
+          
+          // Calculate actual date for this cell
+          const cellDate = new Date(oneYearAgo);
+          cellDate.setDate(oneYearAgo.getDate() + idx);
+          const dateStr = cellDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          
           // LeetCode green color scale
-          let color = '#222';
+          let color = '#161b22';
           if (count > 0) color = '#9be9a8';
           if (count > 1) color = '#40c463';
           if (count > 2) color = '#30a14e';
           if (count > 4) color = '#216e39';
-          svg += `<rect x="${x}" y="${y}" width="${cell}" height="${cell}" rx="2" fill="${color}"/>`;
+          
+          // Add cell with tooltip
+          const cellId = `cell-${w}-${d}`;
+          svg += `<g class="heatmap-cell-group">
+            <rect 
+              id="${cellId}"
+              class="heatmap-cell"
+              x="${x}" 
+              y="${y}" 
+              width="${cell}" 
+              height="${cell}" 
+              rx="2" 
+              fill="${color}"
+              data-count="${count}"
+              data-date="${dateStr}"
+              style="animation-delay: ${(w * rows + d) * 0.01}s;"
+            />
+            <title>${dateStr}: ${count} ${count === 1 ? 'submission' : 'submissions'}</title>
+          </g>`;
         }
       }
-      // Draw month labels
-      svg += monthLabels.map(m => `<text x="${m.x + 2}" y="10" font-size="9" fill="#bbb">${m.label}</text>`).join('');
+      
+      // Draw month labels with responsive font size
+      const fontSize = isMobile ? 8 : 9;
+      monthLabels.forEach((label, idx) => {
+        // Only show every other month on mobile to avoid crowding
+        if (isMobile && idx > 0 && idx < monthLabels.length - 1 && idx % 2 !== 0) {
+          return;
+        }
+        svg += `<text x="${label.x + 2}" y="10" font-size="${fontSize}" fill="#bbb" class="month-label">${label.label}</text>`;
+      });
+      
       svg += '</svg>';
-      heatmapCard.innerHTML = `<div style=\"color:#bbb;font-size:1.05rem;margin-bottom:0.2rem;\"><span style=\"color:#fff;font-size:1.2rem;font-weight:700;\">${displaySubmissions}</span> submissions in the last year</div><div class=\"leetcode-heatmap-svg\" style=\"display:flex;justify-content:center;align-items:center;width:100%;height:100%;\">${svg}</div>`;
+      
+      // Create container with responsive wrapper
+      const containerHTML = `
+        <div style="color:#bbb;font-size:${isMobile ? '0.9rem' : '1.05rem'};margin-bottom:0.5rem;text-align:center;">
+          <span style="color:#fff;font-size:${isMobile ? '1.1rem' : '1.2rem'};font-weight:700;">${displaySubmissions}</span> submissions in the last year
+        </div>
+        <div class="leetcode-heatmap-svg" style="display:flex;justify-content:center;align-items:center;width:100%;height:100%;overflow-x:auto;overflow-y:visible;">
+          ${svg}
+        </div>
+      `;
+      
+      heatmapCard.innerHTML = containerHTML;
+      
+      // Add interactive tooltips on hover (enhanced)
+      setTimeout(() => {
+        const cells = heatmapCard.querySelectorAll('.heatmap-cell');
+        cells.forEach(cell => {
+          cell.addEventListener('mouseenter', function(e) {
+            const count = this.getAttribute('data-count');
+            const date = this.getAttribute('data-date');
+            // Create tooltip
+            const tooltip = document.createElement('div');
+            tooltip.className = 'heatmap-tooltip';
+            tooltip.textContent = `${date}: ${count} ${count === '1' ? 'submission' : 'submissions'}`;
+            tooltip.style.cssText = `
+              position: absolute;
+              background: rgba(0, 0, 0, 0.9);
+              color: #fff;
+              padding: 0.5rem 0.75rem;
+              border-radius: 4px;
+              font-size: 0.85rem;
+              pointer-events: none;
+              z-index: 1000;
+              white-space: nowrap;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            `;
+            document.body.appendChild(tooltip);
+            
+            const rect = this.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            tooltip.style.left = (rect.left + rect.width / 2 - tooltipRect.width / 2) + 'px';
+            tooltip.style.top = (rect.top - tooltipRect.height - 8) + 'px';
+            
+            this._tooltip = tooltip;
+          });
+          
+          cell.addEventListener('mouseleave', function() {
+            if (this._tooltip) {
+              this._tooltip.remove();
+              this._tooltip = null;
+            }
+          });
+        });
+      }, 100);
+      
       } catch (error) {
         console.error('Error rendering LeetCode heatmap:', error);
         const heatmapCard = document.querySelector('.leetcode-card.card-bar-chart');

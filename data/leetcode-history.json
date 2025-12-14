@@ -1,8 +1,153 @@
 {
-  "lastUpdated": "2025-12-06T12:25:57.027892",
+  "lastUpdated": "2025-12-13T20:11:24.900816",
   "data": {
     "count": 11,
     "contestHistory": [
+      {
+        "attended": true,
+        "rating": 1471.041,
+        "ranking": 16742,
+        "trendDirection": "DOWN",
+        "problemsSolved": 1,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 1368,
+        "contest": {
+          "title": "Weekly Contest 409",
+          "startTime": 1722738600
+        }
+      },
+      {
+        "attended": true,
+        "rating": 1464.925,
+        "ranking": 16034,
+        "trendDirection": "DOWN",
+        "problemsSolved": 1,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 561,
+        "contest": {
+          "title": "Weekly Contest 410",
+          "startTime": 1723343400
+        }
+      },
+      {
+        "attended": true,
+        "rating": 1412.107,
+        "ranking": 23856,
+        "trendDirection": "DOWN",
+        "problemsSolved": 0,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 0,
+        "contest": {
+          "title": "Weekly Contest 411",
+          "startTime": 1723948200
+        }
+      },
+      {
+        "attended": true,
+        "rating": 1481.045,
+        "ranking": 4116,
+        "trendDirection": "UP",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 1316,
+        "contest": {
+          "title": "Weekly Contest 450",
+          "startTime": 1747535400
+        }
+      },
+      {
+        "attended": true,
+        "rating": 1571.322,
+        "ranking": 1680,
+        "trendDirection": "UP",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 856,
+        "contest": {
+          "title": "Weekly Contest 451",
+          "startTime": 1748140200
+        }
+      },
+      {
+        "attended": true,
+        "rating": 1624.362,
+        "ranking": 2696,
+        "trendDirection": "UP",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 1428,
+        "contest": {
+          "title": "Weekly Contest 452",
+          "startTime": 1748745000
+        }
+      },
+      {
+        "attended": true,
+        "rating": 1709.55,
+        "ranking": 802,
+        "trendDirection": "UP",
+        "problemsSolved": 3,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 4924,
+        "contest": {
+          "title": "Weekly Contest 460",
+          "startTime": 1753583400
+        }
+      },
+      {
+        "attended": true,
+        "rating": 1807.769,
+        "ranking": 295,
+        "trendDirection": "UP",
+        "problemsSolved": 4,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 5087,
+        "contest": {
+          "title": "Weekly Contest 470",
+          "startTime": 1759631400
+        }
+      },
+      {
+        "attended": true,
+        "rating": 1901.405,
+        "ranking": 225,
+        "trendDirection": "UP",
+        "problemsSolved": 4,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 3677,
+        "contest": {
+          "title": "Weekly Contest 471",
+          "startTime": 1760236200
+        }
+      },
+      {
+        "attended": true,
+        "rating": 1932.206,
+        "ranking": 1281,
+        "trendDirection": "UP",
+        "problemsSolved": 3,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 2281,
+        "contest": {
+          "title": "Weekly Contest 475",
+          "startTime": 1762655400
+        }
+      },
+      {
+        "attended": true,
+        "rating": 1984.664,
+        "ranking": 505,
+        "trendDirection": "UP",
+        "problemsSolved": 3,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 1621,
+        "contest": {
+          "title": "Weekly Contest 477",
+          "startTime": 1763865000
+        }
+      }
+    ],
+    "contestParticipation": [
       {
         "attended": true,
         "rating": 1471.041,
@@ -150,23 +295,23 @@
   },
   "apiSource": "https://alfa-leetcode-api.onrender.com/Rahul_Challa/contest",
   "responseHeaders": {
-    "Date": "Sat, 06 Dec 2025 20:25:55 GMT",
+    "Date": "Sun, 14 Dec 2025 04:11:22 GMT",
     "Content-Type": "application/json; charset=utf-8",
     "Transfer-Encoding": "chunked",
     "Connection": "keep-alive",
     "Content-Encoding": "gzip",
     "access-control-allow-origin": "*",
-    "Cache-Control": "max-age=250",
-    "etag": "W/\"968-3CvKQjlPI0HVHeOGhXGovWDd+MY\"",
-    "ratelimit": "limit=120, remaining=101, reset=1950",
+    "Cache-Control": "max-age=166",
+    "etag": "W/\"968-2B8HC06VkS9Or2/EZty934jywJA\"",
+    "ratelimit": "limit=120, remaining=109, reset=3424",
     "ratelimit-policy": "120;w=3600",
-    "rndr-id": "9752a5d9-9058-4bb0",
+    "rndr-id": "1e1a3d72-bd10-4ae1",
     "vary": "Accept-Encoding",
     "x-powered-by": "Express",
     "x-render-origin-server": "Render",
     "cf-cache-status": "DYNAMIC",
     "Server": "cloudflare",
-    "CF-RAY": "9a9e83eb9fa11726-SJC",
+    "CF-RAY": "9adadb59cda216df-LAX",
     "alt-svc": "h3=\":443\"; ma=86400"
   },
   "responseStatus": 200,

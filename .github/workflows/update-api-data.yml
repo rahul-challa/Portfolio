@@ -126,7 +126,7 @@ jobs:
         import datetime
         import time
         
-        # LeetCode API endpoints (try multiple as fallback)
+        # LeetCode API endpoints (prioritize alfa-leetcode-api as it's most reliable)
         username = 'Rahul_Challa'
         api_endpoints = [
             f'https://alfa-leetcode-api.onrender.com/{username}/calendar',
@@ -139,8 +139,8 @@ jobs:
                 try:
                     print(f'Attempt {attempt + 1}/{max_retries} for {url}')
                     response = requests.get(url, timeout=30)
-                    
-                    if response.status_code == 200:
+            
+            if response.status_code == 200:
                         return response.json(), response.status_code, response.headers
                     elif response.status_code == 429:
                         # Rate limited - wait and retry
@@ -189,22 +189,22 @@ jobs:
                     time.sleep(3)
         
         if data:
-            # Create final data structure
-            final_data = {
-                'lastUpdated': datetime.datetime.now().isoformat(),
-                'data': data,
-                'apiSource': api_url,
+                # Create final data structure
+                final_data = {
+                    'lastUpdated': datetime.datetime.now().isoformat(),
+                    'data': data,
+                    'apiSource': api_url,
                 'responseHeaders': dict(response_headers) if response_headers else None,
                 'responseStatus': response_status,
-                'requestUrl': api_url
-            }
-            
-            # Write to file
-            with open('data/leetcode-calendar.json', 'w') as f:
-                json.dump(final_data, f, indent=2)
-            
-            print('LeetCode calendar data updated successfully')
-        else:
+                    'requestUrl': api_url
+                }
+                
+                # Write to file
+                with open('data/leetcode-calendar.json', 'w') as f:
+                    json.dump(final_data, f, indent=2)
+                
+                print('LeetCode calendar data updated successfully')
+            else:
             print('Failed to fetch LeetCode calendar data from all endpoints')
             print('Keeping existing calendar data file - workflow will continue')
         "
@@ -222,8 +222,7 @@ jobs:
         username = 'Rahul_Challa'
         api_endpoints = [
             f'https://alfa-leetcode-api.onrender.com/{username}/contest',
-            f'https://leetcode-api.cyclic.app/{username}/contest',
-            f'https://leetcode-stats-api.herokuapp.com/{username}'
+            f'https://leetcode-api.cyclic.app/{username}/contest'
         ]
         
         def fetch_with_retry(url, max_retries=3, base_delay=5):
@@ -233,7 +232,7 @@ jobs:
                     print(f'Attempt {attempt + 1}/{max_retries} for {url}')
                     response = requests.get(url, timeout=30)
                     
-                    if response.status_code == 200:
+        if response.status_code == 200:
                         return response.json(), response.status_code, response.headers
                     elif response.status_code == 429:
                         # Rate limited - wait and retry
@@ -324,7 +323,7 @@ jobs:
                     print(f'Attempt {attempt + 1}/{max_retries} for {url}')
                     response = requests.get(url, timeout=30)
                     
-                    if response.status_code == 200:
+        if response.status_code == 200:
                         return response.json(), response.status_code, response.headers
                     elif response.status_code == 429:
                         # Rate limited - wait and retry
