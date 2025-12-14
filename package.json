@@ -1,6 +1,6 @@
 {
   "name": "portfolio-data-updater",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "Portfolio website with cached API data",
   "main": "index.html",
   "scripts": {

@@ -120,6 +120,27 @@ Your portfolio is **100% ready for production deployment** with:
 ---
 
 **Status**: PRODUCTION READY  
-**Last Updated**: August 2025  
+**Last Updated**: December 2025  
+**Version**: 2.1.0  
 **Deployment Time**: 5 minutes  
 **Maintenance**: Fully automated
+
+## Recent Improvements (v2.1.0)
+
+### Code Quality
+- ✅ Removed unused assets and legacy code
+- ✅ Cleaned up test files and temporary files
+- ✅ Optimized project structure
+- ✅ Improved code organization
+
+### Features
+- ✅ Fixed LeetCode heatmap date calculations (now shows current month correctly)
+- ✅ Added responsive heatmap with interactive tooltips
+- ✅ Improved mobile responsiveness across all sections
+- ✅ Enhanced error handling and fallback mechanisms
+
+### Performance
+- ✅ Reduced bundle size by removing unused files
+- ✅ Optimized rendering performance
+- ✅ Improved mobile loading times
+- ✅ Better cache management

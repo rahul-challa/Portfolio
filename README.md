@@ -17,7 +17,7 @@ A modern, responsive portfolio website showcasing my projects, skills, and exper
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **Styling**: Custom CSS with CSS Variables, Grid, Flexbox
-- **Icons**: Feather Icons, FontAwesome
+- **Icons**: Feather Icons
 - **Fonts**: Google Fonts (Poppins, Roboto)
 - **Data Visualization**: Chart.js for interactive charts
 - **APIs**: GitHub API, LeetCode API, VS Code Marketplace API
@@ -35,11 +35,11 @@ Portfolio/
 │   └── animations.js      # Animation and interaction logic
 ├── assets/
 │   ├── images/            # Project images and icons
-│   ├── css/               # Additional CSS libraries
-│   └── js/                # Third-party JavaScript libraries
+│   └── Resume/            # Resume PDF file
 ├── data/                  # Cached API data (JSON files)
 ├── .github/
 │   └── workflows/         # GitHub Actions for data updates
+├── update_data.py         # Manual data update script
 └── README.md              # This file
 ```
 
@@ -132,8 +132,8 @@ The portfolio uses a sophisticated caching system to avoid API rate limits:
 
 ### Development Notes:
 - **Data Files**: Local development uses cached JSON data
-- **API Updates**: Use `test-api-fetch.py` to manually update data
-- **CSS Changes**: Refresh browser to see style updates
+- **API Updates**: Use `update_data.py` to manually update data
+- **CSS Changes**: Refresh browser to see style updates (hard refresh: Ctrl+Shift+R)
 - **JavaScript Debug**: Check browser console for any errors
 
 ## Performance & Optimization
@@ -209,6 +209,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Last Updated**: August 2025  
-**Version**: 2.0.0  
-**Status**: Production Ready 
+**Last Updated**: December 2025  
+**Version**: 2.1.0  
+**Status**: Production Ready
+
+## Recent Updates (v2.1.0)
+
+- **Code Cleanup**: Removed unused assets, test files, and legacy code
+- **Heatmap Improvements**: Fixed date calculations, added responsive design and interactive tooltips
+- **Performance**: Optimized rendering and improved mobile responsiveness
+- **Documentation**: Updated project structure and deployment guides 

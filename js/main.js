@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     async function loadGitHubData() {
       try {
-        console.log('Loading GitHub data from ./data/github-profile.json');
+        // Loading GitHub data from local cache
         // Add cache-busting parameter to prevent browser caching
         const cacheBuster = new Date().getTime();
         const response = await fetch(`./data/github-profile.json?t=${cacheBuster}`, {
@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
           throw new Error('Failed to load GitHub data');
         }
         const githubData = await response.json();
-        console.log('GitHub data loaded:', githubData);
+        // GitHub data loaded successfully
         const data = githubData.data;
         
         document.querySelector('.github-profile').innerHTML = `
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Show last updated timestamp
         const lastUpdated = new Date(githubData.lastUpdated).toLocaleDateString();
-        console.log(`GitHub data loaded (last updated: ${lastUpdated})`);
+        // GitHub data loaded (last updated: ${lastUpdated})
       } catch (error) {
         console.error('Error loading GitHub data:', error);
         // Fallback to static data
@@ -282,37 +282,34 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to load LeetCode data from local files
     async function loadLeetCodeData() {
       try {
-        console.log('Loading LeetCode data from local files...');
+        // Loading LeetCode data from local files
         
         // Load contest data
-        console.log('Loading contest data from ./data/leetcode-contest.json');
         const cacheBuster = new Date().getTime();
         const contestResponse = await fetch(`./data/leetcode-contest.json?t=${cacheBuster}`, {
           cache: 'no-store'
         });
         if (!contestResponse.ok) throw new Error('Failed to load contest data');
         const contestData = await contestResponse.json();
-        console.log('Contest data loaded:', contestData);
+        // Contest data loaded
         
         // Load history data
-        console.log('Loading history data from ./data/leetcode-history.json');
         const historyResponse = await fetch(`./data/leetcode-history.json?t=${cacheBuster}`, {
           cache: 'no-store'
         });
         if (!historyResponse.ok) throw new Error('Failed to load history data');
         const historyData = await historyResponse.json();
-        console.log('History data loaded:', historyData);
+        // History data loaded
         
         // Load calendar data
-        console.log('Loading calendar data from ./data/leetcode-calendar.json');
         const calendarResponse = await fetch(`./data/leetcode-calendar.json?t=${cacheBuster}`, {
           cache: 'no-store'
         });
         if (!calendarResponse.ok) throw new Error('Failed to load calendar data');
         const calendarData = await calendarResponse.json();
-        console.log('Calendar data loaded:', calendarData);
+        // Calendar data loaded
         
-        console.log('LeetCode data loaded successfully from local files');
+        // LeetCode data loaded successfully from local files
         return {
           contestData,
           historyData,
@@ -562,11 +559,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load LeetCode data from local files
     async function loadLeetCodeDataFromFiles() {
       try {
-        console.log('Loading LeetCode data from local files...');
+        // Loading LeetCode data from local files
         const leetcodeData = await loadLeetCodeData();
         
         if (leetcodeData) {
-          console.log('LeetCode data loaded successfully from local files');
+          // LeetCode data loaded successfully
           renderLeetCodeProfile(
             leetcodeData.contestData,
             leetcodeData.historyData,
@@ -575,7 +572,7 @@ document.addEventListener('DOMContentLoaded', function() {
           
           // Show last updated timestamp
           const lastUpdated = new Date(leetcodeData.contestData.lastUpdated).toLocaleDateString();
-          console.log(`LeetCode data loaded (last updated: ${lastUpdated})`);
+          // LeetCode data loaded (last updated: ${lastUpdated})
         } else {
           // If local files fail, show a message
           if (leetcodeProfileContainer) {
@@ -596,7 +593,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ========== NEW LEETCODE CONTEST RATING CHART LOGIC ========== //
     async function fetchContestHistory() {
-      console.log('LeetCode contest chart logic running');
+      // LeetCode contest chart logic running
       // This function is now called with contest history data from the API
       // The data is passed directly from renderLeetCodeProfile
       return [];
@@ -617,7 +614,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       if (!contestHistoryData) {
-        console.log('No contest history data available');
+        // No contest history data available
         return;
       }
       
