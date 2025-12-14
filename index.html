@@ -34,6 +34,7 @@
                 <ul class="nav-list">
                     <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
                     <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="#experience" class="nav-link">Experience</a></li>
                     <li class="nav-item"><a href="#skills" class="nav-link">Skills</a></li>
                     <li class="nav-item"><a href="#projects" class="nav-link">Projects</a></li>
                     <li class="nav-item"><a href="#profiles" class="nav-link">Profiles</a></li>
@@ -114,13 +115,113 @@
         </div>
       </div>
       <div class="scroll-down">
-        <a href="#skills" class="mouse-wrapper">
+        <a href="#experience" class="mouse-wrapper">
           <span class="mouse">
             <span class="wheel"></span>
           </span>
           <span class="mouse-label">Scroll Down</span>
         </a>
       </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="experience section" id="experience">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Experience</h2>
+                <span class="section-subtitle">My Professional Journey</span>
+            </div>
+            <div class="experience-container">
+                    <!-- Graduate Research Project -->
+                    <div class="experience-card">
+                        <div class="experience-header">
+                            <div class="experience-title-row">
+                                <h3 class="experience-title">Graduate Research Project, Autotuning Framework</h3>
+                                <span class="experience-date">July 2025 - Current</span>
+                            </div>
+                            <p class="experience-company">University of California, Riverside</p>
+                        </div>
+                        <ul class="experience-bullets">
+                            <li>Designed an autotuning framework for CPU using reinforcement learning, reducing simulation error to under 5%.</li>
+                            <li>Built validation pipelines on Google Cloud Platform, enabling large scale CPU experiments with better reproducibility.</li>
+                            <li>Integrated and benchmarked MacSim, Sniper, and Z-Sim simulators, enhancing cross-architecture performance validation.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Software Engineering Fellow -->
+                    <div class="experience-card">
+                        <div class="experience-header">
+                            <div class="experience-title-row">
+                                <h3 class="experience-title">Software Engineering Fellow</h3>
+                                <span class="experience-date">July 2024 - Sep 2024</span>
+                            </div>
+                            <p class="experience-company">Headstarter AI</p>
+                        </div>
+                        <ul class="experience-bullets">
+                            <li>Automated the CI/CD pipeline using Docker and GitHub Actions, reducing deployment cycle time by 25%.</li>
+                            <li>Optimized PostgreSQL schemas and ETL workflows, cutting analytics query latency by 18% across production datasets.</li>
+                            <li>Developed event-driven AWS Lambda microservices to handle 10K+ API requests/month, increasing system scalability.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Undergraduate Student Researcher -->
+                    <div class="experience-card">
+                        <div class="experience-header">
+                            <div class="experience-title-row">
+                                <h3 class="experience-title">Undergraduate Student Researcher, ASL Translation System</h3>
+                                <span class="experience-date">Feb 2024 - Jun 2024</span>
+                            </div>
+                            <p class="experience-company">SOA University</p>
+                        </div>
+                        <ul class="experience-bullets">
+                            <li>Led a team to build a real-time ASL-to-text translation system using OpenCV and MediaPipe, achieving 98.9% accuracy.</li>
+                            <li>Developed a Random Forest Classifier on a custom dataset of 13K+ hand gesture images, improving inference time by 35%.</li>
+                            <li>Engineered a modular inference pipeline, enhancing scalability and maintainability for future model integration.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Data Science Intern -->
+                    <div class="experience-card">
+                        <div class="experience-header">
+                            <div class="experience-title-row">
+                                <h3 class="experience-title">Data Science Intern, Risk Management</h3>
+                                <span class="experience-date">Aug 2023 - Sep 2023</span>
+                            </div>
+                            <p class="experience-company">Coding Rajas Technologies</p>
+                        </div>
+                        <ul class="experience-bullets">
+                            <li>Deployed a real-time TensorFlow-based fraud detection model with a 94% F1-score, processing 1000 transactions/min.</li>
+                            <li>Optimized preprocessing pipelines, reducing turnaround time by 40% and improving fraud detection precision.</li>
+                            <li>Developed RESTful API endpoints and dashboards to visualize model outputs, reducing manual fraud review time by 30%.</li>
+                        </ul>
+                    </div>
+
+                    <!-- AI Intern -->
+                    <div class="experience-card">
+                        <div class="experience-header">
+                            <div class="experience-title-row">
+                                <h3 class="experience-title">Artificial Intelligence Intern, Model Training</h3>
+                                <span class="experience-date">Jul 2023 - Aug 2023</span>
+                            </div>
+                            <p class="experience-company">Pantech ProEd Pvt Ltd</p>
+                        </div>
+                        <ul class="experience-bullets">
+                            <li>Created a real-time image classification service using Flask and TensorFlow, achieving 85% accuracy on real world use cases.</li>
+                            <li>Automated data labelling and model training pipelines with Bash scripts, reducing setup and retraining time by 50%.</li>
+                            <li>Built and deployed a Flask-based REST API for real-time classification, enabling seamless model integration into web systems.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-down">
+            <a href="#skills" class="mouse-wrapper">
+                <span class="mouse">
+                    <span class="wheel"></span>
+                </span>
+                <span class="mouse-label">Scroll Down</span>
+            </a>
+        </div>
     </section>
 
     <!-- Skills Section -->
@@ -218,21 +319,21 @@
                     <div class="project-info">
                         <div class="project-header-flex">
                           <img src="assets/images/TexMex.png" alt="TexMex Logo" class="project-logo" />
-                          <h3 class="project-title" style="color: #FFB81C; font-weight: 700; margin: 0;">TexMex</h3>
+                          <h3 class="project-title" style="color: #FFB81C; font-weight: 700; margin: 0;">TexMex - A LaTeX Editor for VS Code</h3>
                         </div>
                         <div class="project-badges" style="margin: 0.5rem 0 1rem 0;">
                           <img id="texmex-installs" src="https://img.shields.io/visual-studio-marketplace/i/RahulChalla.texmex?label=Installs&color=FFB81C&labelColor=121212&style=flat" alt="Installs" style="margin-right: 0.3rem;"/>
                           <img id="texmex-version" src="https://img.shields.io/visual-studio-marketplace/v/RahulChalla.texmex?label=Version&color=FFB81C&labelColor=121212&style=flat" alt="Version" style="margin-right: 0.3rem;"/>
                           <img id="texmex-rating" src="https://img.shields.io/visual-studio-marketplace/r/RahulChalla.texmex?label=Rating&color=FFB81C&labelColor=121212&style=flat" alt="Rating"/>
                         </div>
-                        <p class="project-description">A powerful VS Code extension that brings Overleaf-style LaTeX editing directly to your local editor. TexMex enables real-time PDF preview, automatic recompilation on save, and inline error reporting without needing to leave VS Code. Designed for smooth academic writing and technical documentation, the extension offers a configurable setup for compiler paths and preview delays.</p>
+                        <p class="project-description">Engineered a VS Code extension enabling real-time PDF preview and auto-sync for .tex files, reaching 500+ active users. Optimized rendering and event-handling for 10K+ line LaTeX documents, cutting scroll latency to under 100ms. Published to VS Code Marketplace and maintained a 4.5 rating, showing consistent user satisfaction.</p>
                         <div class="project-tech">
-                            <span class="tech-tag">VS Code Extension API</span>
                             <span class="tech-tag">TypeScript</span>
+                            <span class="tech-tag">VS Code API</span>
                             <span class="tech-tag">Node.js</span>
-                            <span class="tech-tag">LaTeX (TeX Live/MiKTeX)</span>
+                            <span class="tech-tag">LaTeX</span>
                             <span class="tech-tag">PDF.js</span>
-                            <span class="tech-tag">npm</span>
+                            <span class="tech-tag">VS Code Marketplace</span>
                         </div>
                         <div class="project-links">
                             <a href="https://github.com/rahul-challa/TexMex" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
@@ -240,61 +341,59 @@
                         </div>
                     </div>
                 </div>
-                <!-- Lettuce Cook: A React Webapp to share Recipes -->
+                <!-- BitTrader: Self Supervised Trading Model -->
                 <div class="project-card dashboard-card">
                     <div class="project-info">
-                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">Lettuce Cook</h3>
-                        <p class="project-description">A modern, cookbook and recipe website that enables users to browse, search, and filter a curated collection of recipes with ease. Built with React and TypeScript, LettuceCook features a bold, dramatic UI, responsive recipe grid, tag-based filtering, and a detailed recipe view with export-to-DOCX functionality. All assets are locally hosted for fast performance, and the app is fully static—perfect for deployment on GitHub Pages. Includes advanced search, beautiful hero section, and accessible design throughout.</p>
+                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">BitTrader - Self Supervised Trading Model</h3>
+                        <p class="project-description">Deployed a self-training trading model executing 1,200+ simulated BTC trades with an 8.3% ROI using live Gemini data. Built a containerized FastAPI backend on Render Cloud with 99.9% uptime through GitHub Actions CI/CD. Integrated real-time performance tracking and Telegram alerts to monitor trade outcomes and strategy seamlessly.</p>
                         <div class="project-tech">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">TypeScript</span>
-                            <span class="tech-tag">Styled Components</span>
-                            <span class="tech-tag">React Router</span>
-                            <span class="tech-tag">export-to-DOCX</span>
-                            <span class="tech-tag">Github Pages</span>
+                            <span class="tech-tag">FastAPI</span>
+                            <span class="tech-tag">Docker</span>
+                            <span class="tech-tag">Algorithmic Trading</span>
+                            <span class="tech-tag">Machine Learning</span>
+                            <span class="tech-tag">GitHub Actions</span>
+                            <span class="tech-tag">CI/CD</span>
+                            <span class="tech-tag">Render Cloud</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://github.com/rahul-challa/lettucecook" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
-                            <a href="https://rahul-challa.github.io/lettucecook/" class="project-link" target="_blank" aria-label="Live Site"><i data-feather="external-link"></i></a>
+                            <a href="https://github.com/rahul-challa" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
                         </div>
                     </div>
                 </div>
-                <!-- Stock Dashboard Project Card -->
+                <!-- Distributed API Rate Limiter -->
                 <div class="project-card dashboard-card">
                     <div class="project-info">
-                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">Stock Dashboard</h3>
-                        <p class="project-description">A real-time stock price dashboard that empowers users to track and visualize stock market data interactively. Built with React and TypeScript, the dashboard features responsive design, live data fetching from the Alpha Vantage API, and beautiful data visualizations with Chart.js. Includes advanced error handling, loading states, and is fully deployed on GitHub Pages for public access.</p>
+                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">Distributed API Rate Limiter</h3>
+                        <p class="project-description">Engineered a distributed Go rate limiter handling 100k+ RPS via Token Bucket, ensuring sub-millisecond latency. Implemented atomic operations using Redis to eliminate race conditions, reducing API abuse by 99%. Built a Dockerized gRPC/REST microservice to support diverse clients, cutting infrastructure overhead by 40%.</p>
                         <div class="project-tech">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">TypeScript</span>
-                            <span class="tech-tag">Tailwind CSS</span>
-                            <span class="tech-tag">Chart.js</span>
-                            <span class="tech-tag">Vite</span>
-                            <span class="tech-tag">Alpha Vantage API</span>
-                            <span class="tech-tag">GitHub Pages</span>
+                            <span class="tech-tag">GoLang</span>
+                            <span class="tech-tag">Redis</span>
+                            <span class="tech-tag">gRPC</span>
+                            <span class="tech-tag">Docker</span>
+                            <span class="tech-tag">CI/CD</span>
+                            <span class="tech-tag">REST APIs</span>
+                            <span class="tech-tag">Distributed Systems</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://github.com/rahul-challa/Stock-Dashboard" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
-                            <a href="https://rahul-challa.github.io/Stock-Dashboard/" class="project-link" target="_blank" aria-label="Live Site"><i data-feather="external-link"></i></a>
+                            <a href="https://github.com/rahul-challa" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
                         </div>
                     </div>
                 </div>
-                <!-- Portfolio Website Project Card -->
+                <!-- FinSight: AI-Powered Personal Finance Platform -->
                 <div class="project-card dashboard-card">
                     <div class="project-info">
-                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">Portfolio Website</h3>
-                        <p class="project-description">A modern, responsive portfolio website designed and developed from scratch to showcase my skills, projects, and professional background. Features a custom dashboard UI, animated code rain, dynamic profiles integration (GitHub, LeetCode), and modular project cards. Built for performance, accessibility, and easy future expansion.</p>
+                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">FinSight - AI-Powered Personal Finance Platform</h3>
+                        <p class="project-description">Engineered a platform that processes bank statements using FastAPI, PostgreSQL, and Redis generating insights. Developed a ML transaction classifier with 94% category accuracy across major spend types. Integrated an AI insights engine generating personalized budgets, reducing overspend.</p>
                         <div class="project-tech">
-                            <span class="tech-tag">HTML</span>
-                            <span class="tech-tag">CSS</span>
-                            <span class="tech-tag">JavaScript</span>
-                            <span class="tech-tag">Feather Icons</span>
-                            <span class="tech-tag">GitHub API</span>
-                            <span class="tech-tag">LeetCode API</span>
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">FastAPI</span>
+                            <span class="tech-tag">PostgreSQL</span>
+                            <span class="tech-tag">Redis</span>
+                            <span class="tech-tag">Machine Learning</span>
+                            <span class="tech-tag">AI</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://github.com/rahul-challa/Portfolio" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
-                            <a href="https://rahul-challa.github.io/Portfolio/" class="project-link" target="_blank" aria-label="Live Site"><i data-feather="external-link"></i></a>
+                            <a href="https://github.com/rahul-challa" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
                         </div>
                     </div>
                 </div>
@@ -412,7 +511,10 @@
     // Load TexMex badge data from local file
     async function loadTexMexBadges() {
       try {
-        const response = await fetch('./data/texmex-badges.json');
+        const cacheBuster = new Date().getTime();
+        const response = await fetch(`./data/texmex-badges.json?t=${cacheBuster}`, {
+          cache: 'no-store'
+        });
         if (!response.ok) throw new Error('Failed to load TexMex data');
         
         const texmexData = await response.json();

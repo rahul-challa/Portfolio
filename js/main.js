@@ -150,8 +150,8 @@ document.addEventListener('DOMContentLoaded', function() {
         threshold: 0.1
     });
     
-    // Observe all section headers, about info items, skill boxes, and project cards
-    document.querySelectorAll('.section-header, .info-item, .skill-box, .project-card, .contact-card').forEach(el => {
+    // Observe all section headers, about info items, skill boxes, project cards, experience cards, and contact cards
+    document.querySelectorAll('.section-header, .info-item, .skill-box, .project-card, .experience-card, .contact-card').forEach(el => {
         observer.observe(el);
     });
 
@@ -213,7 +213,16 @@ document.addEventListener('DOMContentLoaded', function() {
     async function loadGitHubData() {
       try {
         console.log('Loading GitHub data from ./data/github-profile.json');
-        const response = await fetch('./data/github-profile.json');
+        // Add cache-busting parameter to prevent browser caching
+        const cacheBuster = new Date().getTime();
+        const response = await fetch(`./data/github-profile.json?t=${cacheBuster}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        });
         if (!response.ok) {
           throw new Error('Failed to load GitHub data');
         }
@@ -277,21 +286,28 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Load contest data
         console.log('Loading contest data from ./data/leetcode-contest.json');
-        const contestResponse = await fetch('./data/leetcode-contest.json');
+        const cacheBuster = new Date().getTime();
+        const contestResponse = await fetch(`./data/leetcode-contest.json?t=${cacheBuster}`, {
+          cache: 'no-store'
+        });
         if (!contestResponse.ok) throw new Error('Failed to load contest data');
         const contestData = await contestResponse.json();
         console.log('Contest data loaded:', contestData);
         
         // Load history data
         console.log('Loading history data from ./data/leetcode-history.json');
-        const historyResponse = await fetch('./data/leetcode-history.json');
+        const historyResponse = await fetch(`./data/leetcode-history.json?t=${cacheBuster}`, {
+          cache: 'no-store'
+        });
         if (!historyResponse.ok) throw new Error('Failed to load history data');
         const historyData = await historyResponse.json();
         console.log('History data loaded:', historyData);
         
         // Load calendar data
         console.log('Loading calendar data from ./data/leetcode-calendar.json');
-        const calendarResponse = await fetch('./data/leetcode-calendar.json');
+        const calendarResponse = await fetch(`./data/leetcode-calendar.json?t=${cacheBuster}`, {
+          cache: 'no-store'
+        });
         if (!calendarResponse.ok) throw new Error('Failed to load calendar data');
         const calendarData = await calendarResponse.json();
         console.log('Calendar data loaded:', calendarData);

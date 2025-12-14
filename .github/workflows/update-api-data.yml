@@ -32,38 +32,71 @@ jobs:
         import requests
         import json
         import datetime
+        import time
         
         # GitHub API endpoint for user profile
         username = 'rahul-challa'
         api_url = f'https://api.github.com/users/{username}'
         
+        def fetch_with_retry(url, max_retries=3, base_delay=2):
+            '''Fetch data with retry logic for rate limiting'''
+            for attempt in range(max_retries):
+                try:
+                    print(f'Attempt {attempt + 1}/{max_retries} for {url}')
+                    response = requests.get(url, timeout=30)
+                    
+                    if response.status_code == 200:
+                        return response.json(), response.status_code
+                    elif response.status_code == 429:
+                        # Rate limited - wait and retry
+                        wait_time = base_delay * (2 ** attempt)
+                        print(f'Rate limited (429). Waiting {wait_time} seconds before retry...')
+                        if attempt < max_retries - 1:
+                            time.sleep(wait_time)
+                            continue
+                        else:
+                            print(f'Max retries reached for {url}')
+                            return None, response.status_code
+                    else:
+                        print(f'Failed with status {response.status_code} from {url}')
+                        return None, response.status_code
+                except Exception as e:
+                    print(f'Error with endpoint {url}: {str(e)}')
+                    if attempt < max_retries - 1:
+                        time.sleep(base_delay * (2 ** attempt))
+                    continue
+            return None, None
+        
         try:
+            # Add small delay before first request
+            time.sleep(1)
+            
             # Make request to GitHub API
             print(f'Fetching GitHub profile data for: {username}')
-            response = requests.get(api_url, timeout=30)
-            print(f'Response status: {response.status_code}')
+            user_data, status = fetch_with_retry(api_url)
             
-            if response.status_code == 200:
-                user_data = response.json()
+            if user_data:
                 print(f'User data keys: {list(user_data.keys())}')
                 
-                # Get repositories
+                # Get repositories with delay
+                time.sleep(1)
                 print('Fetching repositories...')
-                repos_response = requests.get(f'{api_url}/repos?per_page=100&sort=updated', timeout=30)
-                if repos_response.status_code == 200:
-                    user_data['repositories'] = repos_response.json()
+                repos_data, repos_status = fetch_with_retry(f'{api_url}/repos?per_page=100&sort=updated')
+                if repos_data:
+                    user_data['repositories'] = repos_data
                     print(f'Found {len(user_data[\"repositories\"])} repositories')
                 else:
-                    print(f'Failed to fetch repositories: {repos_response.status_code}')
+                    print(f'Failed to fetch repositories: {repos_status}')
                 
-                # Get followers list
+                # Get followers list with delay
+                time.sleep(1)
                 print('Fetching followers...')
-                followers_response = requests.get(f'{api_url}/followers?per_page=100', timeout=30)
-                if followers_response.status_code == 200:
-                    user_data['followers_list'] = followers_response.json()
+                followers_data, followers_status = fetch_with_retry(f'{api_url}/followers?per_page=100')
+                if followers_data:
+                    user_data['followers_list'] = followers_data
                     print(f'Found {len(user_data[\"followers_list\"])} followers')
                 else:
-                    print(f'Failed to fetch followers: {followers_response.status_code}')
+                    print(f'Failed to fetch followers: {followers_status}')
                 
                 # Create final data structure
                 final_data = {
@@ -77,82 +110,184 @@ jobs:
                 
                 print('GitHub profile data updated successfully')
             else:
-                print(f'Failed to fetch GitHub data: {response.status_code}')
-                print(f'Response content: {response.text[:500]}')
-                exit(1)
+                print(f'Failed to fetch GitHub data: {status}')
+                print('Keeping existing GitHub data file - workflow will continue')
         except Exception as e:
             print(f'Error fetching GitHub data: {str(e)}')
-            exit(1)
+            print('Keeping existing GitHub data file - workflow will continue')
         "
     
     - name: Update LeetCode Calendar Data
+      continue-on-error: true
       run: |
         python -c "
         import requests
         import json
         import datetime
+        import time
         
-        # LeetCode API endpoint
+        # LeetCode API endpoints (try multiple as fallback)
         username = 'Rahul_Challa'
-        api_url = f'https://alfa-leetcode-api.onrender.com/{username}/calendar'
+        api_endpoints = [
+            f'https://alfa-leetcode-api.onrender.com/{username}/calendar',
+            f'https://leetcode-api.cyclic.app/{username}/calendar'
+        ]
         
-        try:
-            # Make request to LeetCode API
-            print(f'Fetching LeetCode calendar data from: {api_url}')
-            response = requests.get(api_url, timeout=30)
-            print(f'Response status: {response.status_code}')
-            
-            if response.status_code == 200:
-                data = response.json()
+        def fetch_with_retry(url, max_retries=3, base_delay=5):
+            '''Fetch data with retry logic for rate limiting'''
+            for attempt in range(max_retries):
+                try:
+                    print(f'Attempt {attempt + 1}/{max_retries} for {url}')
+                    response = requests.get(url, timeout=30)
+                    
+                    if response.status_code == 200:
+                        return response.json(), response.status_code, response.headers
+                    elif response.status_code == 429:
+                        # Rate limited - wait and retry
+                        wait_time = base_delay * (2 ** attempt)  # Exponential backoff
+                        print(f'Rate limited (429). Waiting {wait_time} seconds before retry...')
+                        if attempt < max_retries - 1:
+                            time.sleep(wait_time)
+                            continue
+                        else:
+                            print(f'Max retries reached for {url}')
+                            return None, response.status_code, None
+                    else:
+                        print(f'Failed with status {response.status_code} from {url}')
+                        return None, response.status_code, None
+                except Exception as e:
+                    print(f'Error with endpoint {url}: {str(e)}')
+                    if attempt < max_retries - 1:
+                        time.sleep(base_delay * (2 ** attempt))
+                    continue
+            return None, None, None
+        
+        data = None
+        api_url = None
+        response_status = None
+        response_headers = None
+        
+        # Add delay before first request to avoid rate limits
+        print('Waiting 2 seconds before making requests...')
+        time.sleep(2)
+        
+        for endpoint in api_endpoints:
+            result_data, status, headers = fetch_with_retry(endpoint)
+            if result_data:
+                data = result_data
+                api_url = endpoint
+                response_status = status
+                response_headers = headers
+                print(f'Successfully fetched calendar data from: {endpoint}')
                 print(f'Received data keys: {list(data.keys()) if isinstance(data, dict) else \"Not a dict\"}')
-                
-                # Create final data structure
-                final_data = {
-                    'lastUpdated': datetime.datetime.now().isoformat(),
-                    'data': data,
-                    'apiSource': api_url,
-                    'responseHeaders': dict(response.headers),
-                    'responseStatus': response.status_code,
-                    'requestUrl': api_url
-                }
-                
-                # Write to file
-                with open('data/leetcode-calendar.json', 'w') as f:
-                    json.dump(final_data, f, indent=2)
-                
-                print('LeetCode calendar data updated successfully')
+                break
             else:
-                print(f'Failed to fetch LeetCode calendar data: {response.status_code}')
-                print(f'Response content: {response.text[:500]}')
-                exit(1)
-        except Exception as e:
-            print(f'Error fetching LeetCode calendar data: {str(e)}')
-            exit(1)
-        "
-    
-    - name: Update LeetCode Contest Data
-      run: |
-        python -c "
-        import requests
-        import json
-        import datetime
+                print(f'Failed to fetch from {endpoint}')
+                # Add delay between endpoint attempts
+                if endpoint != api_endpoints[-1]:
+                    print('Waiting 3 seconds before trying next endpoint...')
+                    time.sleep(3)
         
-        # LeetCode API endpoint for contest data
-        username = 'Rahul_Challa'
-        api_url = f'https://alfa-leetcode-api.onrender.com/{username}/contest'
-        
-        # Make request to LeetCode API
-        response = requests.get(api_url)
-        if response.status_code == 200:
-            data = response.json()
-            
+        if data:
             # Create final data structure
             final_data = {
                 'lastUpdated': datetime.datetime.now().isoformat(),
                 'data': data,
                 'apiSource': api_url,
-                'responseHeaders': dict(response.headers),
-                'responseStatus': response.status_code,
+                'responseHeaders': dict(response_headers) if response_headers else None,
+                'responseStatus': response_status,
+                'requestUrl': api_url
+            }
+            
+            # Write to file
+            with open('data/leetcode-calendar.json', 'w') as f:
+                json.dump(final_data, f, indent=2)
+            
+            print('LeetCode calendar data updated successfully')
+        else:
+            print('Failed to fetch LeetCode calendar data from all endpoints')
+            print('Keeping existing calendar data file - workflow will continue')
+        "
+    
+    - name: Update LeetCode Contest Data
+      continue-on-error: true
+      run: |
+        python -c "
+        import requests
+        import json
+        import datetime
+        import time
+        
+        # LeetCode API endpoints (try multiple as fallback)
+        username = 'Rahul_Challa'
+        api_endpoints = [
+            f'https://alfa-leetcode-api.onrender.com/{username}/contest',
+            f'https://leetcode-api.cyclic.app/{username}/contest',
+            f'https://leetcode-stats-api.herokuapp.com/{username}'
+        ]
+        
+        def fetch_with_retry(url, max_retries=3, base_delay=5):
+            '''Fetch data with retry logic for rate limiting'''
+            for attempt in range(max_retries):
+                try:
+                    print(f'Attempt {attempt + 1}/{max_retries} for {url}')
+                    response = requests.get(url, timeout=30)
+                    
+                    if response.status_code == 200:
+                        return response.json(), response.status_code, response.headers
+                    elif response.status_code == 429:
+                        # Rate limited - wait and retry
+                        wait_time = base_delay * (2 ** attempt)  # Exponential backoff
+                        print(f'Rate limited (429). Waiting {wait_time} seconds before retry...')
+                        if attempt < max_retries - 1:
+                            time.sleep(wait_time)
+                            continue
+                        else:
+                            print(f'Max retries reached for {url}')
+                            return None, response.status_code, None
+                    else:
+                        print(f'Failed with status {response.status_code} from {url}')
+                        return None, response.status_code, None
+                except Exception as e:
+                    print(f'Error with endpoint {url}: {str(e)}')
+                    if attempt < max_retries - 1:
+                        time.sleep(base_delay * (2 ** attempt))
+                    continue
+            return None, None, None
+        
+        data = None
+        api_url = None
+        response_status = None
+        response_headers = None
+        
+        # Add delay before first request to avoid rate limits
+        print('Waiting 3 seconds before making requests...')
+        time.sleep(3)
+        
+        for endpoint in api_endpoints:
+            result_data, status, headers = fetch_with_retry(endpoint)
+            if result_data:
+                data = result_data
+                api_url = endpoint
+                response_status = status
+                response_headers = headers
+                print(f'Successfully fetched data from: {endpoint}')
+                break
+            else:
+                print(f'Failed to fetch from {endpoint}')
+                # Add delay between endpoint attempts
+                if endpoint != api_endpoints[-1]:
+                    print('Waiting 3 seconds before trying next endpoint...')
+                    time.sleep(3)
+        
+        if data:
+            # Create final data structure
+            final_data = {
+                'lastUpdated': datetime.datetime.now().isoformat(),
+                'data': data,
+                'apiSource': api_url,
+                'responseHeaders': dict(response_headers) if response_headers else None,
+                'responseStatus': response_status,
                 'requestUrl': api_url
             }
             
@@ -162,28 +297,90 @@ jobs:
             
             print('LeetCode contest data updated successfully')
         else:
-            print(f'Failed to fetch LeetCode contest data: {response.status_code}')
-            exit(1)
+            print('Failed to fetch LeetCode contest data from all endpoints')
+            print('Keeping existing contest data file - workflow will continue')
         "
     
     - name: Update LeetCode History Data
+      continue-on-error: true
       run: |
         python -c "
         import requests
         import json
         import datetime
+        import time
         
-        # LeetCode API endpoint for contest data (contains history information)
+        # LeetCode API endpoints (try multiple as fallback)
         username = 'Rahul_Challa'
-        api_url = f'https://alfa-leetcode-api.onrender.com/{username}/contest'
+        api_endpoints = [
+            f'https://alfa-leetcode-api.onrender.com/{username}/contest',
+            f'https://leetcode-api.cyclic.app/{username}/contest'
+        ]
         
-        # Make request to LeetCode API
-        response = requests.get(api_url)
-        if response.status_code == 200:
-            contest_data = response.json()
-            
+        def fetch_with_retry(url, max_retries=3, base_delay=5):
+            '''Fetch data with retry logic for rate limiting'''
+            for attempt in range(max_retries):
+                try:
+                    print(f'Attempt {attempt + 1}/{max_retries} for {url}')
+                    response = requests.get(url, timeout=30)
+                    
+                    if response.status_code == 200:
+                        return response.json(), response.status_code, response.headers
+                    elif response.status_code == 429:
+                        # Rate limited - wait and retry
+                        wait_time = base_delay * (2 ** attempt)  # Exponential backoff
+                        print(f'Rate limited (429). Waiting {wait_time} seconds before retry...')
+                        if attempt < max_retries - 1:
+                            time.sleep(wait_time)
+                            continue
+                        else:
+                            print(f'Max retries reached for {url}')
+                            return None, response.status_code, None
+                    else:
+                        print(f'Failed with status {response.status_code} from {url}')
+                        return None, response.status_code, None
+                except Exception as e:
+                    print(f'Error with endpoint {url}: {str(e)}')
+                    if attempt < max_retries - 1:
+                        time.sleep(base_delay * (2 ** attempt))
+                    continue
+            return None, None, None
+        
+        contest_data = None
+        api_url = None
+        response_status = None
+        response_headers = None
+        
+        # Add delay before first request to avoid rate limits
+        print('Waiting 4 seconds before making requests...')
+        time.sleep(4)
+        
+        for endpoint in api_endpoints:
+            result_data, status, headers = fetch_with_retry(endpoint)
+            if result_data:
+                contest_data = result_data
+                api_url = endpoint
+                response_status = status
+                response_headers = headers
+                print(f'Successfully fetched history data from: {endpoint}')
+                break
+            else:
+                print(f'Failed to fetch from {endpoint}')
+                # Add delay between endpoint attempts
+                if endpoint != api_endpoints[-1]:
+                    print('Waiting 3 seconds before trying next endpoint...')
+                    time.sleep(3)
+        
+        if contest_data:
             # Extract contest participation data which contains the history
-            contest_history = contest_data.get('contestParticipation', [])
+            # Handle different API response structures
+            if isinstance(contest_data, dict):
+                if 'data' in contest_data and isinstance(contest_data['data'], dict):
+                    contest_history = contest_data['data'].get('userContestRankingHistory', [])
+                else:
+                    contest_history = contest_data.get('contestParticipation', []) or contest_data.get('userContestRankingHistory', [])
+            else:
+                contest_history = []
             
             # Create history data structure similar to the original format
             history_data = {
@@ -196,8 +393,8 @@ jobs:
                 'lastUpdated': datetime.datetime.now().isoformat(),
                 'data': history_data,
                 'apiSource': api_url,
-                'responseHeaders': dict(response.headers),
-                'responseStatus': response.status_code,
+                'responseHeaders': dict(response_headers) if response_headers else None,
+                'responseStatus': response_status,
                 'requestUrl': api_url,
                 'note': 'Data extracted from contest endpoint as history endpoint is not available'
             }
@@ -208,8 +405,8 @@ jobs:
             
             print('LeetCode history data updated successfully from contest endpoint')
         else:
-            print(f'Failed to fetch LeetCode contest data: {response.status_code}')
-            exit(1)
+            print('Failed to fetch LeetCode history data from all endpoints')
+            print('Keeping existing history data file')
         "
     
     - name: Update TexMex Package Data
