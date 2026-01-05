@@ -82,13 +82,13 @@ def update_github_data():
             with open('data/github-profile.json', 'w') as f:
                 json.dump(final_data, f, indent=2)
             
-            print('✅ GitHub profile data updated successfully')
+            print('[SUCCESS] GitHub profile data updated successfully')
             return True
         else:
-            print(f'❌ Failed to fetch GitHub data: {status}')
+            print(f'[FAILED] Failed to fetch GitHub data: {status}')
             return False
     except Exception as e:
-        print(f'❌ Error fetching GitHub data: {str(e)}')
+        print(f'[ERROR] Error fetching GitHub data: {str(e)}')
         return False
 
 def update_leetcode_calendar():
@@ -116,10 +116,10 @@ def update_leetcode_calendar():
             api_url = endpoint
             response_status = status
             response_headers = headers
-            print(f'✅ Successfully fetched calendar data from: {endpoint}')
+            print(f'[SUCCESS] Successfully fetched calendar data from: {endpoint}')
             break
         else:
-            print(f'❌ Failed to fetch from {endpoint}')
+            print(f'[FAILED] Failed to fetch from {endpoint}')
             if endpoint != api_endpoints[-1]:
                 print('Waiting 3 seconds before trying next endpoint...')
                 time.sleep(3)
@@ -138,10 +138,10 @@ def update_leetcode_calendar():
         with open('data/leetcode-calendar.json', 'w') as f:
             json.dump(final_data, f, indent=2)
         
-        print('✅ LeetCode calendar data updated successfully')
+        print('[SUCCESS] LeetCode calendar data updated successfully')
         return True
     else:
-        print('❌ Failed to fetch LeetCode calendar data from all endpoints')
+        print('[FAILED] Failed to fetch LeetCode calendar data from all endpoints')
         return False
 
 def update_leetcode_contest():
@@ -168,10 +168,10 @@ def update_leetcode_contest():
             api_url = endpoint
             response_status = status
             response_headers = headers
-            print(f'✅ Successfully fetched contest data from: {endpoint}')
+            print(f'[SUCCESS] Successfully fetched contest data from: {endpoint}')
             break
         else:
-            print(f'❌ Failed to fetch from {endpoint}')
+            print(f'[FAILED] Failed to fetch from {endpoint}')
             if endpoint != api_endpoints[-1]:
                 print('Waiting 3 seconds before trying next endpoint...')
                 time.sleep(3)
@@ -190,10 +190,10 @@ def update_leetcode_contest():
         with open('data/leetcode-contest.json', 'w') as f:
             json.dump(final_data, f, indent=2)
         
-        print('✅ LeetCode contest data updated successfully')
+        print('[SUCCESS] LeetCode contest data updated successfully')
         return True
     else:
-        print('❌ Failed to fetch LeetCode contest data from all endpoints')
+        print('[FAILED] Failed to fetch LeetCode contest data from all endpoints')
         return False
 
 def update_leetcode_history():
@@ -220,10 +220,10 @@ def update_leetcode_history():
             api_url = endpoint
             response_status = status
             response_headers = headers
-            print(f'✅ Successfully fetched history data from: {endpoint}')
+            print(f'[SUCCESS] Successfully fetched history data from: {endpoint}')
             break
         else:
-            print(f'❌ Failed to fetch from {endpoint}')
+            print(f'[FAILED] Failed to fetch from {endpoint}')
             if endpoint != api_endpoints[-1]:
                 print('Waiting 3 seconds before trying next endpoint...')
                 time.sleep(3)
@@ -264,10 +264,93 @@ def update_leetcode_history():
         with open('data/leetcode-history.json', 'w') as f:
             json.dump(final_data, f, indent=2)
         
-        print('✅ LeetCode history data updated successfully')
+        print('[SUCCESS] LeetCode history data updated successfully')
         return True
     else:
-        print('❌ Failed to fetch LeetCode history data from all endpoints')
+        print('[FAILED] Failed to fetch LeetCode history data from all endpoints')
+        return False
+
+def update_leetcode_stats():
+    """Update LeetCode problem-solving stats"""
+    print('\n=== Updating LeetCode Problem-Solving Stats ===')
+    username = 'Rahul_Challa'
+    # Use leetcode-stats-api for problem-solving stats
+    api_endpoints = [
+        f'https://leetcode-stats-api.herokuapp.com/{username}',
+        f'https://alfa-leetcode-api.onrender.com/{username}/solved'
+    ]
+    
+    data = None
+    api_url = None
+    response_status = None
+    response_headers = None
+    
+    time.sleep(2)
+    
+    for endpoint in api_endpoints:
+        result_data, status, headers = fetch_with_retry(endpoint)
+        if result_data:
+            # Check if the response has the required stats fields
+            if 'totalSolved' in result_data or 'easySolved' in result_data:
+                data = result_data
+                api_url = endpoint
+                response_status = status
+                response_headers = headers
+                print(f'[SUCCESS] Successfully fetched stats data from: {endpoint}')
+                break
+        else:
+            print(f'[FAILED] Failed to fetch from {endpoint}')
+            if endpoint != api_endpoints[-1]:
+                print('Waiting 3 seconds before trying next endpoint...')
+                time.sleep(3)
+    
+    if data:
+        # Calculate percentages for each difficulty
+        stats_data = {
+            'totalSolved': data.get('totalSolved', 0),
+            'totalQuestions': data.get('totalQuestions', 0),
+            'easySolved': data.get('easySolved', 0),
+            'totalEasy': data.get('totalEasy', 0),
+            'mediumSolved': data.get('mediumSolved', 0),
+            'totalMedium': data.get('totalMedium', 0),
+            'hardSolved': data.get('hardSolved', 0),
+            'totalHard': data.get('totalHard', 0),
+            'acceptanceRate': data.get('acceptanceRate', 0)
+        }
+        
+        # Calculate completion percentages (solved/total for each difficulty)
+        if stats_data['totalEasy'] > 0:
+            stats_data['easyPercentage'] = round((stats_data['easySolved'] / stats_data['totalEasy']) * 100, 1)
+        else:
+            stats_data['easyPercentage'] = 0
+        
+        if stats_data['totalMedium'] > 0:
+            stats_data['mediumPercentage'] = round((stats_data['mediumSolved'] / stats_data['totalMedium']) * 100, 1)
+        else:
+            stats_data['mediumPercentage'] = 0
+        
+        if stats_data['totalHard'] > 0:
+            stats_data['hardPercentage'] = round((stats_data['hardSolved'] / stats_data['totalHard']) * 100, 1)
+        else:
+            stats_data['hardPercentage'] = 0
+        
+        final_data = {
+            'lastUpdated': datetime.datetime.now().isoformat(),
+            'data': stats_data,
+            'apiSource': api_url,
+            'responseHeaders': dict(response_headers) if response_headers else None,
+            'responseStatus': response_status,
+            'requestUrl': api_url
+        }
+        
+        os.makedirs('data', exist_ok=True)
+        with open('data/leetcode-stats.json', 'w') as f:
+            json.dump(final_data, f, indent=2)
+        
+        print('[SUCCESS] LeetCode problem-solving stats updated successfully')
+        return True
+    else:
+        print('[FAILED] Failed to fetch LeetCode problem-solving stats from all endpoints')
         return False
 
 def update_texmex_data():
@@ -315,13 +398,13 @@ def update_texmex_data():
             with open('data/texmex-badges.json', 'w') as f:
                 json.dump(final_data, f, indent=2)
             
-            print('✅ TexMex package data updated successfully')
+            print('[SUCCESS] TexMex package data updated successfully')
             return True
         else:
-            print(f'❌ Failed to fetch TexMex package data: {response.status_code}')
+            print(f'[FAILED] Failed to fetch TexMex package data: {response.status_code}')
             return False
     except Exception as e:
-        print(f'❌ Error fetching TexMex package data: {str(e)}')
+        print(f'[ERROR] Error fetching TexMex package data: {str(e)}')
         return False
 
 def main():
@@ -335,6 +418,7 @@ def main():
         'LeetCode Calendar': update_leetcode_calendar(),
         'LeetCode Contest': update_leetcode_contest(),
         'LeetCode History': update_leetcode_history(),
+        'LeetCode Stats': update_leetcode_stats(),
         'TexMex': update_texmex_data()
     }
     
@@ -342,7 +426,7 @@ def main():
     print('Update Summary:')
     print('=' * 50)
     for service, success in results.items():
-        status = '✅ Success' if success else '❌ Failed'
+        status = '[SUCCESS]' if success else '[FAILED]'
         print(f'{service}: {status}')
     
     successful = sum(results.values())

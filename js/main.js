@@ -309,11 +309,26 @@ document.addEventListener('DOMContentLoaded', function() {
         const calendarData = await calendarResponse.json();
         // Calendar data loaded
         
+        // Load stats data
+        let statsData = null;
+        try {
+          const statsResponse = await fetch(`./data/leetcode-stats.json?t=${cacheBuster}`, {
+            cache: 'no-store'
+          });
+          if (statsResponse.ok) {
+            statsData = await statsResponse.json();
+            // Stats data loaded
+          }
+        } catch (e) {
+          console.warn('Failed to load stats data:', e);
+        }
+        
         // LeetCode data loaded successfully from local files
         return {
           contestData,
           historyData,
-          calendarData
+          calendarData,
+          statsData
         };
       } catch (error) {
         console.error('Failed to load LeetCode data from local files:', error.message);
@@ -321,13 +336,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return {
           contestData: { data: { data: { userContestRanking: null } } },
           historyData: { data: { contestHistory: [] } },
-          calendarData: { data: { submissionCalendar: "{}" } }
+          calendarData: { data: { submissionCalendar: "{}" } },
+          statsData: null
         };
       }
     }
     
     // Render LeetCode profile with fetched data
-    async function renderLeetCodeProfile(contestData, contestHistory, submissionCalendar) {
+    async function renderLeetCodeProfile(contestData, contestHistory, submissionCalendar, statsData) {
       // Handle nested data structure from the API
       let stats = null;
       let badge = null;
@@ -489,7 +505,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="total-problems-compact">
                   <div class="total-problems-label-compact">Total Solved</div>
                   <div class="total-problems-value-compact">${(() => {
-                    // Calculate total from calendar data if available
+                    // Use stats data if available, otherwise calculate from calendar
+                    if (statsData && statsData.data && statsData.data.totalSolved) {
+                      return statsData.data.totalSolved.toLocaleString();
+                    }
+                    // Fallback to calendar data
                     let total = 0;
                     if (submissionCalendar && submissionCalendar.data) {
                       const calendar = typeof submissionCalendar.data.submissionCalendar === 'string' 
@@ -505,33 +525,45 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>
               <div class="stats-right-section">
                 <div class="difficulty-compact-grid">
+                  ${(() => {
+                    // Get stats from statsData or use fallback values
+                    let easyPct = 0, mediumPct = 0, hardPct = 0;
+                    if (statsData && statsData.data) {
+                      easyPct = statsData.data.easyPercentage || 0;
+                      mediumPct = statsData.data.mediumPercentage || 0;
+                      hardPct = statsData.data.hardPercentage || 0;
+                    }
+                    // Fallback to 0 if no data
+                    return `
                   <div class="difficulty-item-compact">
                     <div class="difficulty-header-compact">
                       <span class="difficulty-label-compact">Easy</span>
-                      <span class="difficulty-percentage-compact difficulty-easy-text">75%</span>
+                      <span class="difficulty-percentage-compact difficulty-easy-text">${easyPct > 0 ? easyPct.toFixed(1) + '%' : 'N/A'}</span>
                     </div>
                     <div class="difficulty-bar-compact-track">
-                      <div class="difficulty-bar-compact-fill difficulty-easy" style="width: 75%"></div>
+                      <div class="difficulty-bar-compact-fill difficulty-easy" style="width: ${easyPct}%"></div>
                     </div>
                   </div>
                   <div class="difficulty-item-compact">
                     <div class="difficulty-header-compact">
                       <span class="difficulty-label-compact">Medium</span>
-                      <span class="difficulty-percentage-compact difficulty-medium-text">60%</span>
+                      <span class="difficulty-percentage-compact difficulty-medium-text">${mediumPct > 0 ? mediumPct.toFixed(1) + '%' : 'N/A'}</span>
                     </div>
                     <div class="difficulty-bar-compact-track">
-                      <div class="difficulty-bar-compact-fill difficulty-medium" style="width: 60%"></div>
+                      <div class="difficulty-bar-compact-fill difficulty-medium" style="width: ${mediumPct}%"></div>
                     </div>
                   </div>
                   <div class="difficulty-item-compact">
                     <div class="difficulty-header-compact">
                       <span class="difficulty-label-compact">Hard</span>
-                      <span class="difficulty-percentage-compact difficulty-hard-text">40%</span>
+                      <span class="difficulty-percentage-compact difficulty-hard-text">${hardPct > 0 ? hardPct.toFixed(1) + '%' : 'N/A'}</span>
                     </div>
                     <div class="difficulty-bar-compact-track">
-                      <div class="difficulty-bar-compact-fill difficulty-hard" style="width: 40%"></div>
+                      <div class="difficulty-bar-compact-fill difficulty-hard" style="width: ${hardPct}%"></div>
                     </div>
                   </div>
+                    `;
+                  })()}
                 </div>
               </div>
             </div>
@@ -567,7 +599,8 @@ document.addEventListener('DOMContentLoaded', function() {
           renderLeetCodeProfile(
             leetcodeData.contestData,
             leetcodeData.historyData,
-            leetcodeData.calendarData
+            leetcodeData.calendarData,
+            leetcodeData.statsData
           );
           
           // Show last updated timestamp

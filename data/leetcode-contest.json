@@ -1,11 +1,11 @@
 {
-  "lastUpdated": "2025-12-13T20:11:20.615965",
+  "lastUpdated": "2026-01-05T13:56:21.337692",
   "data": {
-    "contestAttend": 11,
-    "contestRating": 1984.6641700454027,
-    "contestGlobalRanking": 20774,
-    "totalParticipants": 800234,
-    "contestTopPercentage": 2.71,
+    "contestAttend": 12,
+    "contestRating": 2023.301528118362,
+    "contestGlobalRanking": 17164,
+    "totalParticipants": 809188,
+    "contestTopPercentage": 2.22,
     "contestBadges": {
       "name": "Knight"
     },
@@ -152,28 +152,41 @@
           "title": "Weekly Contest 477",
           "startTime": 1763865000
         }
+      },
+      {
+        "attended": true,
+        "rating": 2023.302,
+        "ranking": 692,
+        "trendDirection": "UP",
+        "problemsSolved": 4,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 4440,
+        "contest": {
+          "title": "Weekly Contest 480",
+          "startTime": 1765679400
+        }
       }
     ]
   },
   "apiSource": "https://alfa-leetcode-api.onrender.com/Rahul_Challa/contest",
   "responseHeaders": {
-    "Date": "Sun, 14 Dec 2025 04:11:18 GMT",
+    "Date": "Mon, 05 Jan 2026 21:56:20 GMT",
     "Content-Type": "application/json; charset=utf-8",
     "Transfer-Encoding": "chunked",
     "Connection": "keep-alive",
     "Content-Encoding": "gzip",
     "access-control-allow-origin": "*",
-    "Cache-Control": "max-age=170",
-    "etag": "W/\"968-2B8HC06VkS9Or2/EZty934jywJA\"",
-    "ratelimit": "limit=120, remaining=109, reset=3424",
+    "Cache-Control": "max-age=89",
+    "etag": "W/\"a2f-oCu5hf8JPjKDT4G8g9Zuld/Psik\"",
+    "ratelimit": "limit=120, remaining=72, reset=1221",
     "ratelimit-policy": "120;w=3600",
-    "rndr-id": "360a3f39-6cd5-4d98",
+    "rndr-id": "f6ab853e-49cb-464c",
     "vary": "Accept-Encoding",
     "x-powered-by": "Express",
     "x-render-origin-server": "Render",
     "cf-cache-status": "DYNAMIC",
     "Server": "cloudflare",
-    "CF-RAY": "9adadb3e9c27cbab-LAX",
+    "CF-RAY": "9b96399e49532f77-LAX",
     "alt-svc": "h3=\":443\"; ma=86400"
   },
   "responseStatus": 200,
