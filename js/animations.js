@@ -143,27 +143,4 @@ document.addEventListener('DOMContentLoaded', function() {
         experienceObserver.observe(card);
     });
     
-    // Enhanced experience card hover effects
-    const experienceCards = document.querySelectorAll('.experience-card');
-    
-    experienceCards.forEach((card) => {
-        // Add parallax effect on hover
-        card.addEventListener('mousemove', function(e) {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = (y - centerY) / 20;
-            const rotateY = (centerX - x) / 20;
-            
-            card.style.transform = `translateY(-8px) scale(1.01) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            card.style.transform = 'translateY(0) scale(1) perspective(1000px) rotateX(0) rotateY(0)';
-        });
-    });
 });
