@@ -1,7 +1,7 @@
 {
-  "lastUpdated": "2026-01-05T13:56:26.164044",
+  "lastUpdated": "2026-03-05T16:37:46.271168",
   "data": {
-    "count": 12,
+    "count": 14,
     "contestHistory": [
       {
         "attended": true,
@@ -157,6 +157,32 @@
         "contest": {
           "title": "Weekly Contest 480",
           "startTime": 1765679400
+        }
+      },
+      {
+        "attended": true,
+        "rating": 2034.109,
+        "ranking": 2033,
+        "trendDirection": "UP",
+        "problemsSolved": 3,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 1344,
+        "contest": {
+          "title": "Weekly Contest 487",
+          "startTime": 1769913000
+        }
+      },
+      {
+        "attended": true,
+        "rating": 2002.352,
+        "ranking": 8927,
+        "trendDirection": "DOWN",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 5262,
+        "contest": {
+          "title": "Weekly Contest 488",
+          "startTime": 1770517800
         }
       }
     ],
@@ -316,28 +342,54 @@
           "title": "Weekly Contest 480",
           "startTime": 1765679400
         }
+      },
+      {
+        "attended": true,
+        "rating": 2034.109,
+        "ranking": 2033,
+        "trendDirection": "UP",
+        "problemsSolved": 3,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 1344,
+        "contest": {
+          "title": "Weekly Contest 487",
+          "startTime": 1769913000
+        }
+      },
+      {
+        "attended": true,
+        "rating": 2002.352,
+        "ranking": 8927,
+        "trendDirection": "DOWN",
+        "problemsSolved": 2,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 5262,
+        "contest": {
+          "title": "Weekly Contest 488",
+          "startTime": 1770517800
+        }
       }
     ]
   },
   "apiSource": "https://alfa-leetcode-api.onrender.com/Rahul_Challa/contest",
   "responseHeaders": {
-    "Date": "Mon, 05 Jan 2026 21:56:25 GMT",
+    "Date": "Fri, 06 Mar 2026 00:37:45 GMT",
     "Content-Type": "application/json; charset=utf-8",
     "Transfer-Encoding": "chunked",
     "Connection": "keep-alive",
     "Content-Encoding": "gzip",
     "access-control-allow-origin": "*",
-    "Cache-Control": "max-age=84",
-    "etag": "W/\"a2f-oCu5hf8JPjKDT4G8g9Zuld/Psik\"",
-    "ratelimit": "limit=120, remaining=72, reset=1221",
+    "Cache-Control": "max-age=296",
+    "etag": "W/\"bba-api3yAHwxeGpMjtZ1rwKp4HXGoA\"",
+    "ratelimit": "limit=120, remaining=107, reset=3210",
     "ratelimit-policy": "120;w=3600",
-    "rndr-id": "05f3cd3d-098b-4df2",
+    "rndr-id": "6ea36341-4f1d-4cda",
     "vary": "Accept-Encoding",
     "x-powered-by": "Express",
     "x-render-origin-server": "Render",
     "cf-cache-status": "DYNAMIC",
     "Server": "cloudflare",
-    "CF-RAY": "9b9639bc7dc9d7ab-LAX",
+    "CF-RAY": "9d7d4b2eb8ceb81f-LAX",
     "alt-svc": "h3=\":443\"; ma=86400"
   },
   "responseStatus": 200,

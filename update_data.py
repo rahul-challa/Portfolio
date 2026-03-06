@@ -8,12 +8,12 @@ import datetime
 import time
 import os
 
-def fetch_with_retry(url, max_retries=3, base_delay=5):
+def fetch_with_retry(url, max_retries=3, base_delay=5, timeout=30):
     """Fetch data with retry logic for rate limiting"""
     for attempt in range(max_retries):
         try:
             print(f'  Attempt {attempt + 1}/{max_retries} for {url}')
-            response = requests.get(url, timeout=30)
+            response = requests.get(url, timeout=timeout)
             
             if response.status_code == 200:
                 return response.json(), response.status_code, response.headers
@@ -110,7 +110,7 @@ def update_leetcode_calendar():
     time.sleep(2)
     
     for endpoint in api_endpoints:
-        result_data, status, headers = fetch_with_retry(endpoint)
+        result_data, status, headers = fetch_with_retry(endpoint, timeout=45)
         if result_data:
             data = result_data
             api_url = endpoint
@@ -162,7 +162,7 @@ def update_leetcode_contest():
     time.sleep(3)
     
     for endpoint in api_endpoints:
-        result_data, status, headers = fetch_with_retry(endpoint)
+        result_data, status, headers = fetch_with_retry(endpoint, timeout=45)
         if result_data:
             data = result_data
             api_url = endpoint
@@ -214,7 +214,7 @@ def update_leetcode_history():
     time.sleep(4)
     
     for endpoint in api_endpoints:
-        result_data, status, headers = fetch_with_retry(endpoint)
+        result_data, status, headers = fetch_with_retry(endpoint, timeout=45)
         if result_data:
             contest_data = result_data
             api_url = endpoint
@@ -270,42 +270,10 @@ def update_leetcode_history():
         print('[FAILED] Failed to fetch LeetCode history data from all endpoints')
         return False
 
-def update_leetcode_stats():
-    """Update LeetCode problem-solving stats"""
-    print('\n=== Updating LeetCode Problem-Solving Stats ===')
-    username = 'Rahul_Challa'
-    # Use leetcode-stats-api for problem-solving stats
-    api_endpoints = [
-        f'https://leetcode-stats-api.herokuapp.com/{username}',
-        f'https://alfa-leetcode-api.onrender.com/{username}/solved'
-    ]
-    
-    data = None
-    api_url = None
-    response_status = None
-    response_headers = None
-    
-    time.sleep(2)
-    
-    for endpoint in api_endpoints:
-        result_data, status, headers = fetch_with_retry(endpoint)
-        if result_data:
-            # Check if the response has the required stats fields
-            if 'totalSolved' in result_data or 'easySolved' in result_data:
-                data = result_data
-                api_url = endpoint
-                response_status = status
-                response_headers = headers
-                print(f'[SUCCESS] Successfully fetched stats data from: {endpoint}')
-                break
-        else:
-            print(f'[FAILED] Failed to fetch from {endpoint}')
-            if endpoint != api_endpoints[-1]:
-                print('Waiting 3 seconds before trying next endpoint...')
-                time.sleep(3)
-    
-    if data:
-        # Calculate percentages for each difficulty
+def _normalize_leetcode_stats(data, api_url, response_status, response_headers):
+    """Build stats_data dict from either leetcode-stats-api or alfa-leetcode-api format."""
+    # leetcode-stats-api format: totalSolved, easySolved, totalEasy, etc.
+    if 'totalSolved' in data or ('totalQuestions' in data and data.get('totalQuestions', 0) > 0):
         stats_data = {
             'totalSolved': data.get('totalSolved', 0),
             'totalQuestions': data.get('totalQuestions', 0),
@@ -317,39 +285,146 @@ def update_leetcode_stats():
             'totalHard': data.get('totalHard', 0),
             'acceptanceRate': data.get('acceptanceRate', 0)
         }
-        
-        # Calculate completion percentages (solved/total for each difficulty)
-        if stats_data['totalEasy'] > 0:
-            stats_data['easyPercentage'] = round((stats_data['easySolved'] / stats_data['totalEasy']) * 100, 1)
-        else:
-            stats_data['easyPercentage'] = 0
-        
-        if stats_data['totalMedium'] > 0:
-            stats_data['mediumPercentage'] = round((stats_data['mediumSolved'] / stats_data['totalMedium']) * 100, 1)
-        else:
-            stats_data['mediumPercentage'] = 0
-        
-        if stats_data['totalHard'] > 0:
-            stats_data['hardPercentage'] = round((stats_data['hardSolved'] / stats_data['totalHard']) * 100, 1)
-        else:
-            stats_data['hardPercentage'] = 0
-        
-        final_data = {
-            'lastUpdated': datetime.datetime.now().isoformat(),
-            'data': stats_data,
-            'apiSource': api_url,
-            'responseHeaders': dict(response_headers) if response_headers else None,
-            'responseStatus': response_status,
-            'requestUrl': api_url
+    else:
+        # alfa-leetcode-api /solved format: solvedProblem, easySolved, mediumSolved, hardSolved
+        total_solved = data.get('solvedProblem', 0)
+        easy = data.get('easySolved', 0)
+        medium = data.get('mediumSolved', 0)
+        hard = data.get('hardSolved', 0)
+        # Default LeetCode totals if not provided (approximate)
+        total_easy = data.get('totalEasy', 921)
+        total_medium = data.get('totalMedium', 1982)
+        total_hard = data.get('totalHard', 899)
+        stats_data = {
+            'totalSolved': total_solved,
+            'totalQuestions': total_easy + total_medium + total_hard,
+            'easySolved': easy,
+            'totalEasy': total_easy,
+            'mediumSolved': medium,
+            'totalMedium': total_medium,
+            'hardSolved': hard,
+            'totalHard': total_hard,
+            'acceptanceRate': 0
         }
-        
+        if stats_data['totalQuestions'] > 0 and total_solved > 0:
+            stats_data['acceptanceRate'] = round((total_solved / stats_data['totalQuestions']) * 100, 2)
+
+    if stats_data['totalEasy'] > 0:
+        stats_data['easyPercentage'] = round((stats_data['easySolved'] / stats_data['totalEasy']) * 100, 1)
+    else:
+        stats_data['easyPercentage'] = 0
+    if stats_data['totalMedium'] > 0:
+        stats_data['mediumPercentage'] = round((stats_data['mediumSolved'] / stats_data['totalMedium']) * 100, 1)
+    else:
+        stats_data['mediumPercentage'] = 0
+    if stats_data['totalHard'] > 0:
+        stats_data['hardPercentage'] = round((stats_data['hardSolved'] / stats_data['totalHard']) * 100, 1)
+    else:
+        stats_data['hardPercentage'] = 0
+
+    return {
+        'lastUpdated': datetime.datetime.now().isoformat(),
+        'data': stats_data,
+        'apiSource': api_url,
+        'responseHeaders': dict(response_headers) if response_headers else None,
+        'responseStatus': response_status,
+        'requestUrl': api_url
+    }
+
+
+def update_leetcode_stats():
+    """Update LeetCode problem-solving stats"""
+    print('\n=== Updating LeetCode Problem-Solving Stats ===')
+    username = 'Rahul_Challa'
+    # Try leetcode-stats-api (Render mirror; Heroku one is often down), then alfa /solved
+    api_endpoints = [
+        (f'https://leetcode-stats-api.onrender.com/{username}', 50),
+        (f'https://leetcode-stats-api.herokuapp.com/{username}', 30),
+        (f'https://alfa-leetcode-api.onrender.com/{username}/solved', 45),
+    ]
+    
+    data = None
+    api_url = None
+    response_status = None
+    response_headers = None
+    
+    time.sleep(2)
+    
+    for endpoint_spec in api_endpoints:
+        endpoint = endpoint_spec[0] if isinstance(endpoint_spec, tuple) else endpoint_spec
+        timeout = endpoint_spec[1] if isinstance(endpoint_spec, tuple) and len(endpoint_spec) > 1 else 45
+        result_data, status, headers = fetch_with_retry(endpoint, timeout=timeout)
+        if result_data:
+            if 'totalSolved' in result_data or 'easySolved' in result_data or 'solvedProblem' in result_data:
+                data = result_data
+                api_url = endpoint
+                response_status = status
+                response_headers = headers
+                print(f'[SUCCESS] Successfully fetched stats data from: {endpoint}')
+                break
+        else:
+            print(f'[FAILED] Failed to fetch from {endpoint}')
+            if endpoint_spec != api_endpoints[-1]:
+                print('Waiting 3 seconds before trying next endpoint...')
+                time.sleep(3)
+    
+    if data:
+        final_data = _normalize_leetcode_stats(data, api_url, response_status, response_headers)
         os.makedirs('data', exist_ok=True)
         with open('data/leetcode-stats.json', 'w') as f:
             json.dump(final_data, f, indent=2)
-        
         print('[SUCCESS] LeetCode problem-solving stats updated successfully')
         return True
     else:
+        # Fallback: try alfa /progress + /solved to build stats
+        print('Trying alfa-leetcode-api /solved and /progress...')
+        time.sleep(2)
+        solved, s_status, s_headers = fetch_with_retry(
+            f'https://alfa-leetcode-api.onrender.com/{username}/solved', timeout=45
+        )
+        if solved:
+            progress, p_status, p_headers = fetch_with_retry(
+                f'https://alfa-leetcode-api.onrender.com/{username}/progress', timeout=45
+            )
+            if progress:
+                na = progress.get('numAcceptedQuestions', {})
+                if isinstance(na, dict):
+                    na = na.get('numAcceptedQuestions', [])
+                else:
+                    na = na if isinstance(na, list) else []
+                nu = progress.get('numUntouchedQuestions', []) or []
+                nf = progress.get('numFailedQuestions', []) or []
+
+                def _count_for_difficulty(arr, diff):
+                    for x in arr:
+                        d = x.get('difficulty', '')
+                        if d == diff or d == diff.upper() or d == diff.title():
+                            return x.get('count', 0)
+                    return 0
+
+                total_easy = _count_for_difficulty(na, 'EASY') + _count_for_difficulty(nu, 'EASY') + _count_for_difficulty(nf, 'EASY')
+                total_medium = _count_for_difficulty(na, 'MEDIUM') + _count_for_difficulty(nu, 'MEDIUM') + _count_for_difficulty(nf, 'MEDIUM')
+                total_hard = _count_for_difficulty(na, 'HARD') + _count_for_difficulty(nu, 'HARD') + _count_for_difficulty(nf, 'HARD')
+                if total_easy == 0:
+                    total_easy = 921
+                if total_medium == 0:
+                    total_medium = 1982
+                if total_hard == 0:
+                    total_hard = 899
+                solved['totalEasy'] = total_easy
+                solved['totalMedium'] = total_medium
+                solved['totalHard'] = total_hard
+                final_data = _normalize_leetcode_stats(
+                    solved,
+                    f'https://alfa-leetcode-api.onrender.com/{username}/solved+progress',
+                    s_status,
+                    s_headers
+                )
+                os.makedirs('data', exist_ok=True)
+                with open('data/leetcode-stats.json', 'w') as f:
+                    json.dump(final_data, f, indent=2)
+                print('[SUCCESS] LeetCode problem-solving stats updated from alfa /solved + /progress')
+                return True
         print('[FAILED] Failed to fetch LeetCode problem-solving stats from all endpoints')
         return False
 

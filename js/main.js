@@ -209,7 +209,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // GitHub - Load from local data file
     const githubLogoImg = 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
-    
     async function loadGitHubData() {
       try {
         // Loading GitHub data from local cache
@@ -238,8 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <a href="${data.html_url}" target="_blank" class="btn primary-btn">View GitHub</a>
           </div>
           <div class="profile-heatmap">
-            <img src="https://ghchart.rshah.org/26a641/rahul-challa" alt="GitHub Contribution Heatmap" class="github-heatmap"/>
-            <img src="https://github-readme-stats.vercel.app/api?username=rahul-challa&show_icons=true&theme=dark&hide_title=true&icon_color=FFB81C&title_color=FFB81C&text_color=eeeeee" alt="GitHub Stats" class="github-heatmap"/>
+            <img src="https://ghchart.rshah.org/26a641/rahul-challa" alt="GitHub Contribution Heatmap" class="github-heatmap" referrerpolicy="no-referrer"/>
           </div>
         `;
         
@@ -257,8 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <a href="https://github.com/rahul-challa" target="_blank" class="btn primary-btn">View GitHub</a>
           </div>
           <div class="profile-heatmap">
-            <img src="https://ghchart.rshah.org/26a641/rahul-challa" alt="GitHub Contribution Heatmap" class="github-heatmap"/>
-            <img src="https://github-readme-stats.vercel.app/api?username=rahul-challa&show_icons=true&theme=dark&hide_title=true&icon_color=FFB81C&title_color=FFB81C&text_color=eeeeee" alt="GitHub Stats" class="github-heatmap"/>
+            <img src="https://ghchart.rshah.org/26a641/rahul-challa" alt="GitHub Contribution Heatmap" class="github-heatmap" referrerpolicy="no-referrer"/>
           </div>
         `;
       }

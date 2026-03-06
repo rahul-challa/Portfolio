@@ -36,30 +36,18 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # Reset to match remote exactly and avoid any conflicts
-        echo "Resetting to match remote main branch..."
-        git fetch origin main
-        git reset --hard origin/main
-        
-        # Check what files we have in data directory
         echo "Files in data directory:"
         ls -la data/
-        
-        # Check if any data files were actually updated
         echo "Checking for changes in data files..."
         git status
         
-        # Now add and commit our changes
         git add data/
-        
-        # Check if there are any changes to commit
         if git diff --staged --quiet; then
           echo "No changes to commit - data files are up to date"
         else
           git commit -m "Update API data - $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
           echo "Committed changes to data files"
+          git pull --rebase origin main
+          git push origin main
+          echo "Successfully updated and pushed API data"
         fi
-        
-        # Push should now work since we're exactly matching remote
-        git push origin main
-        echo "Successfully updated and pushed API data"
