@@ -3,31 +3,30 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initial load animations
     setTimeout(() => {
-        document.querySelector('.home-text').classList.add('fade-in');
-        
+        const homeText = document.querySelector('.home-text');
+        if (homeText) homeText.classList.add('fade-in');
         setTimeout(() => {
-            document.querySelector('.home-img').classList.add('fade-in');
+            const homeImg = document.querySelector('.home-img');
+            if (homeImg) homeImg.classList.add('fade-in');
         }, 300);
     }, 100);
-    
+
     // Typing animation for the profession
     const typingElement = document.querySelector('.profession');
-    const originalText = typingElement.textContent;
-    typingElement.textContent = '';
-    
-    let charIndex = 0;
-    const typingSpeed = 100; // milliseconds per character
-    
-    function typeText() {
-        if (charIndex < originalText.length) {
-            typingElement.textContent += originalText.charAt(charIndex);
-            charIndex++;
-            setTimeout(typeText, typingSpeed);
+    if (typingElement) {
+        const originalText = typingElement.textContent;
+        typingElement.textContent = '';
+        let charIndex = 0;
+        const typingSpeed = 100;
+        function typeText() {
+            if (charIndex < originalText.length) {
+                typingElement.textContent += originalText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeText, typingSpeed);
+            }
         }
+        setTimeout(typeText, 1000);
     }
-    
-    // Start typing animation after a delay
-    setTimeout(typeText, 1000);
     
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -49,13 +48,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Parallax effect for the home section
     const homeSection = document.querySelector('.home');
     
-    window.addEventListener('scroll', function() {
-        const scrollPosition = window.scrollY;
-        if (scrollPosition < window.innerHeight) {
-            const parallaxOffset = scrollPosition * 0.4;
-            homeSection.style.backgroundPositionY = `${parallaxOffset}px`;
-        }
-    });
+    if (homeSection) {
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.scrollY;
+            if (scrollPosition < window.innerHeight) {
+                const parallaxOffset = scrollPosition * 0.4;
+                homeSection.style.backgroundPositionY = `${parallaxOffset}px`;
+            }
+        });
+    }
     
     // Project card hover effects
     const projectCards = document.querySelectorAll('.project-card');

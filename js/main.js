@@ -83,16 +83,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function scrollActive() {
         const scrollY = window.pageYOffset;
         const sections = document.querySelectorAll('section[id]');
-        
+        const navLinks = document.querySelectorAll('.nav-menu .nav-link');
+
+        navLinks.forEach(link => link.classList.remove('active'));
+
         sections.forEach(current => {
             const sectionHeight = current.offsetHeight;
             const sectionTop = current.offsetTop - 50;
             const sectionId = current.getAttribute('id');
-            
+            const link = document.querySelector('.nav-menu a[href="#' + sectionId + '"]');
+            if (!link) return;
+
             if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                document.querySelector('.nav-menu a[href*=' + sectionId + ']').classList.add('active');
-            } else {
-                document.querySelector('.nav-menu a[href*=' + sectionId + ']').classList.remove('active');
+                link.classList.add('active');
             }
         });
     }
@@ -458,7 +461,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   </div>
                   <div class="leetcode-rating-display">
                     <span class="leetcode-rating-label-new">Rating</span>
-                    <span class="leetcode-rating-value-new">${stats ? stats.rating.toFixed(0) : 'N/A'}</span>
+                    <span class="leetcode-rating-value-new">${stats && stats.rating != null ? stats.rating.toFixed(0) : 'N/A'}</span>
                   </div>
                 </div>
               </div>
@@ -478,15 +481,15 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="leetcode-stats-grid">
               <div class="leetcode-stat-item">
-                <div class="stat-number">${stats ? stats.attendedContestsCount : 'N/A'}</div>
+                <div class="stat-number">${stats && stats.attendedContestsCount != null ? stats.attendedContestsCount : 'N/A'}</div>
                 <div class="stat-label">Contests</div>
               </div>
               <div class="leetcode-stat-item">
-                <div class="stat-number">${stats ? stats.globalRanking.toLocaleString() : 'N/A'}</div>
-                <div class="stat-label">Global Rank</div>
+              <div class="stat-number">${stats && stats.globalRanking != null ? stats.globalRanking.toLocaleString() : 'N/A'}</div>
+              <div class="stat-label">Global Rank</div>
               </div>
               <div class="leetcode-stat-item">
-                <div class="stat-number">${stats ? stats.topPercentage.toFixed(1) + '%' : 'N/A'}</div>
+                <div class="stat-number">${stats && stats.topPercentage != null ? stats.topPercentage.toFixed(1) + '%' : 'N/A'}</div>
                 <div class="stat-label">Top %</div>
               </div>
             </div>
@@ -601,7 +604,7 @@ document.addEventListener('DOMContentLoaded', function() {
           );
           
           // Show last updated timestamp
-          const lastUpdated = new Date(leetcodeData.contestData.lastUpdated).toLocaleDateString();
+          const lastUpdated = leetcodeData.contestData?.lastUpdated ? new Date(leetcodeData.contestData.lastUpdated).toLocaleDateString() : '';
           // LeetCode data loaded (last updated: ${lastUpdated})
         } else {
           // If local files fail, show a message
@@ -948,12 +951,11 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Add interactive tooltips on hover (enhanced)
       setTimeout(() => {
-        const cells = heatmapCard.querySelectorAll('.heatmap-cell');
-        cells.forEach(cell => {
-          cell.addEventListener('mouseenter', function(e) {
+        const heatmapCells = heatmapCard.querySelectorAll('.heatmap-cell');
+        heatmapCells.forEach(cellEl => {
+          cellEl.addEventListener('mouseenter', function() {
             const count = this.getAttribute('data-count');
             const date = this.getAttribute('data-date');
-            // Create tooltip
             const tooltip = document.createElement('div');
             tooltip.className = 'heatmap-tooltip';
             tooltip.textContent = `${date}: ${count} ${count === '1' ? 'submission' : 'submissions'}`;
@@ -970,16 +972,13 @@ document.addEventListener('DOMContentLoaded', function() {
               box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             `;
             document.body.appendChild(tooltip);
-            
             const rect = this.getBoundingClientRect();
             const tooltipRect = tooltip.getBoundingClientRect();
             tooltip.style.left = (rect.left + rect.width / 2 - tooltipRect.width / 2) + 'px';
             tooltip.style.top = (rect.top - tooltipRect.height - 8) + 'px';
-            
             this._tooltip = tooltip;
           });
-          
-          cell.addEventListener('mouseleave', function() {
+          cellEl.addEventListener('mouseleave', function() {
             if (this._tooltip) {
               this._tooltip.remove();
               this._tooltip = null;
