@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-04-24T04:54:34.847170",
+  "lastUpdated": "2026-04-25T04:36:22.232505",
   "data": {
     "installs": null,
     "version": "0.0.1-security",
@@ -22,12 +22,12 @@
   },
   "apiSource": "https://registry.npmjs.org/texmex",
   "responseHeaders": {
-    "Date": "Fri, 24 Apr 2026 04:54:34 GMT",
+    "Date": "Sat, 25 Apr 2026 04:36:22 GMT",
     "Content-Type": "application/json",
     "Transfer-Encoding": "chunked",
     "Connection": "keep-alive",
-    "set-cookie": "_cfuvid=7eCQV2welM3OkslIwhob4.X1qCUqnzatrzwAo4AoIUM-1777006474.713816-1.0.1.1-XOFXj1WCDCI_qYz4i51zgcRWAetPYCDL1f3iNgf93qY; HttpOnly; SameSite=None; Secure; Path=/; Domain=npmjs.org",
-    "CF-Ray": "9f1282c2fba1ef64-IAD",
+    "set-cookie": "_cfuvid=ryHDHJBUw8BcKp8PBrr3YT.KMAoEQEM8hXPJvp_GJoQ-1777091782.0890305-1.0.1.1-IW4TyjZPCi4Z_Mg3jH3fNbo7S75zY2aX8X.uPaxzCcE; HttpOnly; SameSite=None; Secure; Path=/; Domain=npmjs.org",
+    "CF-Ray": "9f1aa5760dbec9b9-IAD",
     "CF-Cache-Status": "REVALIDATED",
     "Access-Control-Allow-Origin": "*",
     "Cache-Control": "public, max-age=300",
