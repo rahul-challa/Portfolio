@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-21T06:09:47.728187",
+  "lastUpdated": "2026-05-22T06:05:26.798543",
   "data": {
     "installs": null,
     "version": "0.0.1-security",
@@ -22,17 +22,18 @@
   },
   "apiSource": "https://registry.npmjs.org/texmex",
   "responseHeaders": {
-    "Date": "Thu, 21 May 2026 06:09:47 GMT",
+    "Date": "Fri, 22 May 2026 06:05:26 GMT",
     "Content-Type": "application/json",
     "Transfer-Encoding": "chunked",
     "Connection": "keep-alive",
-    "CF-Ray": "9ff16a10ae000271-ORD",
+    "set-cookie": "_cfuvid=Rg2PILbeC1QxN8nKPZ7j_n1ui9XDG2sqkVqGsb_urqw-1779429926.665344-1.0.1.1-ge0lk5_v6m8Z90sAgP3wDpxata.e6ikm43Uj4FOotmo; HttpOnly; SameSite=None; Secure; Path=/; Domain=npmjs.org",
+    "CF-Ray": "9ff9a111ac9a2959-IAD",
     "CF-Cache-Status": "REVALIDATED",
-    "Vary": "accept-encoding, accept",
     "Access-Control-Allow-Origin": "*",
     "Cache-Control": "public, max-age=300",
-    "Server": "cloudflare",
+    "Vary": "accept-encoding, accept",
     "Last-Modified": "Sat, 21 May 2022 15:57:45 GMT",
+    "Server": "cloudflare",
     "ETag": "W/\"1264585a501192ac269438dd0ea92150\"",
     "Content-Encoding": "gzip"
   },
