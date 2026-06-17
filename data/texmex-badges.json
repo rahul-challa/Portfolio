@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-16T07:26:11.366232",
+  "lastUpdated": "2026-06-17T07:08:54.490295",
   "data": {
     "installs": null,
     "version": "0.0.1-security",
@@ -22,11 +22,11 @@
   },
   "apiSource": "https://registry.npmjs.org/texmex",
   "responseHeaders": {
-    "Date": "Tue, 16 Jun 2026 07:26:11 GMT",
+    "Date": "Wed, 17 Jun 2026 07:08:54 GMT",
     "Content-Type": "application/json",
     "Transfer-Encoding": "chunked",
     "Connection": "keep-alive",
-    "CF-Ray": "a0c815b82a9ab4ba-IAD",
+    "CF-Ray": "a0d039c7bbb9d6a9-IAD",
     "CF-Cache-Status": "REVALIDATED",
     "Vary": "accept-encoding, accept",
     "Access-Control-Allow-Origin": "*",
