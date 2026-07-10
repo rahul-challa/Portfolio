@@ -1,10 +1,10 @@
 {
-  "lastUpdated": "2026-07-08T05:19:17.001025",
+  "lastUpdated": "2026-07-10T06:01:30.871852",
   "data": {
     "contestAttend": 14,
     "contestRating": 2002.352,
-    "contestGlobalRanking": 21508,
-    "totalParticipants": 874830,
+    "contestGlobalRanking": 21586,
+    "totalParticipants": 875443,
     "contestTopPercentage": 2.56,
     "contestBadges": {
       "name": "Knight"
@@ -196,23 +196,23 @@
   },
   "apiSource": "https://alfa-leetcode-api.onrender.com/Rahul_Challa/contest",
   "responseHeaders": {
-    "Date": "Wed, 08 Jul 2026 05:19:16 GMT",
+    "Date": "Fri, 10 Jul 2026 06:01:30 GMT",
     "Content-Type": "application/json; charset=utf-8",
     "Transfer-Encoding": "chunked",
     "Connection": "keep-alive",
     "access-control-allow-origin": "*",
     "Cache-Control": "max-age=300",
-    "etag": "W/\"bba-dmZuQ7LqgVgc7aHWssvnqFfF6GY\"",
-    "ratelimit": "limit=120, remaining=10, reset=1559",
+    "etag": "W/\"bba-MiRpF3HCxc2mPJ4CFM69KG3wMFY\"",
+    "ratelimit": "limit=120, remaining=6, reset=1883",
     "ratelimit-policy": "120;w=3600",
-    "rndr-id": "063f11af-4a4b-4b10",
+    "rndr-id": "4694072d-9aef-47bc",
     "Server": "cloudflare",
     "vary": "Accept-Encoding",
     "x-powered-by": "Express",
     "x-render-origin-server": "Render",
     "cf-cache-status": "DYNAMIC",
     "Content-Encoding": "gzip",
-    "CF-RAY": "a17ca210aa74d705-IAD",
+    "CF-RAY": "a18d5aaeaf20aef8-LAX",
     "alt-svc": "h3=\":443\"; ma=86400"
   },
   "responseStatus": 200,
