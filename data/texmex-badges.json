@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-19T05:21:09.394836",
+  "lastUpdated": "2026-07-20T05:39:58.350383",
   "data": {
     "installs": null,
     "version": "0.0.1-security",
@@ -22,13 +22,13 @@
   },
   "apiSource": "https://registry.npmjs.org/texmex",
   "responseHeaders": {
-    "Date": "Sun, 19 Jul 2026 05:21:09 GMT",
+    "Date": "Mon, 20 Jul 2026 05:39:58 GMT",
     "Content-Type": "application/json",
     "Transfer-Encoding": "chunked",
     "Connection": "keep-alive",
-    "CF-Ray": "a1d747f12e0d4c71-SJC",
+    "set-cookie": "__cf_bm=xCAyaNNmSL91spEHW6E728Sb0kTtPHSgQRrtUJpbI5I-1784525998.237807-1.0.1.1-RGxioKRt8D7dSW.eUCBpUMABXJ678wfukac4Yzswfrz601ucRp9Rr..ciTbTxmK8fYzH2pVJ5OZNJaujwxfUx_p8iMJnoIs8.mFY0ymedwQYFg4C7oqZxpenUPdXDTds; HttpOnly; SameSite=None; Secure; Path=/; Domain=npmjs.org; Expires=Mon, 20 Jul 2026 06:09:58 GMT, _cfuvid=Y1wIDcGF21zT9bz50H1xrVzfF2LX59Q7W4LXO.XTv1Q-1784525998.237807-1.0.1.1-PpLTCWrd7QNl6gxWxJZl8FlKT8T3Tgsd209fJa4pEEo; HttpOnly; SameSite=None; Secure; Path=/; Domain=npmjs.org",
+    "CF-Ray": "a1dfa0e0f82e1257-ORD",
     "CF-Cache-Status": "REVALIDATED",
-    "set-cookie": "__cf_bm=cOavhayvMp0qkbUt.0T0t86XFGDxDEEKuwnyX16uGc0-1784438469.3076775-1.0.1.1-j0BBhYsEIg3KdHknZeIGRR3NJ_4Q2qCEfPSF6utojMkHfcwXjKuMAj2vOZKhTRwvnDpl150MxbCcTxJB9.Td69CI7N0aehAizr9V_mGS7N2ClEHoJGw5V.fpRLybDPUw; HttpOnly; SameSite=None; Secure; Path=/; Domain=npmjs.org; Expires=Sun, 19 Jul 2026 05:51:09 GMT",
     "Access-Control-Allow-Origin": "*",
     "Cache-Control": "public, max-age=300",
     "Vary": "accept-encoding, accept",
