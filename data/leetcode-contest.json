@@ -1,11 +1,11 @@
 {
-  "lastUpdated": "2026-07-30T04:56:24.704441",
+  "lastUpdated": "2026-08-01T05:24:34.609259",
   "data": {
-    "contestAttend": 14,
-    "contestRating": 2002.352,
-    "contestGlobalRanking": 21757,
-    "totalParticipants": 876708,
-    "contestTopPercentage": 2.58,
+    "contestAttend": 15,
+    "contestRating": 1993.8045574649163,
+    "contestGlobalRanking": 22810,
+    "totalParticipants": 877230,
+    "contestTopPercentage": 2.7,
     "contestBadges": {
       "name": "Knight"
     },
@@ -191,28 +191,41 @@
           "title": "Weekly Contest 488",
           "startTime": 1770517800
         }
+      },
+      {
+        "attended": true,
+        "rating": 1993.805,
+        "ranking": 3595,
+        "trendDirection": "DOWN",
+        "problemsSolved": 3,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 4231,
+        "contest": {
+          "title": "Weekly Contest 512",
+          "startTime": 1785033000
+        }
       }
     ]
   },
   "apiSource": "https://alfa-leetcode-api.onrender.com/Rahul_Challa/contest",
   "responseHeaders": {
-    "Date": "Thu, 30 Jul 2026 04:56:24 GMT",
+    "Date": "Sat, 01 Aug 2026 05:24:34 GMT",
     "Content-Type": "application/json; charset=utf-8",
     "Transfer-Encoding": "chunked",
     "Connection": "keep-alive",
     "access-control-allow-origin": "*",
     "Cache-Control": "max-age=300",
     "cf-cache-status": "DYNAMIC",
-    "etag": "W/\"bba-hbT3FH8SCL0aJWwREgJqDuJ+WfI\"",
-    "ratelimit": "limit=120, remaining=74, reset=2745",
+    "etag": "W/\"c8e-EIpQxVRfuFUUI3qHt/nbvLpz7Fg\"",
+    "ratelimit": "limit=120, remaining=86, reset=3018",
     "ratelimit-policy": "120;w=3600",
-    "rndr-id": "197ff731-a1d8-4fde",
+    "rndr-id": "eee80279-66f3-4a68",
     "Server": "cloudflare",
     "vary": "Accept-Encoding",
     "x-powered-by": "Express",
     "x-render-origin-server": "Render",
     "Content-Encoding": "gzip",
-    "CF-RAY": "a231c6cd8c262f3b-LAX",
+    "CF-RAY": "a2426ad35a0f7aad-ORD",
     "alt-svc": "h3=\":443\"; ma=86400"
   },
   "responseStatus": 200,
