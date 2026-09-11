@@ -1,7 +1,7 @@
 {
-  "lastUpdated": "2026-09-10T06:59:35.596430",
+  "lastUpdated": "2026-09-11T06:59:09.520996",
   "data": {
-    "count": 16,
+    "count": 17,
     "contestHistory": [
       {
         "attended": true,
@@ -209,6 +209,19 @@
         "contest": {
           "title": "Biweekly Contest 188",
           "startTime": 1785594600
+        }
+      },
+      {
+        "attended": true,
+        "rating": 2052.15,
+        "ranking": 307,
+        "trendDirection": "UP",
+        "problemsSolved": 4,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 3181,
+        "contest": {
+          "title": "Weekly Contest 518",
+          "startTime": 1788661800
         }
       }
     ],
@@ -420,28 +433,41 @@
           "title": "Biweekly Contest 188",
           "startTime": 1785594600
         }
+      },
+      {
+        "attended": true,
+        "rating": 2052.15,
+        "ranking": 307,
+        "trendDirection": "UP",
+        "problemsSolved": 4,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 3181,
+        "contest": {
+          "title": "Weekly Contest 518",
+          "startTime": 1788661800
+        }
       }
     ]
   },
   "apiSource": "https://alfa-leetcode-api.onrender.com/Rahul_Challa/contest",
   "responseHeaders": {
-    "Date": "Thu, 10 Sep 2026 06:59:35 GMT",
+    "Date": "Fri, 11 Sep 2026 06:59:09 GMT",
     "Content-Type": "application/json; charset=utf-8",
     "Transfer-Encoding": "chunked",
     "Connection": "keep-alive",
     "access-control-allow-origin": "*",
     "Cache-Control": "max-age=296",
-    "cf-cache-status": "DYNAMIC",
-    "etag": "W/\"d4c-t9DcXf5LEqNjs4yEfESRJRcZBeo\"",
-    "ratelimit": "limit=120, remaining=58, reset=2431",
+    "etag": "W/\"e1c-8UvsairCjK7rtdhPgSBDhCZo8fo\"",
+    "ratelimit": "limit=120, remaining=102, reset=3212",
     "ratelimit-policy": "120;w=3600",
-    "rndr-id": "aef2c12c-412f-45dd",
+    "rndr-id": "c76e5937-02c3-49d5",
     "Server": "cloudflare",
     "vary": "Accept-Encoding",
     "x-powered-by": "Express",
     "x-render-origin-server": "Render",
+    "cf-cache-status": "DYNAMIC",
     "Content-Encoding": "gzip",
-    "CF-RAY": "a38c8d02cf3cc06c-IAD",
+    "CF-RAY": "a394c9c03fcb9617-SEA",
     "alt-svc": "h3=\":443\"; ma=86400"
   },
   "responseStatus": 200,

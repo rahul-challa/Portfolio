@@ -1,11 +1,11 @@
 {
-  "lastUpdated": "2026-09-10T06:59:31.453470",
+  "lastUpdated": "2026-09-11T06:59:05.426985",
   "data": {
-    "contestAttend": 15,
-    "contestRating": 1994.387,
-    "contestGlobalRanking": 23069,
-    "totalParticipants": 881221,
-    "contestTopPercentage": 2.72,
+    "contestAttend": 16,
+    "contestRating": 2052.150207923722,
+    "contestGlobalRanking": 16775,
+    "totalParticipants": 882088,
+    "contestTopPercentage": 1.98,
     "contestBadges": {
       "name": "Knight"
     },
@@ -217,28 +217,41 @@
           "title": "Biweekly Contest 188",
           "startTime": 1785594600
         }
+      },
+      {
+        "attended": true,
+        "rating": 2052.15,
+        "ranking": 307,
+        "trendDirection": "UP",
+        "problemsSolved": 4,
+        "totalProblems": 4,
+        "finishTimeInSeconds": 3181,
+        "contest": {
+          "title": "Weekly Contest 518",
+          "startTime": 1788661800
+        }
       }
     ]
   },
   "apiSource": "https://alfa-leetcode-api.onrender.com/Rahul_Challa/contest",
   "responseHeaders": {
-    "Date": "Thu, 10 Sep 2026 06:59:31 GMT",
+    "Date": "Fri, 11 Sep 2026 06:59:05 GMT",
     "Content-Type": "application/json; charset=utf-8",
     "Transfer-Encoding": "chunked",
     "Connection": "keep-alive",
     "access-control-allow-origin": "*",
     "Cache-Control": "max-age=300",
-    "cf-cache-status": "DYNAMIC",
-    "etag": "W/\"d4c-t9DcXf5LEqNjs4yEfESRJRcZBeo\"",
-    "ratelimit": "limit=120, remaining=58, reset=2431",
+    "etag": "W/\"e1c-8UvsairCjK7rtdhPgSBDhCZo8fo\"",
+    "ratelimit": "limit=120, remaining=102, reset=3212",
     "ratelimit-policy": "120;w=3600",
-    "rndr-id": "7c513561-23d7-46f6",
+    "rndr-id": "c25dad37-5d5c-40f0",
     "Server": "cloudflare",
     "vary": "Accept-Encoding",
     "x-powered-by": "Express",
     "x-render-origin-server": "Render",
+    "cf-cache-status": "DYNAMIC",
     "Content-Encoding": "gzip",
-    "CF-RAY": "a38c8ce87dd48e82-IAD",
+    "CF-RAY": "a394c9a61bed7537-SEA",
     "alt-svc": "h3=\":443\"; ma=86400"
   },
   "responseStatus": 200,
