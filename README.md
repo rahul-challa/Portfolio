@@ -3,7 +3,7 @@
 A modern, responsive portfolio website showcasing my projects, skills, and experience as a software developer.
 
 ## Live Demo
-[View Portfolio](https://rahul-challa.github.io/Portfolio/)
+[View Portfolio](https://rahulchalla.com/)
 
 ## Features
 
@@ -214,7 +214,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-- **Portfolio**: [rahul-challa.github.io/Portfolio](https://rahul-challa.github.io/Portfolio/)
+- **Portfolio**: [rahulchalla.com](https://rahulchalla.com/)
 - **GitHub**: [github.com/rahul-challa](https://github.com/rahul-challa)
 - **LinkedIn**: [linkedin.com/in/rahulchalla13](https://linkedin.com/in/rahulchalla13)
 
