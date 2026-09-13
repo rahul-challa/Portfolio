@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function observeReveal(root = document) {
         root.querySelectorAll(
-            '.section-header, .github-strip, .project-card, .experience-row, .education-row, .contact-card, .about-stat-card, .repo-row'
+            '.section-header, .github-strip, .leetcode-strip, .project-card, .experience-row, .education-row, .contact-card, .about-stat-card, .repo-row'
         ).forEach(el => {
             if (!el.classList.contains('fade-in')) revealObserver.observe(el);
         });
@@ -111,9 +111,6 @@ document.addEventListener('DOMContentLoaded', function () {
         requestAnimationFrame(tick);
     }
 
-    /*=============== CODE RAIN (hero avatar) ===============*/
-    initCodeRain();
-
     /*=============== PROJECTS + PROFILES ===============*/
     const leetcodeProfileContainer = document.querySelector('.leetcode-profile');
     if (leetcodeProfileContainer) {
@@ -130,59 +127,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // expose for the reveal observer once dynamic content lands
     window.__observeReveal = observeReveal;
 });
-
-/*=============== CODE RAIN CANVAS ===============*/
-function initCodeRain() {
-    const canvas = document.getElementById('codeRainCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-
-    function resizeCanvas() {
-        const style = getComputedStyle(canvas);
-        canvas.width = parseInt(style.width, 10);
-        canvas.height = parseInt(style.height, 10);
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    const fontSize = 16;
-    const codeChars = '01<>/={}[]();$#@&%';
-    const yellow = '#ffb81c';
-    let drops = Array(Math.max(1, Math.floor(canvas.width / fontSize))).fill(1);
-
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.font = fontSize + 'px monospace';
-        ctx.fillStyle = yellow;
-        ctx.globalAlpha = 0.7;
-
-        const cx = canvas.width / 2;
-        const cy = canvas.height / 2;
-        // fillText's (x, y) is the glyph's baseline anchor, not its full
-        // painted extent - a glyph anchored just inside the true edge can
-        // still paint several pixels past it (ascenders, character width).
-        // Shrinking the test radius by a full glyph size keeps every
-        // painted pixel safely inside the circle, independent of whatever
-        // CSS clipping is (or isn't) applied to the canvas itself.
-        const r = canvas.width / 2 - fontSize;
-
-        for (let i = 0; i < drops.length; i++) {
-            const text = codeChars[Math.floor(Math.random() * codeChars.length)];
-            const x = i * fontSize;
-            const y = drops[i] * fontSize;
-
-            if (Math.pow(x - cx, 2) + Math.pow(y - cy, 2) < Math.pow(r, 2)) {
-                ctx.fillText(text, x, y);
-            }
-            if (y > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
-            drops[i]++;
-        }
-        ctx.globalAlpha = 1.0;
-    }
-    setInterval(draw, 60);
-}
 
 /*=============== TEXMEX BADGES ===============*/
 function setBadgePill(id, label, value) {
@@ -398,112 +342,98 @@ function renderLeetCodeProfile(data) {
 
     const badge = data.contest && data.contest.badge;
     const badgeCount = (data.badges || []).length;
+    const rating = data.contest && data.contest.rating != null ? data.contest.rating : 'N/A';
+    const contests = data.contest && data.contest.attendedContestsCount != null ? data.contest.attendedContestsCount : 'N/A';
+    const globalRank = data.contest && data.contest.globalRanking != null ? data.contest.globalRanking.toLocaleString() : 'N/A';
+    const topPct = data.contest && data.contest.topPercentage != null ? data.contest.topPercentage.toFixed(1) + '%' : 'N/A';
 
+    // Same "identity strip" component as the GitHub strip atop Projects,
+    // then an About-style hairline stat row, a compact difficulty
+    // breakdown, and a full-width heatmap - no boxed dashboard cards.
     const leetcodeProfileHTML = `
-      <div class="leetcode-grid">
-        <div class="leetcode-card card-info-redesigned">
-          <div class="leetcode-profile-content">
-            <div class="leetcode-profile-main">
-              <div class="leetcode-avatar-wrapper">
-                <img src="${LEETCODE_LOGO}" alt="LeetCode Logo" class="leetcode-avatar"/>
-              </div>
-              <div class="leetcode-info-section">
-                <div class="leetcode-name-badge-row">
-                  <h3 class="leetcode-username-new">${LEETCODE_DISPLAY_NAME}</h3>
-                  ${badge ? `
-                    <div class="leetcode-badge-container">
-                      <img src="assets/images/Knight.gif" alt="${badge} Badge" class="leetcode-badge-gif" />
-                      <span class="leetcode-badge-text">${badge}</span>
-                    </div>
-                  ` : ''}
-                </div>
-                <div class="leetcode-rating-display">
-                  <span class="leetcode-rating-label-new">Rating</span>
-                  <span class="leetcode-rating-value-new">${data.contest && data.contest.rating != null ? data.contest.rating : 'N/A'}</span>
-                </div>
-                ${badgeCount ? `<div class="leetcode-badge-count" title="${(data.badges || []).join(', ')}">${badgeCount} badges earned</div>` : ''}
-              </div>
+      <div class="leetcode-strip">
+        <div class="leetcode-strip-identity">
+          <img src="${LEETCODE_LOGO}" alt="LeetCode Logo" class="leetcode-strip-avatar" />
+          <div class="leetcode-strip-meta">
+            <div class="leetcode-strip-name-row">
+              <span class="leetcode-strip-username">${LEETCODE_DISPLAY_NAME}</span>
+              ${badge ? `
+                <span class="leetcode-strip-badge">
+                  <img src="assets/images/Knight.gif" alt="${badge} badge" /> ${badge}
+                </span>
+              ` : ''}
             </div>
-            <a href="https://leetcode.com/${data.username}" target="_blank" rel="noopener noreferrer" class="leetcode-view-btn">
-              <span>View LeetCode</span>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+            <p class="leetcode-strip-note">Rating ${rating} &middot; ${data.totalSolved.toLocaleString()} problems solved${badgeCount ? ` &middot; ${badgeCount} badges earned` : ''}</p>
+            <a href="https://leetcode.com/${data.username}" target="_blank" rel="noopener noreferrer" class="leetcode-strip-link">
+              View LeetCode <i data-feather="arrow-up-right"></i>
             </a>
           </div>
         </div>
+      </div>
 
-        <div class="leetcode-card card-pie-chart">
-          <div class="leetcode-card-header"><h3>Contest Performance</h3></div>
-          <div class="leetcode-stats-grid">
-            <div class="leetcode-stat-item">
-              <div class="stat-number">${data.contest && data.contest.attendedContestsCount != null ? data.contest.attendedContestsCount : 'N/A'}</div>
-              <div class="stat-label">Contests</div>
-            </div>
-            <div class="leetcode-stat-item">
-              <div class="stat-number">${data.contest && data.contest.globalRanking != null ? data.contest.globalRanking.toLocaleString() : 'N/A'}</div>
-              <div class="stat-label">Global Rank</div>
-            </div>
-            <div class="leetcode-stat-item">
-              <div class="stat-number">${data.contest && data.contest.topPercentage != null ? data.contest.topPercentage.toFixed(1) + '%' : 'N/A'}</div>
-              <div class="stat-label">Top %</div>
-            </div>
+      <div class="leetcode-stats-row">
+        <div class="about-stat-card">
+          <div class="info-title">${data.totalSolved.toLocaleString()}</div>
+          <div class="stat-label">Problems Solved</div>
+        </div>
+        <div class="about-stat-card">
+          <div class="info-title">${contests}</div>
+          <div class="stat-label">Contests Attended</div>
+        </div>
+        <div class="about-stat-card">
+          <div class="info-title">${globalRank}</div>
+          <div class="stat-label">Global Rank</div>
+        </div>
+        <div class="about-stat-card">
+          <div class="info-title">${topPct}</div>
+          <div class="stat-label">Top Percentile</div>
+        </div>
+      </div>
+
+      <div class="leetcode-difficulty-row">
+        <div>
+          <div class="leetcode-difficulty-header">
+            <span>Easy</span>
+            <span class="difficulty-easy-text">${data.easyPercentage}%</span>
+          </div>
+          <div class="difficulty-bar-compact-track">
+            <div class="difficulty-bar-compact-fill difficulty-easy" style="width: ${data.easyPercentage}%"></div>
           </div>
         </div>
-
-        <div class="leetcode-card card-interactive-stats">
-          <div class="leetcode-card-header"><h3>Problem Solving Stats</h3></div>
-          <div class="problem-stats-compact">
-            <div class="total-problems-compact">
-              <div class="total-problems-label-compact">Total Solved</div>
-              <div class="total-problems-value-compact">${data.totalSolved.toLocaleString()}</div>
-            </div>
-            <div class="difficulty-compact-grid">
-              <div class="difficulty-item-compact">
-                <div class="difficulty-header-compact">
-                  <span class="difficulty-label-compact">Easy</span>
-                  <span class="difficulty-percentage-compact difficulty-easy-text">${data.easyPercentage}%</span>
-                </div>
-                <div class="difficulty-bar-compact-track">
-                  <div class="difficulty-bar-compact-fill difficulty-easy" style="width: ${data.easyPercentage}%"></div>
-                </div>
-              </div>
-              <div class="difficulty-item-compact">
-                <div class="difficulty-header-compact">
-                  <span class="difficulty-label-compact">Medium</span>
-                  <span class="difficulty-percentage-compact difficulty-medium-text">${data.mediumPercentage}%</span>
-                </div>
-                <div class="difficulty-bar-compact-track">
-                  <div class="difficulty-bar-compact-fill difficulty-medium" style="width: ${data.mediumPercentage}%"></div>
-                </div>
-              </div>
-              <div class="difficulty-item-compact">
-                <div class="difficulty-header-compact">
-                  <span class="difficulty-label-compact">Hard</span>
-                  <span class="difficulty-percentage-compact difficulty-hard-text">${data.hardPercentage}%</span>
-                </div>
-                <div class="difficulty-bar-compact-track">
-                  <div class="difficulty-bar-compact-fill difficulty-hard" style="width: ${data.hardPercentage}%"></div>
-                </div>
-              </div>
-            </div>
+        <div>
+          <div class="leetcode-difficulty-header">
+            <span>Medium</span>
+            <span class="difficulty-medium-text">${data.mediumPercentage}%</span>
+          </div>
+          <div class="difficulty-bar-compact-track">
+            <div class="difficulty-bar-compact-fill difficulty-medium" style="width: ${data.mediumPercentage}%"></div>
           </div>
         </div>
-
-        <div class="leetcode-card card-bar-chart">
-          <div class="leetcode-card-header"><h3>Activity</h3></div>
-          <div class="leetcode-heatmap-svg"></div>
+        <div>
+          <div class="leetcode-difficulty-header">
+            <span>Hard</span>
+            <span class="difficulty-hard-text">${data.hardPercentage}%</span>
+          </div>
+          <div class="difficulty-bar-compact-track">
+            <div class="difficulty-bar-compact-fill difficulty-hard" style="width: ${data.hardPercentage}%"></div>
+          </div>
         </div>
+      </div>
+
+      <div class="leetcode-strip-heatmap">
+        <div class="leetcode-heatmap-svg"></div>
       </div>
     `;
 
     leetcodeProfileContainer.innerHTML = leetcodeProfileHTML;
+    feather.replace();
+    if (window.__observeReveal) window.__observeReveal(document.getElementById('profiles'));
     renderLeetCodeHeatmap(data.submissionCalendar || {});
 }
 
 /*=============== LEETCODE ACTIVITY HEATMAP (SVG) ===============*/
 function renderLeetCodeHeatmap(calendarData) {
-    const heatmapCard = document.querySelector('.leetcode-card.card-bar-chart');
+    const heatmapCard = document.querySelector('.leetcode-strip-heatmap');
     if (!heatmapCard) return;
 
     try {
