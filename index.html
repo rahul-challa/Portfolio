@@ -4,226 +4,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Rahul Challa - Software Developer Portfolio showcasing projects, skills, and experience. Specialized in full-stack development, AI/ML, and distributed systems.">
-    <meta name="keywords" content="Rahul Challa, Software Developer, Portfolio, Full Stack Developer, AI/ML, Distributed Systems">
+    <meta name="description" content="Rahul Challa - Software Engineer specializing in performance systems, backend infrastructure, and developer tools. M.S. Computer Science candidate at UC Riverside.">
+    <meta name="keywords" content="Rahul Challa, Software Engineer, Portfolio, Backend Development, Distributed Systems, Performance Engineering">
     <meta name="author" content="Rahul Challa">
-    <meta property="og:title" content="Rahul Challa | Portfolio">
-    <meta property="og:description" content="Software Developer Portfolio showcasing projects, skills, and experience">
+    <meta property="og:title" content="Rahul Challa | Software Engineer">
+    <meta property="og:description" content="Portfolio showcasing systems research, backend projects, and developer tools.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://rahul-challa.github.io/Portfolio/">
-    <title>Rahul Challa | Portfolio</title>
-    
+    <title>Rahul Challa | Software Engineer</title>
+
     <!-- Favicon -->
     <link rel="icon" href="assets/images/code.svg" type="image/svg+xml">
-    
+
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/styles.css?v=2">
-    <link rel="stylesheet" href="css/responsive.css">
-    
+    <link rel="stylesheet" href="css/styles.css?v=5">
+
     <!-- Feather Icons -->
     <script src="https://unpkg.com/feather-icons"></script>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
+    <!-- Scroll progress indicator -->
+    <div class="scroll-progress" id="scroll-progress"></div>
+
     <!-- Header Section -->
     <header class="header" id="header">
-        <div class="container">
-            <div class="logo">
-                <a href="index.html">Rahul Challa</a>
-            </div>
-            <nav class="nav-menu">
+        <div class="container header-container">
+            <a href="#home" class="logo">Rahul<span class="logo-accent">.</span>Challa</a>
+            <nav class="nav-menu" id="nav-menu">
                 <ul class="nav-list">
-                    <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
-                    <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
-                    <li class="nav-item"><a href="#experience" class="nav-link">Experience</a></li>
-                    <li class="nav-item"><a href="#skills" class="nav-link">Skills</a></li>
-                    <li class="nav-item"><a href="#projects" class="nav-link">Projects</a></li>
-                    <li class="nav-item"><a href="#profiles" class="nav-link">Profiles</a></li>
-                    <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+                    <li class="nav-item"><a href="#home" class="nav-link active"><span class="nav-index">00</span>Home</a></li>
+                    <li class="nav-item"><a href="#about" class="nav-link"><span class="nav-index">01</span>About</a></li>
+                    <li class="nav-item"><a href="#education" class="nav-link"><span class="nav-index">02</span>Education</a></li>
+                    <li class="nav-item"><a href="#experience" class="nav-link"><span class="nav-index">03</span>Experience</a></li>
+                    <li class="nav-item"><a href="#skills" class="nav-link"><span class="nav-index">04</span>Skills</a></li>
+                    <li class="nav-item"><a href="#projects" class="nav-link"><span class="nav-index">05</span>Projects</a></li>
+                    <li class="nav-item"><a href="#profiles" class="nav-link"><span class="nav-index">06</span>LeetCode</a></li>
+                    <li class="nav-item"><a href="#contact" class="nav-link"><span class="nav-index">07</span>Contact</a></li>
                 </ul>
             </nav>
-            <div class="hamburger">
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
-            </div>
+            </button>
         </div>
     </header>
-    
+
     <!-- Home Section -->
     <section class="home section" id="home">
-        <div class="container">
-            <div class="home-content">
-                <div class="home-text fade-in">
-                    <p class="greeting">Hello, I'm</p>
-                    <h1 class="name">Rahul Challa</h1>
-                    <h2 class="profession">Software Developer</h2>
-                    <p class="brief-intro">Software developer passionate about building impactful and efficient tech solutions.
-					</p>
-                    <div class="home-buttons">
-                        <a href="https://drive.google.com/file/d/1F7l3IAqMlgYXCG8_c4LzXeNZ20trwzTG/view?usp=sharing" class="btn primary-btn" target="_blank" rel="noopener noreferrer">Resume</a>
-                        <a href="#projects" class="btn secondary-btn">View My Work</a>
-                        <a href="#contact" class="btn secondary-btn">Contact Me</a>
-                    </div>
+        <div class="container home-content">
+            <div class="home-text">
+                <p class="greeting">Hello, I'm</p>
+                <h1 class="name">Rahul<br>Challa</h1>
+                <h2 class="profession" data-text="Software Engineer">Software Engineer</h2>
+                <p class="brief-intro">
+                    I build performance-critical systems and developer tools&mdash;from a reinforcement-learning
+                    CPU autotuning framework to a VS&nbsp;Code extension used by 1,100+ developers. Currently an
+                    M.S. Computer Science candidate at UC&nbsp;Riverside.
+                </p>
+                <div class="home-buttons">
+                    <a href="assets/Resume/Rahul%20Challa.pdf" class="btn primary-btn" target="_blank" rel="noopener noreferrer">
+                        <i data-feather="download"></i> Resume
+                    </a>
+                    <a href="#projects" class="btn secondary-btn">View My Work</a>
+                    <a href="#contact" class="btn secondary-btn">Contact Me</a>
                 </div>
-                <div class="home-img fade-in-delayed">
-                    <div class="profile-img-animated">
+                <div class="home-socials">
+                    <a href="https://github.com/rahul-challa" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i data-feather="github"></i></a>
+                    <a href="https://www.linkedin.com/in/rahulchalla13/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i data-feather="linkedin"></i></a>
+                    <a href="mailto:challaviswanadhrahul@gmail.com" aria-label="Email"><i data-feather="mail"></i></a>
+                </div>
+            </div>
+            <div class="home-img">
+                <div class="profile-img-animated">
+                    <div class="avatar-frame">
                         <canvas id="codeRainCanvas"></canvas>
-                        <img src="assets/images/Profile.png" alt="Logo" class="rounded-image" />
+                        <img src="assets/images/Profile.png" alt="Rahul Challa" class="rounded-image" />
                     </div>
                 </div>
             </div>
-            <div class="scroll-down">
-                <a href="#about" class="mouse-wrapper">
-                    <span class="mouse">
-                        <span class="wheel"></span>
-                    </span>
-                    <span class="mouse-label">Scroll Down</span>
+        </div>
+        <div class="scroll-down">
+            <a href="#about" class="mouse-wrapper">
+                <span class="mouse"><span class="wheel"></span></span>
+                <span class="mouse-label">Scroll Down</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about section" id="about">
+        <div class="container about-container-new">
+            <div class="about-img-card">
+                <img src="assets/images/About.jpeg" alt="Rahul Challa" class="about-img" />
+            </div>
+            <div class="about-content-new">
+                <span class="section-eyebrow"><span class="eyebrow-index">01</span>About Me</span>
+                <h2 class="about-tagline">Turning research and real workloads into reliable software</h2>
+                <p class="about-intro">
+                    I'm <span class="highlight">Rahul Challa</span>, a software engineer and graduate researcher at UC
+                    Riverside. My work spans micro-architectural profiling and reinforcement learning, distributed
+                    data pipelines, and production-grade backend services&mdash;always with an eye on measurable
+                    performance and correctness.
+                </p>
+                <div class="about-stats-row">
+                    <div class="about-stat-card">
+                        <div class="info-title" data-counter="1100" data-suffix="+">0</div>
+                        <div class="stat-label">Active users on my VS&nbsp;Code extension</div>
+                    </div>
+                    <div class="about-stat-card">
+                        <div class="info-title" data-counter="90" data-suffix="%">0</div>
+                        <div class="stat-label">Parameter-match accuracy in CPU autotuning research</div>
+                    </div>
+                    <div class="about-stat-card">
+                        <div class="info-title" data-counter="11.5" data-suffix="M">0</div>
+                        <div class="stat-label">Building footprints processed in a live streaming pipeline</div>
+                    </div>
+                </div>
+                <div class="about-funfact">
+                    <i data-feather="coffee"></i> When I'm not coding, I'm creating art, experimenting in the kitchen, or enjoying a great cup of coffee!
+                </div>
+                <a href="assets/Resume/Rahul%20Challa.pdf" class="btn primary-btn download-cv" target="_blank" rel="noopener noreferrer">
+                    <i data-feather="download"></i> Download Resume
                 </a>
             </div>
         </div>
+        <div class="scroll-down">
+            <a href="#education" class="mouse-wrapper">
+                <span class="mouse"><span class="wheel"></span></span>
+                <span class="mouse-label">Scroll Down</span>
+            </a>
+        </div>
     </section>
-    
-    <!-- About Section -->
-    <section class="about section" id="about">
-      <div class="container about-container-new">
-        <div class="about-img-card">
-          <img src="assets/images/About.jpeg" alt="Rahul Challa" class="about-img" />
+
+    <!-- Education Section -->
+    <section class="education section" id="education">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-eyebrow"><span class="eyebrow-index">02</span>Education</span>
+                <h2 class="section-title">Academic Background</h2>
+            </div>
+            <div class="education-layout">
+                <div class="education-img-card">
+                    <img src="assets/images/Graduation.jpg" alt="Rahul Challa at his UC Riverside graduation" class="education-img" />
+                </div>
+                <div class="education-container">
+                    <div class="education-row">
+                        <img src="assets/images/logos/ucr.png?v=3" alt="University of California, Riverside logo" class="education-mark" />
+                        <div class="education-body">
+                            <div class="education-title-row">
+                                <h3 class="education-degree">Master of Science, Computer Science</h3>
+                                <span class="education-date">Sep 2024 &ndash; Mar 2026</span>
+                            </div>
+                            <p class="education-school">University of California, Riverside &middot; In Progress</p>
+                            <ul class="education-honors">
+                                <li>HEST Scholarship Awardee (2025)</li>
+                                <li>Top 3 @ UCRPC (2024)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="education-row">
+                        <img src="assets/images/logos/iter.png?v=3" alt="Institute of Technical Education &amp; Research logo" class="education-mark" />
+                        <div class="education-body">
+                            <div class="education-title-row">
+                                <h3 class="education-degree">Bachelor of Technology, Computer Science &amp; Engineering</h3>
+                                <span class="education-date">Nov 2020 &ndash; Jul 2024</span>
+                            </div>
+                            <p class="education-school">Institute of Technical Education &amp; Research &middot; 3.7 GPA</p>
+                            <ul class="education-honors">
+                                <li>Merit Scholarship Awardee</li>
+                                <li>Top 15 @ Byte Verse Hackathon (2023)</li>
+                                <li>Top 10 @ Xperiments by UST (2022)</li>
+                                <li>Google Cloud Facilitator (2022)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="about-content-new">
-          <div class="about-tagline">Turning ideas into impactful digital solutions</div>
-          <p class="about-intro">
-            Hi, I'm <span class="highlight">Rahul Challa</span> — a software developer with a passion for building smart, scalable tech. From AI-powered web apps to real-time data dashboards, I love solving real-world problems with code and creativity.
-          </p>
-          <div class="about-stats-row">
-            <div class="about-stat-card">
-              <div class="info-title" style="color: #FFB81C; font-weight: 800; font-size: 2rem;">1+</div>
-              <div class="stat-label">Years of project and internship experience</div>
-            </div>
-            <div class="about-stat-card">
-              <div class="info-title" style="color: #FFB81C; font-weight: 800; font-size: 2rem;">15+</div>
-              <div class="stat-label">AI, data, and web development projects</div>
-            </div>
-            <div class="about-stat-card">
-              <div class="info-title" style="color: #FFB81C; font-weight: 800; font-size: 2rem;">8+</div>
-              <div class="stat-label">Teams & organizations worked with</div>
-            </div>
-          </div>
-          <div class="about-funfact">
-            <i data-feather="coffee"></i> When I'm not coding, I'm creating art, experimenting in the kitchen, or enjoying a great cup of coffee!
-          </div>
-          <a href="https://drive.google.com/file/d/1F7l3IAqMlgYXCG8_c4LzXeNZ20trwzTG/view?usp=sharing" class="btn primary-btn download-cv" target="_blank" rel="noopener noreferrer">Download Resume</a>
+        <div class="scroll-down">
+            <a href="#experience" class="mouse-wrapper">
+                <span class="mouse"><span class="wheel"></span></span>
+                <span class="mouse-label">Scroll Down</span>
+            </a>
         </div>
-      </div>
-      <div class="scroll-down">
-        <a href="#experience" class="mouse-wrapper">
-          <span class="mouse">
-            <span class="wheel"></span>
-          </span>
-          <span class="mouse-label">Scroll Down</span>
-        </a>
-      </div>
     </section>
 
     <!-- Experience Section -->
     <section class="experience section" id="experience">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Experience</h2>
-                <span class="section-subtitle">My Professional Journey</span>
+                <span class="section-eyebrow"><span class="eyebrow-index">03</span>Experience</span>
+                <h2 class="section-title">My Professional Journey</h2>
             </div>
             <div class="experience-container">
-                    <!-- Graduate Research Project -->
-                    <div class="experience-card">
+                <div class="experience-row">
+                    <div class="experience-header-flex">
+                        <img src="assets/images/logos/saayam.png?v=3" alt="Saayam For All logo" class="experience-logo" />
                         <div class="experience-header">
                             <div class="experience-title-row">
-                                <h3 class="experience-title">Graduate Research Project, Autotuning Framework</h3>
-                                <span class="experience-date">July 2025 - Current</span>
+                                <h3 class="experience-title">Software Engineer</h3>
+                                <span class="experience-date">Sep 2026 &ndash; Present</span>
                             </div>
-                            <p class="experience-company">University of California, Riverside</p>
+                            <p class="experience-company">Saayam For All &middot; Part-time &middot; Remote</p>
                         </div>
-                        <ul class="experience-bullets">
-                            <li>Designed an autotuning framework for CPU using reinforcement learning, reducing simulation error to under 5%.</li>
-                            <li>Built validation pipelines on Google Cloud Platform, enabling large scale CPU experiments with better reproducibility.</li>
-                            <li>Integrated and benchmarked MacSim, Sniper, and Z-Sim simulators, enhancing cross-architecture performance validation.</li>
-                        </ul>
                     </div>
+                </div>
 
-                    <!-- Software Engineering Fellow -->
-                    <div class="experience-card">
+                <div class="experience-row">
+                    <div class="experience-header-flex">
+                        <img src="assets/images/logos/ucr.png?v=3" alt="University of California, Riverside logo" class="experience-logo" />
                         <div class="experience-header">
                             <div class="experience-title-row">
-                                <h3 class="experience-title">Software Engineering Fellow</h3>
-                                <span class="experience-date">July 2024 - Sep 2024</span>
+                                <h3 class="experience-title">Graduate Researcher, Autotuning Framework for CPU Model Validation</h3>
+                                <span class="experience-date">Sep 2025 &ndash; Mar 2026</span>
                             </div>
-                            <p class="experience-company">Headstarter AI</p>
+                            <p class="experience-company">University of California, Riverside &middot; Part-time</p>
+                            <p class="experience-secondary-role">Concurrently: Student Assistant (STDT), UCR Auxiliary Services</p>
                         </div>
-                        <ul class="experience-bullets">
-                            <li>Automated the CI/CD pipeline using Docker and GitHub Actions, reducing deployment cycle time by 25%.</li>
-                            <li>Optimized PostgreSQL schemas and ETL workflows, cutting analytics query latency by 18% across production datasets.</li>
-                            <li>Developed event-driven AWS Lambda microservices to handle 10K+ API requests/month, increasing system scalability.</li>
-                        </ul>
                     </div>
+                    <ul class="experience-bullets">
+                        <li>Developing an autotuning framework for CPU model validation using reinforcement learning and microarchitectural simulators (MacSim, Sniper, Z-Sim).</li>
+                        <li>Implementing multi-armed bandit algorithms to minimize simulation error across workloads.</li>
+                        <li>Building scalable pipelines in Python on Google Cloud Platform for long-latency experiments.</li>
+                    </ul>
+                </div>
 
-                    <!-- Undergraduate Student Researcher -->
-                    <div class="experience-card">
+                <div class="experience-row">
+                    <div class="experience-header-flex">
+                        <img src="assets/images/logos/iter.png?v=3" alt="Institute of Technical Education &amp; Research logo" class="experience-logo" />
                         <div class="experience-header">
                             <div class="experience-title-row">
                                 <h3 class="experience-title">Undergraduate Student Researcher, ASL Translation System</h3>
-                                <span class="experience-date">Feb 2024 - Jun 2024</span>
+                                <span class="experience-date">Feb 2024 &ndash; Jun 2024</span>
                             </div>
-                            <p class="experience-company">SOA University</p>
+                            <p class="experience-company">Institute of Technical Education &amp; Research &middot; Internship</p>
                         </div>
-                        <ul class="experience-bullets">
-                            <li>Led a team to build a real-time ASL-to-text translation system using OpenCV and MediaPipe, achieving 98.9% accuracy.</li>
-                            <li>Developed a Random Forest Classifier on a custom dataset of 13K+ hand gesture images, improving inference time by 35%.</li>
-                            <li>Engineered a modular inference pipeline, enhancing scalability and maintainability for future model integration.</li>
-                        </ul>
                     </div>
-
-                    <!-- Data Science Intern -->
-                    <div class="experience-card">
-                        <div class="experience-header">
-                            <div class="experience-title-row">
-                                <h3 class="experience-title">Data Science Intern, Risk Management</h3>
-                                <span class="experience-date">Aug 2023 - Sep 2023</span>
-                            </div>
-                            <p class="experience-company">Coding Rajas Technologies</p>
-                        </div>
-                        <ul class="experience-bullets">
-                            <li>Deployed a real-time TensorFlow-based fraud detection model with a 94% F1-score, processing 1000 transactions/min.</li>
-                            <li>Optimized preprocessing pipelines, reducing turnaround time by 40% and improving fraud detection precision.</li>
-                            <li>Developed RESTful API endpoints and dashboards to visualize model outputs, reducing manual fraud review time by 30%.</li>
-                        </ul>
-                    </div>
-
-                    <!-- AI Intern -->
-                    <div class="experience-card">
-                        <div class="experience-header">
-                            <div class="experience-title-row">
-                                <h3 class="experience-title">Artificial Intelligence Intern, Model Training</h3>
-                                <span class="experience-date">Jul 2023 - Aug 2023</span>
-                            </div>
-                            <p class="experience-company">Pantech ProEd Pvt Ltd</p>
-                        </div>
-                        <ul class="experience-bullets">
-                            <li>Created a real-time image classification service using Flask and TensorFlow, achieving 85% accuracy on real world use cases.</li>
-                            <li>Automated data labelling and model training pipelines with Bash scripts, reducing setup and retraining time by 50%.</li>
-                            <li>Built and deployed a Flask-based REST API for real-time classification, enabling seamless model integration into web systems.</li>
-                        </ul>
-                    </div>
+                    <ul class="experience-bullets">
+                        <li>Created a real-time ASL-to-text translation system using OpenCV and MediaPipe.</li>
+                        <li>Built a Random Forest Classifier on a dataset of 13K+ gesture images with 98.9% accuracy.</li>
+                    </ul>
                 </div>
             </div>
+        </div>
         <div class="scroll-down">
             <a href="#skills" class="mouse-wrapper">
-                <span class="mouse">
-                    <span class="wheel"></span>
-                </span>
+                <span class="mouse"><span class="wheel"></span></span>
                 <span class="mouse-label">Scroll Down</span>
             </a>
         </div>
@@ -233,208 +266,134 @@
     <section class="skills section" id="skills">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Skills</h2>
-                <span class="section-subtitle">What I Work With</span>
+                <span class="section-eyebrow"><span class="eyebrow-index">04</span>Skills</span>
+                <h2 class="section-title">What I Work With</h2>
             </div>
             <div class="skills-list-new">
                 <div class="skill-group">
-                    <span class="skill-label"><strong>Programming:</strong></span>
+                    <span class="skill-label">Languages</span>
                     <div class="skill-items-list">
-                        <span class="skill-item">Python</span>
-                        <span class="skill-item">C</span>
-                        <span class="skill-item">C++</span>
                         <span class="skill-item">Java</span>
-                        <span class="skill-item">JavaScript</span>
+                        <span class="skill-item">Python</span>
+                        <span class="skill-item">TypeScript</span>
+                        <span class="skill-item">Go</span>
                         <span class="skill-item">SQL</span>
-                                </div>
-                            </div>
+                        <span class="skill-item">JavaScript</span>
+                        <span class="skill-item">C++</span>
+                        <span class="skill-item">Bash</span>
+                    </div>
+                </div>
                 <div class="skill-group">
-                    <span class="skill-label"><strong>Web/Cloud:</strong></span>
+                    <span class="skill-label">Backend &amp; APIs</span>
                     <div class="skill-items-list">
-                        <span class="skill-item">Flask</span>
-                        <span class="skill-item">Django</span>
-                        <span class="skill-item">React.js</span>
-                        <span class="skill-item">Next.js</span>
-                        <span class="skill-item">AWS</span>
-                        <span class="skill-item">GCP</span>
+                        <span class="skill-item">Spring Boot</span>
+                        <span class="skill-item">Spring MVC</span>
+                        <span class="skill-item">Spring Data JPA</span>
+                        <span class="skill-item">Spring Security</span>
+                        <span class="skill-item">RESTful API</span>
+                        <span class="skill-item">FastAPI</span>
+                        <span class="skill-item">Node.js</span>
+                        <span class="skill-item">gRPC</span>
+                    </div>
+                </div>
+                <div class="skill-group">
+                    <span class="skill-label">Cloud &amp; DevOps</span>
+                    <div class="skill-items-list">
+                        <span class="skill-item">AWS (Lambda, EC2, S3)</span>
                         <span class="skill-item">Docker</span>
-                        <span class="skill-item">Kubernetes</span>
-                                </div>
-                            </div>
-                <div class="skill-group">
-                    <span class="skill-label"><strong>ML/Data:</strong></span>
-                    <div class="skill-items-list">
-                        <span class="skill-item">TensorFlow</span>
-                        <span class="skill-item">PyTorch</span>
-                        <span class="skill-item">Scikit-learn</span>
-                        <span class="skill-item">Pandas</span>
-                        <span class="skill-item">NumPy</span>
-                        <span class="skill-item">OpenCV</span>
-                                </div>
-                            </div>
-                <div class="skill-group">
-                    <span class="skill-label"><strong>Systems:</strong></span>
-                    <div class="skill-items-list">
+                        <span class="skill-item">CI/CD (GitHub Actions)</span>
+                        <span class="skill-item">12-Factor App Methodology</span>
                         <span class="skill-item">Linux</span>
-                        <span class="skill-item">Distributed Systems</span>
-                        <span class="skill-item">OS</span>
-                        <span class="skill-item">Multithreading</span>
-                        <span class="skill-item">Networking</span>
-                                </div>
-                            </div>
+                        <span class="skill-item">Git</span>
+                        <span class="skill-item">Vercel</span>
+                        <span class="skill-item">Render</span>
+                    </div>
+                </div>
                 <div class="skill-group">
-                    <span class="skill-label"><strong>Databases:</strong></span>
+                    <span class="skill-label">Data &amp; Messaging</span>
                     <div class="skill-items-list">
                         <span class="skill-item">PostgreSQL</span>
-                        <span class="skill-item">MySQL</span>
                         <span class="skill-item">MongoDB</span>
+                        <span class="skill-item">Redis</span>
+                        <span class="skill-item">Apache Kafka</span>
+                        <span class="skill-item">Apache Spark</span>
+                        <span class="skill-item">DuckDB</span>
+                        <span class="skill-item">Supabase</span>
                         <span class="skill-item">DynamoDB</span>
                     </div>
                 </div>
                 <div class="skill-group">
-                    <span class="skill-label"><strong>Tools:</strong></span>
+                    <span class="skill-label">Systems</span>
                     <div class="skill-items-list">
-                        <span class="skill-item">Git</span>
-                        <span class="skill-item">REST APIs</span>
-                        <span class="skill-item">Figma</span>
+                        <span class="skill-item">Distributed Systems</span>
+                        <span class="skill-item">Microservices Architecture</span>
+                        <span class="skill-item">Performance Profiling (Intel VTune)</span>
                     </div>
                 </div>
             </div>
-            <div class="scroll-down">
-                <a href="#profiles" class="mouse-wrapper">
-                    <span class="mouse">
-                        <span class="wheel"></span>
-                    </span>
-                    <span class="mouse-label">Scroll Down</span>
-                </a>
-            </div>
+        </div>
+        <div class="scroll-down">
+            <a href="#projects" class="mouse-wrapper">
+                <span class="mouse"><span class="wheel"></span></span>
+                <span class="mouse-label">Scroll Down</span>
+            </a>
         </div>
     </section>
-    
+
     <!-- Projects Section -->
     <section class="projects section" id="projects">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Projects</h2>
-                <span class="section-subtitle">My Recent Work</span>
+                <span class="section-eyebrow"><span class="eyebrow-index">05</span>Projects</span>
+                <h2 class="section-title">My Recent Work</h2>
+                <p class="section-note" id="projects-synced"></p>
             </div>
-            <div class="projects-grid">
-                <!-- TexMex: LaTeX Live Preview for VS Code -->
-                <div class="project-card dashboard-card">
-                    <div class="project-info">
-                        <div class="project-header-flex">
-                          <img src="assets/images/TexMex.png" alt="TexMex Logo" class="project-logo" />
-                          <h3 class="project-title" style="color: #FFB81C; font-weight: 700; margin: 0;">TexMex - A LaTeX Editor for VS Code</h3>
-                        </div>
-                        <div class="project-badges" style="margin: 0.5rem 0 1rem 0;">
-                          <img id="texmex-installs" src="https://img.shields.io/visual-studio-marketplace/i/RahulChalla.texmex?label=Installs&color=FFB81C&labelColor=121212&style=flat" alt="Installs" style="margin-right: 0.3rem;"/>
-                          <img id="texmex-version" src="https://img.shields.io/visual-studio-marketplace/v/RahulChalla.texmex?label=Version&color=FFB81C&labelColor=121212&style=flat" alt="Version" style="margin-right: 0.3rem;"/>
-                          <img id="texmex-rating" src="https://img.shields.io/visual-studio-marketplace/r/RahulChalla.texmex?label=Rating&color=FFB81C&labelColor=121212&style=flat" alt="Rating"/>
-                        </div>
-                        <p class="project-description">Engineered a VS Code extension enabling real-time PDF preview and auto-sync for .tex files, reaching 500+ active users. Optimized rendering and event-handling for 10K+ line LaTeX documents, cutting scroll latency to under 100ms. Published to VS Code Marketplace and maintained a 4.5 rating, showing consistent user satisfaction.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">TypeScript</span>
-                            <span class="tech-tag">VS Code API</span>
-                            <span class="tech-tag">Node.js</span>
-                            <span class="tech-tag">LaTeX</span>
-                            <span class="tech-tag">PDF.js</span>
-                            <span class="tech-tag">VS Code Marketplace</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/rahul-challa/TexMex" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
-                            <a href="https://marketplace.visualstudio.com/items?itemName=RahulChalla.texmex" class="project-link" target="_blank" aria-label="Live Site"><i data-feather="external-link"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!-- BitTrader: Self Supervised Trading Model -->
-                <div class="project-card dashboard-card">
-                    <div class="project-info">
-                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">BitTrader - Self Supervised Trading Model</h3>
-                        <p class="project-description">Deployed a self-training trading model executing 1,200+ simulated BTC trades with an 8.3% ROI using live Gemini data. Built a containerized FastAPI backend on Render Cloud with 99.9% uptime through GitHub Actions CI/CD. Integrated real-time performance tracking and Telegram alerts to monitor trade outcomes and strategy seamlessly.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">FastAPI</span>
-                            <span class="tech-tag">Docker</span>
-                            <span class="tech-tag">Algorithmic Trading</span>
-                            <span class="tech-tag">Machine Learning</span>
-                            <span class="tech-tag">GitHub Actions</span>
-                            <span class="tech-tag">CI/CD</span>
-                            <span class="tech-tag">Render Cloud</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/rahul-challa" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Distributed API Rate Limiter -->
-                <div class="project-card dashboard-card">
-                    <div class="project-info">
-                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">Distributed API Rate Limiter</h3>
-                        <p class="project-description">Engineered a distributed Go rate limiter handling 100k+ RPS via Token Bucket, ensuring sub-millisecond latency. Implemented atomic operations using Redis to eliminate race conditions, reducing API abuse by 99%. Built a Dockerized gRPC/REST microservice to support diverse clients, cutting infrastructure overhead by 40%.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">GoLang</span>
-                            <span class="tech-tag">Redis</span>
-                            <span class="tech-tag">gRPC</span>
-                            <span class="tech-tag">Docker</span>
-                            <span class="tech-tag">CI/CD</span>
-                            <span class="tech-tag">REST APIs</span>
-                            <span class="tech-tag">Distributed Systems</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/rahul-challa" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!-- FinSight: AI-Powered Personal Finance Platform -->
-                <div class="project-card dashboard-card">
-                    <div class="project-info">
-                        <h3 class="project-title" style="color: #FFB81C; font-weight: 700;">FinSight - AI-Powered Personal Finance Platform</h3>
-                        <p class="project-description">Engineered a platform that processes bank statements using FastAPI, PostgreSQL, and Redis generating insights. Developed a ML transaction classifier with 94% category accuracy across major spend types. Integrated an AI insights engine generating personalized budgets, reducing overspend.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">FastAPI</span>
-                            <span class="tech-tag">PostgreSQL</span>
-                            <span class="tech-tag">Redis</span>
-                            <span class="tech-tag">Machine Learning</span>
-                            <span class="tech-tag">AI</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/rahul-challa" class="project-link" target="_blank" aria-label="GitHub Code"><i data-feather="github"></i></a>
-                        </div>
-                    </div>
+
+            <div class="github-strip" id="github-strip">
+                <!-- GitHub identity + contribution heatmap rendered here by main.js -->
+            </div>
+
+            <div class="projects-grid" id="featured-projects">
+                <!-- Featured (curated) project cards are rendered here by main.js from data/projects.json -->
+            </div>
+
+            <div class="more-projects">
+                <h3 class="more-projects-title">More on GitHub</h3>
+                <p class="more-projects-subtitle">Auto-synced nightly from my GitHub repos&mdash;nothing here is hand-edited.</p>
+                <div class="repo-list" id="more-projects-list">
+                    <!-- Compact auto-generated repo rows are rendered here by main.js -->
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Profiles Section -->
     <section class="profiles section" id="profiles">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Profiles</h2>
-                <span class="section-subtitle">My Digital Footprint</span>
+                <span class="section-eyebrow"><span class="eyebrow-index">06</span>LeetCode</span>
+                <h2 class="section-title">Problem Solving</h2>
             </div>
             <div class="profiles-container">
                 <div class="profile-card leetcode-profile">
                     <!-- LeetCode profile info will be loaded here -->
                 </div>
-                <div class="profile-card github-profile">
-                    <!-- GitHub profile info will be loaded here -->
-                </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Contact Section -->
     <section class="contact section" id="contact">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Contact Me</h2>
-                <span class="section-subtitle">Let's connect!</span>
+                <span class="section-eyebrow"><span class="eyebrow-index">07</span>Contact</span>
+                <h2 class="section-title">Let's Connect</h2>
             </div>
             <div class="contact-info contact-tiles-row">
-                    <div class="contact-card">
-                        <i data-feather="mail" class="contact-icon"></i>
-                        <h3 class="contact-title">Email</h3>
+                <div class="contact-card">
+                    <i data-feather="mail" class="contact-icon"></i>
+                    <h3 class="contact-title">Email</h3>
+                    <span class="contact-data">challaviswanadhrahul@gmail.com</span>
                     <a href="mailto:challaviswanadhrahul@gmail.com" class="contact-link">Write to me</a>
                 </div>
                 <div class="contact-card">
@@ -442,132 +401,44 @@
                     <h3 class="contact-title">LinkedIn</h3>
                     <span class="contact-data">@rahulchalla13</span>
                     <a href="https://www.linkedin.com/in/rahulchalla13/" class="contact-link" target="_blank" rel="noopener noreferrer">Connect</a>
-                    </div>
-                    <div class="contact-card">
+                </div>
+                <div class="contact-card">
                     <i data-feather="github" class="contact-icon"></i>
                     <h3 class="contact-title">GitHub</h3>
                     <span class="contact-data">@rahul-challa</span>
                     <a href="https://github.com/rahul-challa" class="contact-link" target="_blank" rel="noopener noreferrer">View Profile</a>
-                    </div>
-                    <div class="contact-card">
-                        <i data-feather="map-pin" class="contact-icon"></i>
-                        <h3 class="contact-title">Location</h3>
-                    <span class="contact-data">San Francisco, California</span>
-                    <a href="https://www.google.com/maps/place/San Francisco" class="contact-link" target="_blank" rel="noopener noreferrer">View on map</a>
+                </div>
+                <div class="contact-card">
+                    <i data-feather="map-pin" class="contact-icon"></i>
+                    <h3 class="contact-title">Location</h3>
+                    <span class="contact-data">San Francisco Bay Area</span>
+                    <a href="https://www.google.com/maps/place/San+Francisco+Bay+Area" class="contact-link" target="_blank" rel="noopener noreferrer">View on map</a>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Footer Section -->
     <footer class="footer thankyou-footer-alt">
         <div class="container">
             <p class="thankyou-message-alt">Thanks for stopping by!</p>
+            <p class="footer-copyright">&copy; <span id="footer-year"></span> Rahul Challa. Built from scratch with HTML, CSS &amp; JS.</p>
         </div>
     </footer>
-    
+
     <!-- Scroll Top Button -->
-    <a href="#" class="scrollup" id="scroll-up">
+    <a href="#" class="scrollup" id="scroll-up" aria-label="Scroll to top">
         <i data-feather="arrow-up" class="scrollup-icon"></i>
     </a>
-    
+
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="js/main.js?v=4" defer></script>
-    <script src="js/animations.js"></script>
-    
+    <script src="js/main.js?v=6" defer></script>
+    <script src="js/animations.js?v=3" defer></script>
+
     <!-- Initialize Feather Icons -->
     <script>
         feather.replace();
-    </script>
-    <script>
-    function setFallbackBadge(id, label, value) {
-      const badge = document.getElementById(id);
-      if (badge) {
-        badge.style.display = "none";
-        let fallback = document.getElementById(id+"-fallback");
-        if (!fallback) {
-          fallback = document.createElement("span");
-          fallback.id = id+"-fallback";
-          fallback.className = "badge-fallback";
-          fallback.style.cssText = "background:#121212;color:#FFB81C;border-radius:4px;padding:2px 8px;margin-right:0.3rem;font-weight:600;";
-          badge.parentNode.insertBefore(fallback, badge.nextSibling);
-        }
-        fallback.innerText = `${label}: ${value}`;
-      }
-    }
-    function saveBadgeValue(key, value) {
-      try { localStorage.setItem(key, value); } catch(e) {}
-    }
-    function getBadgeValue(key) {
-      try { return localStorage.getItem(key); } catch(e) { return null; }
-    }
-    function extractValueFromSVG(svgText) {
-      // Try to extract the value from the SVG badge text
-      const match = svgText.match(/>([^<>]+)<\/text>\s*<\/g/);
-      if (match && match.length > 0) {
-        // The last <text> is usually the value
-        return match[match.length-1].replace(/.*>([^<>]+)<.*/, '$1').trim();
-      }
-      // Fallback: try to get the last <text> value
-      const allText = [...svgText.matchAll(/<text[^>]*>([^<]+)<\/text>/g)].map(m => m[1]);
-      return allText.length ? allText[allText.length-1].trim() : null;
-    }
-    // Load TexMex badge data from local file
-    async function loadTexMexBadges() {
-      try {
-        const cacheBuster = new Date().getTime();
-        const response = await fetch(`./data/texmex-badges.json?t=${cacheBuster}`, {
-          cache: 'no-store'
-        });
-        if (!response.ok) throw new Error('Failed to load TexMex data');
-        
-        const texmexData = await response.json();
-        const data = texmexData.data;
-        
-        // Only display data if it's real (not fallback)
-        if (texmexData.apiSource !== 'fallback' && data.installs && data.version && data.rating) {
-          // Set fallback badges for all TexMex stats with real data
-          setFallbackBadge("texmex-installs", "Installs", data.installs);
-          setFallbackBadge("texmex-version", "Version", data.version);
-          setFallbackBadge("texmex-rating", "Rating", data.rating);
-          
-          // Show last updated timestamp
-          const lastUpdated = new Date(texmexData.lastUpdated).toLocaleDateString();
-          console.log(`TexMex data loaded (last updated: ${lastUpdated})`);
-        } else {
-          // Hide badges if no real data is available
-          hideTexMexBadges();
-          console.log('TexMex: No real data available, badges hidden');
-        }
-      } catch (error) {
-        console.error('Error loading TexMex data:', error);
-        // Hide badges if data loading fails
-        hideTexMexBadges();
-        console.log('TexMex: Data loading failed, badges hidden');
-      }
-    }
-    
-    // Function to hide TexMex badges when no real data is available
-    function hideTexMexBadges() {
-      const badges = ['texmex-installs', 'texmex-version', 'texmex-rating'];
-      badges.forEach(id => {
-        const badge = document.getElementById(id);
-        if (badge) {
-          badge.style.display = 'none';
-        }
-        // Remove any existing fallback badges
-        const fallback = document.getElementById(id + '-fallback');
-        if (fallback) {
-          fallback.remove();
-        }
-      });
-    }
-    
-    // Load TexMex badges
-    loadTexMexBadges();
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
-<!-- End of HTML Document -->
-

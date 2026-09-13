@@ -8,9 +8,9 @@ A modern, responsive portfolio website showcasing my projects, skills, and exper
 ## Features
 
 - **Responsive Design**: Mobile-first approach with modern CSS Grid and Flexbox
-- **Dynamic Content**: Real-time data from GitHub, LeetCode, and VS Code Marketplace
-- **Interactive Elements**: Smooth animations, hover effects, and dynamic charts
-- **Performance Optimized**: Lazy loading, efficient data caching, and optimized assets
+- **Dynamic Content**: Projects, GitHub stats, and LeetCode stats are all pulled live from GitHub/LeetCode's own APIs and cached locally - nothing is hand-maintained except the curated project descriptions
+- **Interactive Elements**: Scroll-reveal animations, animated stat counters, an SVG contribution heatmap
+- **Performance Optimized**: Local data caching (no live API calls from the browser), pre-normalized image assets, optimized fonts
 - **Accessibility**: Semantic HTML, ARIA labels, and keyboard navigation support
 
 ## Technologies Used
@@ -18,9 +18,8 @@ A modern, responsive portfolio website showcasing my projects, skills, and exper
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **Styling**: Custom CSS with CSS Variables, Grid, Flexbox
 - **Icons**: Feather Icons
-- **Fonts**: Google Fonts (Poppins, Roboto)
-- **Data Visualization**: Chart.js for interactive charts
-- **APIs**: GitHub API, LeetCode API, VS Code Marketplace API
+- **Fonts**: Google Fonts (Fraunces, Poppins, Roboto Mono)
+- **APIs**: GitHub REST API, LeetCode GraphQL API, VS Code Marketplace Gallery API
 
 ## Project Structure
 
@@ -28,15 +27,20 @@ A modern, responsive portfolio website showcasing my projects, skills, and exper
 Portfolio/
 ├── index.html              # Main HTML file
 ├── css/
-│   ├── styles.css          # Main stylesheet
-│   └── responsive.css      # Responsive design rules
+│   └── styles.css          # Stylesheet (includes responsive rules)
 ├── js/
 │   ├── main.js            # Main JavaScript functionality
 │   └── animations.js      # Animation and interaction logic
 ├── assets/
-│   ├── images/            # Project images and icons
+│   ├── images/            # Project images, personal photos, institution/company logos
 │   └── Resume/            # Resume PDF file
-├── data/                  # Cached API data (JSON files)
+├── data/                  # Cached API data (JSON files, auto-updated nightly)
+│   ├── projects.json          # Auto-generated from GitHub repos + project-overrides.json
+│   ├── project-overrides.json # Hand-curated copy for specific repos (git-tracked, edited directly)
+│   ├── github-profile.json    # GitHub profile stats
+│   ├── github-heatmap.svg     # Pre-recolored contribution heatmap (see caching notes below)
+│   ├── leetcode-profile.json  # LeetCode stats, contest ranking, badges, submission calendar
+│   └── texmex-badges.json     # VS Code Marketplace stats for the TexMex extension
 ├── .github/
 │   └── workflows/         # GitHub Actions for data updates
 ├── update_data.py         # Manual data update script
@@ -48,15 +52,22 @@ Portfolio/
 The portfolio uses a sophisticated caching system to avoid API rate limits:
 
 ### How It Works:
-1. **Daily Updates**: GitHub Actions run daily to fetch fresh data
-2. **Local Storage**: All API responses are cached in JSON files
-3. **Fallback Data**: Static fallback data ensures the site always works
-4. **No Direct API Calls**: The frontend only loads local JSON files
+1. **Daily Updates**: `.github/workflows/update-api-data.yml` runs `update_data.py` daily to fetch fresh data
+2. **Local Storage**: All API responses are cached in JSON (or SVG, for the heatmap) files under `data/`
+3. **Fallback Data**: The frontend falls back to sane static values if a fetch fails
+4. **No Direct API Calls**: The frontend only loads local files - it never calls GitHub/LeetCode/VS Code Marketplace directly
 
 ### Data Sources:
-- **GitHub Profile**: User info, repositories, followers
-- **LeetCode Stats**: Contest rankings, problem solving history, activity heatmap
-- **VS Code Marketplace**: TexMex extension statistics
+- **GitHub**: profile stats, and the Projects section's repo list (via `update_projects_data()` in `update_data.py`, merged with `data/project-overrides.json` for hand-written descriptions on specific repos)
+- **GitHub contribution heatmap**: fetched from `ghchart.rshah.org` and recolored for the dark theme server-side, since that service sends no CORS headers (so it can't be fetched and recolored client-side) and only serves a light-background SVG by default
+- **LeetCode**: queried directly against `leetcode.com/graphql` (the same endpoint leetcode.com's own frontend uses) rather than a third-party mirror API, which is both more reliable and returns richer data (full badge list, precise question-count percentages)
+- **VS Code Marketplace**: TexMex extension stats via the Marketplace Gallery API
+
+### Keeping Projects up to date:
+- New GitHub repos show up automatically on the next nightly sync - no action needed
+- To give a specific repo a polished description/tech list instead of its raw GitHub description, add an entry for it in `data/project-overrides.json` (keyed by repo name)
+- To hide a repo from the Projects section entirely (coursework, forks, etc.), add its name to `PROJECT_EXCLUDED_REPOS` in `update_data.py`
+- Deleting or renaming a repo on GitHub removes it from the site automatically, since the list is rebuilt from the live GitHub API on every run
 
 ### Benefits:
 - **No Rate Limits**: Always works regardless of API restrictions
@@ -205,17 +216,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Portfolio**: [rahul-challa.github.io/Portfolio](https://rahul-challa.github.io/Portfolio/)
 - **GitHub**: [github.com/rahul-challa](https://github.com/rahul-challa)
-- **LinkedIn**: [linkedin.com/in/rahul-challa](https://linkedin.com/in/rahul-challa)
+- **LinkedIn**: [linkedin.com/in/rahulchalla13](https://linkedin.com/in/rahulchalla13)
 
 ---
 
-**Last Updated**: December 2025  
-**Version**: 2.1.0  
-**Status**: Production Ready
-
-## Recent Updates (v2.1.0)
-
-- **Code Cleanup**: Removed unused assets, test files, and legacy code
-- **Heatmap Improvements**: Fixed date calculations, added responsive design and interactive tooltips
-- **Performance**: Optimized rendering and improved mobile responsiveness
-- **Documentation**: Updated project structure and deployment guides 
+**Status**: Production Ready 

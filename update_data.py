@@ -91,395 +91,327 @@ def update_github_data():
         print(f'[ERROR] Error fetching GitHub data: {str(e)}')
         return False
 
-def update_leetcode_calendar():
-    """Update LeetCode calendar data"""
-    print('\n=== Updating LeetCode Calendar Data ===')
-    username = 'Rahul_Challa'
-    # Prioritize alfa-leetcode-api as it's the most reliable
-    # Prioritize alfa-leetcode-api as it's the most reliable
-    api_endpoints = [
-        f'https://alfa-leetcode-api.onrender.com/{username}/calendar',
-        f'https://leetcode-api.cyclic.app/{username}/calendar'
-    ]
-    
-    data = None
-    api_url = None
-    response_status = None
-    response_headers = None
-    
-    time.sleep(2)
-    
-    for endpoint in api_endpoints:
-        result_data, status, headers = fetch_with_retry(endpoint, timeout=45)
-        if result_data:
-            data = result_data
-            api_url = endpoint
-            response_status = status
-            response_headers = headers
-            print(f'[SUCCESS] Successfully fetched calendar data from: {endpoint}')
-            break
-        else:
-            print(f'[FAILED] Failed to fetch from {endpoint}')
-            if endpoint != api_endpoints[-1]:
-                print('Waiting 3 seconds before trying next endpoint...')
-                time.sleep(3)
-    
-    if data:
-        final_data = {
-            'lastUpdated': datetime.datetime.now().isoformat(),
-            'data': data,
-            'apiSource': api_url,
-            'responseHeaders': dict(response_headers) if response_headers else None,
-            'responseStatus': response_status,
-            'requestUrl': api_url
-        }
-        
-        os.makedirs('data', exist_ok=True)
-        with open('data/leetcode-calendar.json', 'w') as f:
-            json.dump(final_data, f, indent=2)
-        
-        print('[SUCCESS] LeetCode calendar data updated successfully')
-        return True
-    else:
-        print('[FAILED] Failed to fetch LeetCode calendar data from all endpoints')
-        return False
+def update_github_heatmap():
+    """Fetch the GitHub contribution heatmap SVG and recolor it for the dark
+    theme server-side.
 
-def update_leetcode_contest():
-    """Update LeetCode contest data"""
-    print('\n=== Updating LeetCode Contest Data ===')
-    username = 'Rahul_Challa'
-    # Prioritize alfa-leetcode-api as it's the most reliable and returns correct format
-    api_endpoints = [
-        f'https://alfa-leetcode-api.onrender.com/{username}/contest',
-        f'https://leetcode-api.cyclic.app/{username}/contest'
-    ]
-    
-    data = None
-    api_url = None
-    response_status = None
-    response_headers = None
-    
-    time.sleep(3)
-    
-    for endpoint in api_endpoints:
-        result_data, status, headers = fetch_with_retry(endpoint, timeout=45)
-        if result_data:
-            data = result_data
-            api_url = endpoint
-            response_status = status
-            response_headers = headers
-            print(f'[SUCCESS] Successfully fetched contest data from: {endpoint}')
-            break
-        else:
-            print(f'[FAILED] Failed to fetch from {endpoint}')
-            if endpoint != api_endpoints[-1]:
-                print('Waiting 3 seconds before trying next endpoint...')
-                time.sleep(3)
-    
-    if data:
-        final_data = {
-            'lastUpdated': datetime.datetime.now().isoformat(),
-            'data': data,
-            'apiSource': api_url,
-            'responseHeaders': dict(response_headers) if response_headers else None,
-            'responseStatus': response_status,
-            'requestUrl': api_url
-        }
-        
-        os.makedirs('data', exist_ok=True)
-        with open('data/leetcode-contest.json', 'w') as f:
-            json.dump(final_data, f, indent=2)
-        
-        print('[SUCCESS] LeetCode contest data updated successfully')
-        return True
-    else:
-        print('[FAILED] Failed to fetch LeetCode contest data from all endpoints')
-        return False
+    ghchart.rshah.org doesn't send CORS headers, so the browser can't
+    `fetch()` its SVG text to recolor it client-side (only `<img>` works
+    cross-origin without CORS, and CSS can never reach inside an
+    externally-referenced <img>). Fetching and recoloring it here, then
+    serving it same-origin as a static file, sidesteps both problems.
+    """
+    print('\n=== Updating GitHub Contribution Heatmap ===')
+    username = 'rahul-challa'
+    api_url = f'https://ghchart.rshah.org/26a641/{username}'
 
-def update_leetcode_history():
-    """Update LeetCode history data"""
-    print('\n=== Updating LeetCode History Data ===')
-    username = 'Rahul_Challa'
-    # Prioritize alfa-leetcode-api as it's the most reliable
-    api_endpoints = [
-        f'https://alfa-leetcode-api.onrender.com/{username}/contest',
-        f'https://leetcode-api.cyclic.app/{username}/contest'
-    ]
-    
-    contest_data = None
-    api_url = None
-    response_status = None
-    response_headers = None
-    
-    time.sleep(4)
-    
-    for endpoint in api_endpoints:
-        result_data, status, headers = fetch_with_retry(endpoint, timeout=45)
-        if result_data:
-            contest_data = result_data
-            api_url = endpoint
-            response_status = status
-            response_headers = headers
-            print(f'[SUCCESS] Successfully fetched history data from: {endpoint}')
-            break
-        else:
-            print(f'[FAILED] Failed to fetch from {endpoint}')
-            if endpoint != api_endpoints[-1]:
-                print('Waiting 3 seconds before trying next endpoint...')
-                time.sleep(3)
-    
-    if contest_data:
-        # Extract contest participation data - handle alfa-leetcode-api format
-        contest_history = []
-        if isinstance(contest_data, dict):
-            # alfa-leetcode-api returns contestParticipation directly in data
-            if 'contestParticipation' in contest_data:
-                contest_history = contest_data['contestParticipation']
-            elif 'data' in contest_data and isinstance(contest_data['data'], dict):
-                # Check nested data structure
-                if 'contestParticipation' in contest_data['data']:
-                    contest_history = contest_data['data']['contestParticipation']
-                elif 'userContestRankingHistory' in contest_data['data']:
-                    contest_history = contest_data['data']['userContestRankingHistory']
-            else:
-                contest_history = contest_data.get('contestParticipation', []) or contest_data.get('userContestRankingHistory', [])
-        
-        history_data = {
-            'count': len(contest_history),
-            'contestHistory': contest_history,
-            'contestParticipation': contest_history  # Also include for alfa-leetcode-api format
-        }
-        
-        final_data = {
-            'lastUpdated': datetime.datetime.now().isoformat(),
-            'data': history_data,
-            'apiSource': api_url,
-            'responseHeaders': dict(response_headers) if response_headers else None,
-            'responseStatus': response_status,
-            'requestUrl': api_url,
-            'note': 'Data extracted from contest endpoint as history endpoint is not available'
-        }
-        
-        os.makedirs('data', exist_ok=True)
-        with open('data/leetcode-history.json', 'w') as f:
-            json.dump(final_data, f, indent=2)
-        
-        print('[SUCCESS] LeetCode history data updated successfully')
-        return True
-    else:
-        print('[FAILED] Failed to fetch LeetCode history data from all endpoints')
-        return False
-
-def _normalize_leetcode_stats(data, api_url, response_status, response_headers):
-    """Build stats_data dict from either leetcode-stats-api or alfa-leetcode-api format."""
-    # leetcode-stats-api format: totalSolved, easySolved, totalEasy, etc.
-    if 'totalSolved' in data or ('totalQuestions' in data and data.get('totalQuestions', 0) > 0):
-        stats_data = {
-            'totalSolved': data.get('totalSolved', 0),
-            'totalQuestions': data.get('totalQuestions', 0),
-            'easySolved': data.get('easySolved', 0),
-            'totalEasy': data.get('totalEasy', 0),
-            'mediumSolved': data.get('mediumSolved', 0),
-            'totalMedium': data.get('totalMedium', 0),
-            'hardSolved': data.get('hardSolved', 0),
-            'totalHard': data.get('totalHard', 0),
-            'acceptanceRate': data.get('acceptanceRate', 0)
-        }
-    else:
-        # alfa-leetcode-api /solved format: solvedProblem, easySolved, mediumSolved, hardSolved
-        total_solved = data.get('solvedProblem', 0)
-        easy = data.get('easySolved', 0)
-        medium = data.get('mediumSolved', 0)
-        hard = data.get('hardSolved', 0)
-        # Default LeetCode totals if not provided (approximate)
-        total_easy = data.get('totalEasy', 921)
-        total_medium = data.get('totalMedium', 1982)
-        total_hard = data.get('totalHard', 899)
-        stats_data = {
-            'totalSolved': total_solved,
-            'totalQuestions': total_easy + total_medium + total_hard,
-            'easySolved': easy,
-            'totalEasy': total_easy,
-            'mediumSolved': medium,
-            'totalMedium': total_medium,
-            'hardSolved': hard,
-            'totalHard': total_hard,
-            'acceptanceRate': 0
-        }
-        if stats_data['totalQuestions'] > 0 and total_solved > 0:
-            stats_data['acceptanceRate'] = round((total_solved / stats_data['totalQuestions']) * 100, 2)
-
-    if stats_data['totalEasy'] > 0:
-        stats_data['easyPercentage'] = round((stats_data['easySolved'] / stats_data['totalEasy']) * 100, 1)
-    else:
-        stats_data['easyPercentage'] = 0
-    if stats_data['totalMedium'] > 0:
-        stats_data['mediumPercentage'] = round((stats_data['mediumSolved'] / stats_data['totalMedium']) * 100, 1)
-    else:
-        stats_data['mediumPercentage'] = 0
-    if stats_data['totalHard'] > 0:
-        stats_data['hardPercentage'] = round((stats_data['hardSolved'] / stats_data['totalHard']) * 100, 1)
-    else:
-        stats_data['hardPercentage'] = 0
-
-    return {
-        'lastUpdated': datetime.datetime.now().isoformat(),
-        'data': stats_data,
-        'apiSource': api_url,
-        'responseHeaders': dict(response_headers) if response_headers else None,
-        'responseStatus': response_status,
-        'requestUrl': api_url
-    }
-
-
-def update_leetcode_stats():
-    """Update LeetCode problem-solving stats"""
-    print('\n=== Updating LeetCode Problem-Solving Stats ===')
-    username = 'Rahul_Challa'
-    # Try leetcode-stats-api (Render mirror; Heroku one is often down), then alfa /solved
-    api_endpoints = [
-        (f'https://leetcode-stats-api.onrender.com/{username}', 50),
-        (f'https://leetcode-stats-api.herokuapp.com/{username}', 30),
-        (f'https://alfa-leetcode-api.onrender.com/{username}/solved', 45),
-    ]
-    
-    data = None
-    api_url = None
-    response_status = None
-    response_headers = None
-    
-    time.sleep(2)
-    
-    for endpoint_spec in api_endpoints:
-        endpoint = endpoint_spec[0] if isinstance(endpoint_spec, tuple) else endpoint_spec
-        timeout = endpoint_spec[1] if isinstance(endpoint_spec, tuple) and len(endpoint_spec) > 1 else 45
-        result_data, status, headers = fetch_with_retry(endpoint, timeout=timeout)
-        if result_data:
-            if 'totalSolved' in result_data or 'easySolved' in result_data or 'solvedProblem' in result_data:
-                data = result_data
-                api_url = endpoint
-                response_status = status
-                response_headers = headers
-                print(f'[SUCCESS] Successfully fetched stats data from: {endpoint}')
-                break
-        else:
-            print(f'[FAILED] Failed to fetch from {endpoint}')
-            if endpoint_spec != api_endpoints[-1]:
-                print('Waiting 3 seconds before trying next endpoint...')
-                time.sleep(3)
-    
-    if data:
-        final_data = _normalize_leetcode_stats(data, api_url, response_status, response_headers)
-        os.makedirs('data', exist_ok=True)
-        with open('data/leetcode-stats.json', 'w') as f:
-            json.dump(final_data, f, indent=2)
-        print('[SUCCESS] LeetCode problem-solving stats updated successfully')
-        return True
-    else:
-        # Fallback: try alfa /progress + /solved to build stats
-        print('Trying alfa-leetcode-api /solved and /progress...')
-        time.sleep(2)
-        solved, s_status, s_headers = fetch_with_retry(
-            f'https://alfa-leetcode-api.onrender.com/{username}/solved', timeout=45
-        )
-        if solved:
-            progress, p_status, p_headers = fetch_with_retry(
-                f'https://alfa-leetcode-api.onrender.com/{username}/progress', timeout=45
-            )
-            if progress:
-                na = progress.get('numAcceptedQuestions', {})
-                if isinstance(na, dict):
-                    na = na.get('numAcceptedQuestions', [])
-                else:
-                    na = na if isinstance(na, list) else []
-                nu = progress.get('numUntouchedQuestions', []) or []
-                nf = progress.get('numFailedQuestions', []) or []
-
-                def _count_for_difficulty(arr, diff):
-                    for x in arr:
-                        d = x.get('difficulty', '')
-                        if d == diff or d == diff.upper() or d == diff.title():
-                            return x.get('count', 0)
-                    return 0
-
-                total_easy = _count_for_difficulty(na, 'EASY') + _count_for_difficulty(nu, 'EASY') + _count_for_difficulty(nf, 'EASY')
-                total_medium = _count_for_difficulty(na, 'MEDIUM') + _count_for_difficulty(nu, 'MEDIUM') + _count_for_difficulty(nf, 'MEDIUM')
-                total_hard = _count_for_difficulty(na, 'HARD') + _count_for_difficulty(nu, 'HARD') + _count_for_difficulty(nf, 'HARD')
-                if total_easy == 0:
-                    total_easy = 921
-                if total_medium == 0:
-                    total_medium = 1982
-                if total_hard == 0:
-                    total_hard = 899
-                solved['totalEasy'] = total_easy
-                solved['totalMedium'] = total_medium
-                solved['totalHard'] = total_hard
-                final_data = _normalize_leetcode_stats(
-                    solved,
-                    f'https://alfa-leetcode-api.onrender.com/{username}/solved+progress',
-                    s_status,
-                    s_headers
-                )
-                os.makedirs('data', exist_ok=True)
-                with open('data/leetcode-stats.json', 'w') as f:
-                    json.dump(final_data, f, indent=2)
-                print('[SUCCESS] LeetCode problem-solving stats updated from alfa /solved + /progress')
-                return True
-        print('[FAILED] Failed to fetch LeetCode problem-solving stats from all endpoints')
-        return False
-
-def update_texmex_data():
-    """Update TexMex package data"""
-    print('\n=== Updating TexMex Package Data ===')
-    package_name = 'texmex'
-    api_url = f'https://registry.npmjs.org/{package_name}'
-    
     try:
         response = requests.get(api_url, timeout=30)
         if response.status_code == 200:
-            data = response.json()
-            
-            latest_version = data.get('dist-tags', {}).get('latest')
-            latest_data = data.get('versions', {}).get(latest_version, {})
-            
+            svg_text = response.text
+            svg_text = svg_text.replace('fill:#EEEEEE', 'fill:#161b22')
+            svg_text = svg_text.replace('fill:#767676', 'fill:#6e7180')
+
+            os.makedirs('data', exist_ok=True)
+            with open('data/github-heatmap.svg', 'w', encoding='utf-8') as f:
+                f.write(svg_text)
+
+            print('[SUCCESS] GitHub heatmap updated successfully')
+            return True
+        else:
+            print(f'[FAILED] Failed to fetch GitHub heatmap: {response.status_code}')
+            return False
+    except Exception as e:
+        print(f'[ERROR] Error fetching GitHub heatmap: {str(e)}')
+        return False
+
+LEETCODE_USERNAME = 'Rahul_Challa'
+LEETCODE_GRAPHQL_URL = 'https://leetcode.com/graphql'
+
+def leetcode_graphql(query, variables=None, max_retries=3):
+    """Query LeetCode's own public GraphQL API directly - the same endpoint
+    leetcode.com's own frontend uses to render profile pages.
+
+    This replaces a set of third-party mirror APIs (alfa-leetcode-api on
+    Render's free tier, leetcode-stats-api on Heroku/Render, etc.) that were
+    the actual source of "unreliable" data: free-tier hosts sleep and take
+    30-60s to cold-start, occasionally time out entirely, and return
+    inconsistently-shaped JSON across mirrors. Querying LeetCode directly
+    needs no auth and removes that middleman.
+    """
+    headers = {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
+        'Referer': f'https://leetcode.com/{LEETCODE_USERNAME}/',
+    }
+    payload = {'query': query, 'variables': variables or {}}
+
+    for attempt in range(max_retries):
+        try:
+            response = requests.post(LEETCODE_GRAPHQL_URL, json=payload, headers=headers, timeout=30)
+            if response.status_code == 200:
+                body = response.json()
+                if 'errors' in body:
+                    print(f'  GraphQL errors: {body["errors"]}')
+                    return None
+                return body.get('data')
+            elif response.status_code == 429:
+                wait_time = 5 * (2 ** attempt)
+                print(f'  Rate limited (429). Waiting {wait_time}s before retry...')
+                if attempt < max_retries - 1:
+                    time.sleep(wait_time)
+                    continue
+                return None
+            else:
+                print(f'  Failed with status {response.status_code}')
+                return None
+        except Exception as e:
+            print(f'  Error querying LeetCode GraphQL: {str(e)}')
+            if attempt < max_retries - 1:
+                time.sleep(5 * (2 ** attempt))
+            continue
+    return None
+
+def update_leetcode_data():
+    """Fetch profile stats, contest ranking, badges, and the submission
+    calendar in a single request and write one consolidated file.
+
+    Replaces the old 4-file setup (leetcode-calendar.json, -contest.json,
+    -history.json, -stats.json), each independently fetched from a
+    different unreliable third-party mirror with its own response shape -
+    which is also why main.js used to carry so much defensive "which API
+    format is this" branching.
+    """
+    print('\n=== Updating LeetCode Data ===')
+
+    query = """
+    query userProfile($username: String!) {
+      matchedUser(username: $username) {
+        username
+        profile { ranking }
+        submitStats { acSubmissionNum { difficulty count } }
+        userCalendar { submissionCalendar }
+        badges { displayName }
+      }
+      userContestRanking(username: $username) {
+        attendedContestsCount
+        rating
+        globalRanking
+        topPercentage
+        badge { name }
+      }
+      allQuestionsCount { difficulty count }
+    }
+    """
+
+    data = leetcode_graphql(query, {'username': LEETCODE_USERNAME})
+
+    if not data or not data.get('matchedUser'):
+        print(f'[FAILED] LeetCode user "{LEETCODE_USERNAME}" not found or API unreachable')
+        return False
+
+    matched_user = data['matchedUser']
+    contest = data.get('userContestRanking') or {}
+    totals = {q['difficulty']: q['count'] for q in data.get('allQuestionsCount', [])}
+    solved = {s['difficulty']: s['count'] for s in matched_user['submitStats']['acSubmissionNum']}
+
+    def pct(solved_count, total_count):
+        return round((solved_count / total_count) * 100, 1) if total_count else 0
+
+    easy_solved = solved.get('Easy', 0)
+    medium_solved = solved.get('Medium', 0)
+    hard_solved = solved.get('Hard', 0)
+
+    final_data = {
+        'lastUpdated': datetime.datetime.now().isoformat(),
+        'username': LEETCODE_USERNAME,
+        'ranking': matched_user['profile']['ranking'],
+        'totalSolved': solved.get('All', 0),
+        'totalQuestions': totals.get('All', 0),
+        'easySolved': easy_solved,
+        'easyTotal': totals.get('Easy', 0),
+        'easyPercentage': pct(easy_solved, totals.get('Easy', 0)),
+        'mediumSolved': medium_solved,
+        'mediumTotal': totals.get('Medium', 0),
+        'mediumPercentage': pct(medium_solved, totals.get('Medium', 0)),
+        'hardSolved': hard_solved,
+        'hardTotal': totals.get('Hard', 0),
+        'hardPercentage': pct(hard_solved, totals.get('Hard', 0)),
+        'contest': {
+            'attendedContestsCount': contest.get('attendedContestsCount'),
+            'rating': round(contest['rating']) if contest.get('rating') is not None else None,
+            'globalRanking': contest.get('globalRanking'),
+            'topPercentage': contest.get('topPercentage'),
+            'badge': (contest.get('badge') or {}).get('name'),
+        },
+        'badges': [b['displayName'] for b in matched_user.get('badges', [])],
+        'submissionCalendar': json.loads(matched_user['userCalendar']['submissionCalendar'] or '{}'),
+        'apiSource': LEETCODE_GRAPHQL_URL,
+    }
+
+    os.makedirs('data', exist_ok=True)
+    with open('data/leetcode-profile.json', 'w') as f:
+        json.dump(final_data, f, indent=2)
+
+    print('[SUCCESS] LeetCode data updated successfully')
+    return True
+
+# Repos that are not real showcase projects (the special GitHub
+# profile-README repo, this Portfolio site's own source, and daily-problem
+# trackers) and should never render as a Project card no matter what's on
+# GitHub. Edit this set any time without touching GitHub itself - it's a
+# purely local, git-tracked lever.
+PROJECT_EXCLUDED_REPOS = {
+    'rahul-challa',   # special GitHub profile README repo
+    'Portfolio',      # this site's own source
+    'CS-208',         # coursework
+    'LEETCODE',       # solutions dump - already surfaced via the Profiles section
+    'GFG-POTD',       # daily-problem tracker
+}
+
+def load_project_overrides():
+    """Manually curated copy for specific repos (description, tech tags,
+    extra links, icon/logo). A repo with no entry here still shows up
+    automatically - just with GitHub's raw description and primary language
+    as its only tag, until someone polishes it here."""
+    try:
+        with open('data/project-overrides.json', 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+def update_projects_data():
+    """Auto-generate the Projects list from the user's live GitHub repos,
+    merged with manual overrides for polished copy on specific repos.
+
+    Because the output is rebuilt from scratch from the current GitHub repo
+    list every run, a repo that's deleted or renamed on GitHub simply isn't
+    in that list anymore and drops out of projects.json (and therefore off
+    the site) on the next scheduled run - no separate cleanup step needed.
+    """
+    print('\n=== Updating Projects Data ===')
+    username = 'rahul-challa'
+    overrides = load_project_overrides()
+
+    repos_data, status, _ = fetch_with_retry(
+        f'https://api.github.com/users/{username}/repos?per_page=100&sort=pushed', base_delay=2
+    )
+    if not repos_data:
+        print(f'[FAILED] Failed to fetch repos: {status}')
+        return False
+
+    projects = []
+    for repo in repos_data:
+        name = repo['name']
+        if repo.get('fork') or repo.get('archived') or name in PROJECT_EXCLUDED_REPOS:
+            continue
+
+        override = overrides.get(name, {})
+        projects.append({
+            'name': name,
+            'displayName': override.get('displayName') or name.replace('-', ' ').replace('_', ' '),
+            'description': override.get('description') or repo.get('description') or 'No description yet.',
+            'tech': override.get('tech') or ([repo['language']] if repo.get('language') else []),
+            'githubUrl': repo['html_url'],
+            'extraLinks': override.get('extraLinks', []),
+            'logo': override.get('logo'),
+            'icon': override.get('icon'),
+            'stars': repo.get('stargazers_count', 0),
+            'language': repo.get('language'),
+            'updatedAt': repo.get('pushed_at'),
+            'curated': name in overrides,
+        })
+
+    # Curated (manually polished) projects first, in the override file's
+    # key order; everything else follows, most-recently-pushed first.
+    curated_order = list(overrides.keys())
+    curated = sorted(
+        [p for p in projects if p['curated']],
+        key=lambda p: curated_order.index(p['name'])
+    )
+    rest = sorted(
+        [p for p in projects if not p['curated']],
+        key=lambda p: p['updatedAt'] or '',
+        reverse=True
+    )
+
+    final_data = {
+        'lastUpdated': datetime.datetime.now().isoformat(),
+        'projects': curated + rest,
+    }
+
+    os.makedirs('data', exist_ok=True)
+    with open('data/projects.json', 'w') as f:
+        json.dump(final_data, f, indent=2)
+
+    print(f'[SUCCESS] Projects data updated successfully ({len(final_data["projects"])} projects, {len(curated)} curated)')
+    return True
+
+def update_texmex_data():
+    """Update TexMex VS Code extension data from the VS Code Marketplace.
+
+    Note: TexMex is a VS Code extension (publisher.extension id
+    "RahulChalla.texmex"), not an npm package - a package that happens to
+    also be named "texmex" exists on the npm registry (an unrelated
+    security-holder placeholder) and was being queried by mistake, which
+    always produced null installs/rating.
+    """
+    print('\n=== Updating TexMex Extension Data ===')
+    extension_id = 'RahulChalla.texmex'
+    api_url = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery'
+
+    payload = {
+        'filters': [{'criteria': [{'filterType': 7, 'value': extension_id}]}],
+        # Flags: IncludeVersions | IncludeStatistics | IncludeLatestVersionOnly
+        'flags': 914
+    }
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json;api-version=3.0-preview.1'
+    }
+
+    try:
+        response = requests.post(api_url, json=payload, headers=headers, timeout=30)
+        if response.status_code == 200:
+            result = response.json()
+            extensions = result.get('results', [{}])[0].get('extensions', [])
+
+            if not extensions:
+                print(f'[FAILED] Extension "{extension_id}" not found on the Marketplace')
+                return False
+
+            ext = extensions[0]
+            stats = {s['statisticName']: s['value'] for s in ext.get('statistics', [])}
+            latest = (ext.get('versions') or [{}])[0]
+
             final_data = {
                 'lastUpdated': datetime.datetime.now().isoformat(),
                 'data': {
-                    'installs': None,
-                    'version': latest_version,
-                    'rating': None,
-                    'ratingCount': None,
-                    'publisher': latest_data.get('publisher', {}).get('name'),
-                    'displayName': latest_data.get('displayName'),
-                    'description': latest_data.get('description'),
-                    'categories': latest_data.get('categories', []),
-                    'tags': latest_data.get('keywords', []),
-                    'repository': latest_data.get('repository', {}).get('url'),
-                    'homepage': latest_data.get('homepage'),
-                    'bugs': latest_data.get('bugs', {}).get('url'),
-                    'license': latest_data.get('license'),
-                    'engines': latest_data.get('engines', {}),
-                    'icon': latest_data.get('icon'),
-                    'galleryBanner': latest_data.get('galleryBanner', {}),
-                    'preview': latest_data.get('preview', False),
+                    'installs': int(stats.get('install', 0)) or None,
+                    'version': latest.get('version'),
+                    'rating': round(stats.get('averagerating', 0), 1) or None,
+                    'ratingCount': int(stats.get('ratingcount', 0)) or None,
+                    'publisher': ext.get('publisher', {}).get('publisherName'),
+                    'displayName': ext.get('displayName'),
+                    'description': ext.get('shortDescription'),
+                    'extensionId': extension_id,
                     'public': True
                 },
                 'apiSource': api_url,
-                'responseHeaders': dict(response.headers),
                 'responseStatus': response.status_code
             }
-            
+
             os.makedirs('data', exist_ok=True)
             with open('data/texmex-badges.json', 'w') as f:
                 json.dump(final_data, f, indent=2)
-            
-            print('[SUCCESS] TexMex package data updated successfully')
+
+            print('[SUCCESS] TexMex extension data updated successfully')
             return True
         else:
-            print(f'[FAILED] Failed to fetch TexMex package data: {response.status_code}')
+            print(f'[FAILED] Failed to fetch TexMex extension data: {response.status_code}')
             return False
     except Exception as e:
-        print(f'[ERROR] Error fetching TexMex package data: {str(e)}')
+        print(f'[ERROR] Error fetching TexMex extension data: {str(e)}')
         return False
 
 def main():
@@ -490,10 +422,9 @@ def main():
     
     results = {
         'GitHub': update_github_data(),
-        'LeetCode Calendar': update_leetcode_calendar(),
-        'LeetCode Contest': update_leetcode_contest(),
-        'LeetCode History': update_leetcode_history(),
-        'LeetCode Stats': update_leetcode_stats(),
+        'GitHub Heatmap': update_github_heatmap(),
+        'Projects': update_projects_data(),
+        'LeetCode': update_leetcode_data(),
         'TexMex': update_texmex_data()
     }
     

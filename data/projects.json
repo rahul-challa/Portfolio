@@ -1,0 +1,308 @@
+{
+  "lastUpdated": "2026-09-12T21:07:49.363887",
+  "projects": [
+    {
+      "name": "Private-Credit-Portfolio-Engine",
+      "displayName": "Private Credit Portfolio Engine",
+      "description": "Built REST microservices for managing credit facilities, borrowers, and covenants with Spring Boot, PostgreSQL, and Flyway-managed schema migrations. Secured all API endpoints with stateless OAuth2/JWT authentication via Spring Security, and ensured business-logic correctness with a layered JUnit 5, Mockito, and Cucumber test suite wired into CI/CD.",
+      "tech": [
+        "Java",
+        "Spring Boot",
+        "PostgreSQL",
+        "Docker",
+        "Flyway",
+        "OAuth2/JWT"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/Private-Credit-Portfolio-Engine",
+      "extraLinks": [],
+      "logo": null,
+      "icon": "briefcase",
+      "stars": 0,
+      "language": "Java",
+      "updatedAt": "2026-08-31T21:53:30Z",
+      "curated": true
+    },
+    {
+      "name": "TexMex",
+      "displayName": "TexMex \u2013 A LaTeX Editor for VS Code",
+      "description": "Reached 1,100+ active users with a VS Code extension delivering real-time LaTeX preview and auto-sync for .tex files. Cut scroll latency to under 100ms for 10K+ line documents, and built a WebSocket-based peer collaboration server for live multi-user editing\u2014shipped as a fully self-contained, zero-dependency extension with a 4.5 rating.",
+      "tech": [
+        "TypeScript",
+        "VS Code API",
+        "Node.js",
+        "WebSockets"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/TexMex",
+      "extraLinks": [
+        {
+          "label": "Marketplace",
+          "url": "https://marketplace.visualstudio.com/items?itemName=RahulChalla.texmex",
+          "icon": "external-link"
+        }
+      ],
+      "logo": "assets/images/TexMex.png",
+      "icon": null,
+      "stars": 1,
+      "language": "TypeScript",
+      "updatedAt": "2026-06-19T19:04:08Z",
+      "curated": true
+    },
+    {
+      "name": "wild-fire-twin",
+      "displayName": "Wildfire Twin \u2013 Digital Twin Disaster Simulation",
+      "description": "Built a Kafka-to-Spark streaming pipeline cross-referencing live fire-event streams against 11.5M building footprints, sustaining a sub-30s processing SLA at 1K concurrent events. Cut P95 latency by 91% by rewriting Python UDFs as native Java (Apache Sedona) expressions with broadcast spatial joins, then indexed the data with Uber's H3 library and served it through a DuckDB-backed Streamlit dashboard.",
+      "tech": [
+        "Kafka",
+        "Spark",
+        "Apache Sedona",
+        "Docker",
+        "DuckDB",
+        "Streamlit"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/wild-fire-twin",
+      "extraLinks": [],
+      "logo": null,
+      "icon": "activity",
+      "stars": 0,
+      "language": "Python",
+      "updatedAt": "2026-06-19T19:37:27Z",
+      "curated": true
+    },
+    {
+      "name": "Digital-Finance-Analytics-Gateway",
+      "displayName": "Digital Finance Analytics Gateway",
+      "description": "No description yet.",
+      "tech": [
+        "Java"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/Digital-Finance-Analytics-Gateway",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": "Java",
+      "updatedAt": "2026-08-31T21:50:53Z",
+      "curated": false
+    },
+    {
+      "name": "LLM-Inference-Engine",
+      "displayName": "LLM Inference Engine",
+      "description": "No description yet.",
+      "tech": [
+        "C++"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/LLM-Inference-Engine",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": "C++",
+      "updatedAt": "2026-06-20T01:20:16Z",
+      "curated": false
+    },
+    {
+      "name": "Raft-KV-Store",
+      "displayName": "Raft KV Store",
+      "description": "No description yet.",
+      "tech": [
+        "Go"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/Raft-KV-Store",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": "Go",
+      "updatedAt": "2026-06-19T22:03:48Z",
+      "curated": false
+    },
+    {
+      "name": "FireMen",
+      "displayName": "FireMen",
+      "description": "No description yet.",
+      "tech": [
+        "TypeScript"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/FireMen",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": "TypeScript",
+      "updatedAt": "2026-05-09T21:00:35Z",
+      "curated": false
+    },
+    {
+      "name": "Gubernator---Distributed-API-Rate-limiter",
+      "displayName": "Gubernator   Distributed API Rate limiter",
+      "description": "No description yet.",
+      "tech": [
+        "Go"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/Gubernator---Distributed-API-Rate-limiter",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": "Go",
+      "updatedAt": "2026-04-17T16:27:17Z",
+      "curated": false
+    },
+    {
+      "name": "MS_Project-Autotuning_Framework",
+      "displayName": "MS Project Autotuning Framework",
+      "description": "An autotuning framework leveraging Multi-Armed Bandits to validate and optimize microarchitectural simulator parameters (MacSim, Sniper, Z-Sim) by minimizing execution error against physical CPU benchmarks.",
+      "tech": [
+        "Python"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/MS_Project-Autotuning_Framework",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 1,
+      "language": "Python",
+      "updatedAt": "2026-03-17T22:06:41Z",
+      "curated": false
+    },
+    {
+      "name": "Stock-Sentiment",
+      "displayName": "Stock Sentiment",
+      "description": "No description yet.",
+      "tech": [
+        "Python"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/Stock-Sentiment",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": "Python",
+      "updatedAt": "2025-09-14T22:22:16Z",
+      "curated": false
+    },
+    {
+      "name": "Enterpise-Metrics-Dashboard",
+      "displayName": "Enterpise Metrics Dashboard",
+      "description": "No description yet.",
+      "tech": [
+        "Python"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/Enterpise-Metrics-Dashboard",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": "Python",
+      "updatedAt": "2025-08-14T22:29:47Z",
+      "curated": false
+    },
+    {
+      "name": "ML-Runtime-Profiler",
+      "displayName": "ML Runtime Profiler",
+      "description": "No description yet.",
+      "tech": [
+        "Python"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/ML-Runtime-Profiler",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": "Python",
+      "updatedAt": "2025-07-19T17:17:22Z",
+      "curated": false
+    },
+    {
+      "name": "linux-char-device-driver",
+      "displayName": "linux char device driver",
+      "description": "A Linux kernel module implementing a character device driver",
+      "tech": [
+        "C"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/linux-char-device-driver",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": "C",
+      "updatedAt": "2025-07-19T17:09:42Z",
+      "curated": false
+    },
+    {
+      "name": "MLFlow-Monitoring-Churn-Deployment",
+      "displayName": "MLFlow Monitoring Churn Deployment",
+      "description": "No description yet.",
+      "tech": [],
+      "githubUrl": "https://github.com/rahul-challa/MLFlow-Monitoring-Churn-Deployment",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": null,
+      "updatedAt": "2025-07-02T04:14:28Z",
+      "curated": false
+    },
+    {
+      "name": "Payments-Fraud-NLP-Detector",
+      "displayName": "Payments Fraud NLP Detector",
+      "description": "No description yet.",
+      "tech": [],
+      "githubUrl": "https://github.com/rahul-challa/Payments-Fraud-NLP-Detector",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": null,
+      "updatedAt": "2025-07-02T04:13:26Z",
+      "curated": false
+    },
+    {
+      "name": "Distributed-Training-Framework-with-gRPC",
+      "displayName": "Distributed Training Framework with gRPC",
+      "description": "No description yet.",
+      "tech": [
+        "Python"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/Distributed-Training-Framework-with-gRPC",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": "Python",
+      "updatedAt": "2025-06-20T02:17:47Z",
+      "curated": false
+    },
+    {
+      "name": "lettucecook",
+      "displayName": "lettucecook",
+      "description": "No description yet.",
+      "tech": [
+        "TypeScript"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/lettucecook",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": "TypeScript",
+      "updatedAt": "2025-05-12T04:18:37Z",
+      "curated": false
+    },
+    {
+      "name": "Stock-Dashboard",
+      "displayName": "Stock Dashboard",
+      "description": "No description yet.",
+      "tech": [
+        "TypeScript"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/Stock-Dashboard",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "stars": 0,
+      "language": "TypeScript",
+      "updatedAt": "2025-05-04T19:22:05Z",
+      "curated": false
+    }
+  ]
+}
