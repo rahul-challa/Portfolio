@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-13T07:09:02.755816",
+  "lastUpdated": "2026-09-14T07:32:42.192787",
   "data": {
     "login": "rahul-challa",
     "id": 82740463,
@@ -22,7 +22,7 @@
     "site_admin": false,
     "name": "Rahul Challa",
     "company": "University of California",
-    "blog": "https://rahul-challa.github.io/Portfolio/",
+    "blog": "rahulchalla.com",
     "location": "Riverside",
     "email": null,
     "hireable": null,
@@ -33,7 +33,7 @@
     "followers": 13,
     "following": 6,
     "created_at": "2021-04-18T02:05:18Z",
-    "updated_at": "2026-09-13T05:04:55Z",
+    "updated_at": "2026-09-13T17:04:02Z",
     "repositories": [
       {
         "id": 834462937,
@@ -103,14 +103,14 @@
         "releases_url": "https://api.github.com/repos/rahul-challa/Portfolio/releases{/id}",
         "deployments_url": "https://api.github.com/repos/rahul-challa/Portfolio/deployments",
         "created_at": "2024-07-27T10:45:28Z",
-        "updated_at": "2026-09-13T05:08:52Z",
-        "pushed_at": "2026-09-13T05:08:48Z",
+        "updated_at": "2026-09-13T07:09:08Z",
+        "pushed_at": "2026-09-13T07:09:05Z",
         "git_url": "git://github.com/rahul-challa/Portfolio.git",
         "ssh_url": "git@github.com:rahul-challa/Portfolio.git",
         "clone_url": "https://github.com/rahul-challa/Portfolio.git",
         "svn_url": "https://github.com/rahul-challa/Portfolio",
         "homepage": null,
-        "size": 6658,
+        "size": 6659,
         "stargazers_count": 1,
         "watchers_count": 1,
         "language": "CSS",
