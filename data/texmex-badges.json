@@ -1,13 +1,13 @@
 {
-  "lastUpdated": "2026-09-18T07:01:38.825116",
+  "lastUpdated": "2026-09-19T07:00:51.448468",
   "data": {
-    "installs": 1158,
-    "version": "0.0.7",
+    "installs": 1159,
+    "version": "0.0.9",
     "rating": 5.0,
     "ratingCount": 3,
     "publisher": "RahulChalla",
     "displayName": "TexMex",
-    "description": "Live LaTeX preview and editing for VS Code",
+    "description": "Live LaTeX preview for VS Code. No LaTeX install required.",
     "extensionId": "RahulChalla.texmex",
     "public": true
   },
