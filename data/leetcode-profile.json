@@ -1,7 +1,7 @@
 {
-  "lastUpdated": "2026-09-24T07:09:58.547945",
+  "lastUpdated": "2026-09-25T07:06:03.379191",
   "username": "Rahul_Challa",
-  "ranking": 430511,
+  "ranking": 430840,
   "totalSolved": 334,
   "totalQuestions": 4060,
   "easySolved": 97,
@@ -16,7 +16,7 @@
   "contest": {
     "attendedContestsCount": 17,
     "rating": 2051,
-    "globalRanking": 16877,
+    "globalRanking": 16895,
     "topPercentage": 1.99,
     "badge": "Knight"
   },
@@ -60,7 +60,6 @@
     "1785542400": 4,
     "1788652800": 4,
     "1789171200": 3,
-    "1758672000": 11,
     "1758758400": 1,
     "1758844800": 1,
     "1758931200": 5,
