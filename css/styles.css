@@ -1065,24 +1065,52 @@ a:hover .roll > span + span, button:hover .roll > span + span,
 
 .contact-lead { font-size: var(--t-base-lg); font-weight: 500; color: var(--white); line-height: 1.3; }
 
-.contact-form {
+.contact-form { display: flex; flex-direction: column; }
+
+.contact-field {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     border-bottom: 1px solid var(--line);
-    padding-bottom: 0.75rem;
+    transition: border-color 0.3s ease;
 }
 
-.contact-form input {
+.contact-field:focus-within { border-color: var(--clay); }
+
+.contact-form input,
+.contact-form textarea {
     flex: 1;
     min-width: 0;
-    padding: 0.75rem 0;
+    padding: 0.85rem 0;
+    font: inherit;
     font-size: var(--t-base-lg);
     color: var(--white);
+    background: none;
+    border: 0;
     outline: none;
 }
 
-.contact-form input::placeholder { color: var(--muted); }
+.contact-form textarea {
+    resize: none;
+    overflow: hidden;
+    line-height: 1.35;
+    max-height: 14rem;
+}
+
+.contact-field-msg { align-items: flex-end; padding-bottom: 0.6rem; }
+.contact-field-msg textarea { padding-bottom: 0.25rem; }
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder { color: var(--muted); }
+
+.contact-form button:disabled { opacity: 0.6; cursor: wait; }
+
+/* Honeypot: off-screen for people, still in the form for bots */
+.contact-trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+.contact-status { min-height: 1.2em; margin-top: 0.75rem; color: var(--muted); text-transform: none; }
+.contact-status[data-state="success"] { color: var(--clay); }
+.contact-status[data-state="error"] { color: #f87171; }
 
 .contact-list li {
     display: flex;
@@ -1207,7 +1235,7 @@ a:hover .roll > span + span, button:hover .roll > span + span,
     .stat + .stat { padding-left: 0; border-left: 0; }
     .stat { padding: var(--space-sm) 0; border-bottom: 1px solid var(--line); }
     .about-words > span:nth-child(2) { align-self: flex-start; }
-    .contact-form { flex-direction: column; align-items: stretch; }
+    .contact-field-msg { flex-direction: column; align-items: stretch; }
     .skills-grid { grid-template-columns: 1fr 1fr; }
 }
 

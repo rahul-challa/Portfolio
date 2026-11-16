@@ -35,6 +35,20 @@
     <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
 
+    <!-- Cloudflare Web Analytics: privacy-friendly, no cookies. Paste the token from
+         Cloudflare dashboard > Analytics & Logs > Web Analytics (also set it in 404.html). -->
+    <script>
+        (function () {
+            var token = 'YOUR_CF_ANALYTICS_TOKEN';
+            if (token.indexOf('YOUR_') === 0) return;
+            var s = document.createElement('script');
+            s.defer = true;
+            s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+            s.setAttribute('data-cf-beacon', JSON.stringify({ token: token }));
+            document.head.appendChild(s);
+        })();
+    </script>
+
     <!-- Plain-text summary for AI assistants: https://llmstxt.org -->
     <link rel="alternate" type="text/markdown" href="llms.txt" title="LLM-friendly summary">
 
@@ -71,7 +85,7 @@
           "image": "https://rahulchalla.com/assets/images/main%20page%20image.jpg",
           "jobTitle": "Software Engineer",
           "description": "Software engineer in the San Francisco Bay Area building AI and backend systems: LLM inference and routing, reinforcement learning, distributed data pipelines and developer tools.",
-          "email": "mailto:challaviswanadhrahul@gmail.com",
+          "email": "mailto:mail@rahulchalla.com",
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "San Francisco Bay Area",
@@ -121,7 +135,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/styles.css?v=11">
+    <link rel="stylesheet" href="css/styles.css?v=12">
 
     <!-- Motion libraries (optional: the page is fully usable if these fail to load) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
@@ -164,7 +178,7 @@
             <a href="#contact"><span class="mono">06</span><span data-roll>Contact</span></a>
         </nav>
         <div class="menu-foot mono">
-            <a href="mailto:challaviswanadhrahul@gmail.com">challaviswanadhrahul@gmail.com</a>
+            <a href="mailto:mail@rahulchalla.com">mail@rahulchalla.com</a>
             <span>Local time <span class="js-time">--:--</span></span>
         </div>
     </div>
@@ -579,16 +593,31 @@
                 </h2>
                 <div class="contact-side" data-reveal>
                     <p class="contact-lead">Have a role, a project or an interesting problem in mind?</p>
-                    <form class="contact-form" id="contact-form">
-                        <label class="sr-only" for="contact-msg">Your message</label>
-                        <input id="contact-msg" name="message" type="text" placeholder="Tell me about it&hellip;" autocomplete="off">
-                        <button type="submit" class="pill-btn pill-clay" data-magnetic>
-                            <span class="pill-fill"></span>
-                            <span class="pill-text" data-roll>Send &#8599;</span>
-                        </button>
+                    <!-- Sends through Web3Forms (https://web3forms.com). Paste the access key it
+                         emails you into access_key below; until then, Send opens an email instead. -->
+                    <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+                        <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+                        <input type="hidden" name="subject" value="New message from rahulchalla.com">
+                        <input type="hidden" name="from_name" value="rahulchalla.com">
+                        <!-- Spam trap: hidden from people, bots fill it in -->
+                        <input type="checkbox" name="botcheck" class="contact-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+                        <div class="contact-field">
+                            <label class="sr-only" for="contact-email">Your email</label>
+                            <input id="contact-email" name="email" type="email" placeholder="Your email" autocomplete="email" required>
+                        </div>
+                        <div class="contact-field contact-field-msg">
+                            <label class="sr-only" for="contact-msg">Your message</label>
+                            <textarea id="contact-msg" name="message" rows="1" placeholder="Tell me about it&hellip;" required></textarea>
+                            <button type="submit" class="pill-btn pill-clay" data-magnetic>
+                                <span class="pill-fill"></span>
+                                <span class="pill-text" data-roll>Send &#8599;</span>
+                            </button>
+                        </div>
+                        <p class="contact-status mono" id="contact-status" role="status" aria-live="polite"></p>
                     </form>
                     <ul class="contact-list">
-                        <li><span class="mono">Email</span><a href="mailto:challaviswanadhrahul@gmail.com" data-roll>challaviswanadhrahul@gmail.com</a></li>
+                        <li><span class="mono">Email</span><a href="mailto:mail@rahulchalla.com" data-roll>mail@rahulchalla.com</a></li>
                         <li><span class="mono">LinkedIn</span><a href="https://www.linkedin.com/in/rahulchalla13/" target="_blank" rel="noopener noreferrer" data-roll>@rahulchalla13</a></li>
                         <li><span class="mono">GitHub</span><a href="https://github.com/rahul-challa" target="_blank" rel="noopener noreferrer" data-roll>@rahul-challa</a></li>
                         <li><span class="mono">Instagram</span><a href="https://www.instagram.com/rahul_challa_13/" target="_blank" rel="noopener noreferrer" data-roll>@rahul_challa_13</a></li>
@@ -627,11 +656,11 @@
         <div class="foot-name" aria-hidden="true" data-split="roll">Rahul Challa</div>
         <div class="foot-bottom mono">
             <span>&copy; <span id="footer-year"></span> Rahul Challa</span>
-            <span>Built from scratch with HTML, CSS &amp; JS</span>
+            <span>Powered by coffee. Debugged by more coffee.</span>
         </div>
     </footer>
 
     <script src="js/main.js?v=9" defer></script>
-    <script src="js/interactions.js?v=7" defer></script>
+    <script src="js/interactions.js?v=8" defer></script>
 </body>
 </html>

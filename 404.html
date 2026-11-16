@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page not found | Rahul Challa</title>
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#d97757">
+
+    <!-- Absolute paths: GitHub Pages serves this file for any missing URL, at any depth -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" href="/assets/images/favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css?v=12">
+
+    <style>
+        .nf {
+            min-height: 100vh;
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: var(--space-md) var(--pad) var(--pad);
+            background: var(--clay);
+            color: var(--ink);
+        }
+
+        .nf-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            font-weight: 500;
+        }
+
+        .nf-top a { line-height: 1.25; }
+
+        .nf-code {
+            font-size: clamp(9rem, 4rem + 30vw, 30rem);
+            font-weight: 600;
+            line-height: 0.8;
+            letter-spacing: -0.06em;
+            margin-left: -0.04em;
+        }
+
+        .nf-bottom {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: var(--gap);
+            align-items: end;
+        }
+
+        .nf-msg { grid-column: 1 / 7; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-md); }
+
+        .nf-msg h1 {
+            color: var(--ink);
+            font-size: var(--t-h2);
+            text-transform: uppercase;
+            letter-spacing: -0.035em;
+            line-height: 0.95;
+        }
+
+        .nf-msg p { max-width: 36ch; font-weight: 500; color: rgba(10, 10, 13, 0.78); }
+
+        .nf-links { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+        .nf-path { grid-column: 9 / 13; justify-self: end; text-align: right; color: rgba(10, 10, 13, 0.65); overflow-wrap: anywhere; }
+
+        @media (max-width: 900px) {
+            .nf-msg { grid-column: 1 / 13; }
+            .nf-path { grid-column: 1 / 13; justify-self: start; text-align: left; }
+        }
+    </style>
+
+    <!-- Cloudflare Web Analytics (same token as index.html; inactive until set) -->
+    <script>
+        (function () {
+            var token = 'YOUR_CF_ANALYTICS_TOKEN';
+            if (token.indexOf('YOUR_') === 0) return;
+            var s = document.createElement('script');
+            s.defer = true;
+            s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+            s.setAttribute('data-cf-beacon', JSON.stringify({ token: token }));
+            document.head.appendChild(s);
+        })();
+    </script>
+</head>
+
+<body>
+    <main class="nf">
+        <div class="nf-top">
+            <a href="/">Rahul Challa<br>Software Engineer</a>
+            <a href="/#contact">Contact</a>
+        </div>
+
+        <div class="nf-code" aria-hidden="true">404</div>
+
+        <div class="nf-bottom">
+            <div class="nf-msg">
+                <h1>This page wandered off.</h1>
+                <p>The link might be old or mistyped. Everything I've built is on the homepage.</p>
+                <div class="nf-links">
+                    <a href="/" class="pill-btn">
+                        <span class="pill-fill"></span>
+                        <span class="pill-text">Back home &#8599;</span>
+                    </a>
+                    <a href="/#works" class="pill-btn pill-outline">
+                        <span class="pill-fill"></span>
+                        <span class="pill-text">See my work &#8599;</span>
+                    </a>
+                </div>
+            </div>
+            <span class="nf-path mono" id="nf-path"></span>
+        </div>
+    </main>
+
+    <script>
+        // Show the path that wasn't found (as text, never HTML)
+        var path = location.pathname;
+        try { path = decodeURIComponent(path); } catch (e) { /* malformed URL: show it raw */ }
+        document.getElementById('nf-path').textContent = 'Not found: ' + path;
+    </script>
+</body>
+</html>

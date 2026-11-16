@@ -14,3 +14,5 @@ exclude:
   - package.json
   - __pycache__
   - "are in the file*"
+  - tools
+  - ROADMAP.md

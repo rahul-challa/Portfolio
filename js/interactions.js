@@ -170,14 +170,56 @@ document.addEventListener('DOMContentLoaded', () => {
     tickTime();
     setInterval(tickTime, 1000);
 
-    /*=============== CONTACT FORM -> mailto ===============*/
+    /*=============== CONTACT FORM (Web3Forms, mailto fallback) ===============*/
     const form = document.getElementById('contact-form');
     if (form) {
-        form.addEventListener('submit', e => {
+        const status = document.getElementById('contact-status');
+        const button = form.querySelector('button[type="submit"]');
+        const msgField = form.elements.message;
+        const setStatus = (text, state) => {
+            status.textContent = text;
+            status.dataset.state = state || '';
+        };
+
+        // Message box grows with its content
+        const grow = () => { msgField.style.height = 'auto'; msgField.style.height = `${msgField.scrollHeight}px`; };
+        msgField.addEventListener('input', grow);
+
+        form.addEventListener('submit', async e => {
             e.preventDefault();
-            const msg = form.elements.message.value.trim();
-            const subject = encodeURIComponent('Hello from your portfolio');
-            window.location.href = `mailto:challaviswanadhrahul@gmail.com?subject=${subject}&body=${encodeURIComponent(msg)}`;
+            const email = form.elements.email.value.trim();
+            const msg = msgField.value.trim();
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setStatus('Please add a valid email so I can reply.', 'error'); form.elements.email.focus(); return; }
+            if (!msg) { setStatus('Please write a message first.', 'error'); msgField.focus(); return; }
+
+            // No access key yet: hand off to the visitor's email app
+            if (form.elements.access_key.value.startsWith('YOUR_')) {
+                const subject = encodeURIComponent('Hello from rahulchalla.com');
+                const body = encodeURIComponent(`${msg}\n\n— ${email}`);
+                window.location.href = `mailto:mail@rahulchalla.com?subject=${subject}&body=${body}`;
+                return;
+            }
+
+            button.disabled = true;
+            setStatus('Sending…', 'pending');
+            try {
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                    body: JSON.stringify(Object.fromEntries(new FormData(form)))
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || data.success === false) throw new Error(data.message || `HTTP ${res.status}`);
+                form.reset();
+                grow();
+                setStatus("Thanks! Your message is on its way, and I'll get back to you soon.", 'success');
+            } catch (err) {
+                console.error('Contact form error:', err);
+                setStatus("Couldn't send right now. Email me directly at mail@rahulchalla.com.", 'error');
+            } finally {
+                button.disabled = false;
+            }
         });
     }
 
