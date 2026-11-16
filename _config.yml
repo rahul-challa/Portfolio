@@ -1,0 +1,16 @@
+# GitHub Pages (Jekyll) publish settings.
+# Keep repo notes and tooling off the public site so search engines only
+# index the portfolio itself. These files stay in the repo, unpublished.
+exclude:
+  - README.md
+  - COMMIT-MESSAGE.md
+  - DEPLOYMENT-CHECKLIST.md
+  - DEPLOYMENT-STATUS.md
+  - GITHUB-ACTIONS-TROUBLESHOOTING.md
+  - PAT-SETUP-GUIDE.md
+  - PRODUCTION-STATUS.md
+  - LICENSE
+  - update_data.py
+  - package.json
+  - __pycache__
+  - "are in the file*"

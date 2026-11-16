@@ -1,0 +1,41 @@
+# Rahul Challa
+
+> Rahul Challa is a software engineer in the San Francisco Bay Area who builds AI and backend systems: LLM inference and routing, reinforcement learning, distributed data pipelines and developer tools. He holds an M.S. in Computer Science from the University of California, Riverside. Website: https://rahulchalla.com
+
+## Current role
+
+- Robotics AI Data & Evaluation Specialist at Google DeepMind (contract via Adecco), Nov 2026 – present. Builds internal operator scripts, UI workflows and telemetry tools (cut manual QA overhead by 15%), debugs terminal-level faults and sensor issues (reduced downtime by 15%), and sustains a 95% data yield across training pipelines with automated session validation and anomaly detection.
+
+## Experience
+
+- Software Engineer, AI & Backend — Saayam for All (Aug 2026 – Nov 2026): Flask backend routing multiple LLMs at 630+ tokens/sec with sub-second latency; sub-500ms PostgreSQL search; telemetry pipeline benchmarking TTFT that cut inference delays by 94%; zero-shot classification for semantic prompt routing.
+- Graduate Researcher, Autotuning Framework — University of California, Riverside (Jul 2025 – Mar 2026): sequential reinforcement-learning model reaching 90% parameter-matching accuracy for unknown CPUs; convergence within 0.5% of a 500M+ configuration space using IPC, CPI and cache-level metrics; cross-platform profiler across 30 workloads with prediction error within 5% of ground truth.
+- Undergraduate Researcher, ASL Translation System — SOA University (Feb 2024 – Jun 2024): ensemble Random Forest classifier with 98% real-time accuracy; OpenCV pipeline tracking 21 hand landmarks; sub-500ms latency.
+
+## Projects
+
+- [Wildfire Twin](https://github.com/rahul-challa/wild-fire-twin): digital-twin disaster simulation on Kafka, Spark, Apache Sedona, H3, DuckDB and Streamlit; sub-30s SLA at 1K concurrent events; P95 spatial-join latency cut by 91% across 11.5M building footprints.
+- [TexMex](https://marketplace.visualstudio.com/items?itemName=RahulChalla.texmex): live LaTeX editor for VS Code with 1,200+ users; zero-dependency extension with a fault-tolerant WebSocket collaboration server and sub-100ms preview latency on 10K+ line documents. Source: https://github.com/rahul-challa/TexMex
+- [Private Credit Portfolio Engine](https://github.com/rahul-challa/Private-Credit-Portfolio-Engine): Spring Boot and PostgreSQL REST microservices for credit facilities, borrowers and covenants; OAuth2/JWT security; JUnit 5, Mockito and Cucumber tests in CI/CD.
+- [Distributed API Rate Limiter](https://github.com/rahul-challa/Gubernator---Distributed-API-Rate-limiter): Go token-bucket rate limiter handling 100K+ requests/sec over gRPC and REST at sub-millisecond latency; cut API abuse by 99%.
+
+## Education
+
+- M.S. Computer Science, University of California, Riverside (Sep 2024 – Mar 2026). HEST Scholarship (2025); Top 3 at UCRPC (2024).
+- B.Tech Computer Science and Engineering, SOA University (Nov 2020 – Sep 2024). Top 10 at Byte Verse by NIT Patna (2023); Top 10 at Xperiments by UST (2022); Google Cloud Facilitator (2022).
+
+## Skills
+
+- AI / ML & evaluation: LLM routing and inference optimization (TTFT), reinforcement learning, zero-shot classification, human-in-the-loop evaluation, data QA and pipelines, PyTorch, scikit-learn, OpenCV, telemetry and benchmarking.
+- Languages & frameworks: Python, C++, TypeScript, Java, Go, SQL, FastAPI, Flask, Node.js, Spring Boot, gRPC, REST APIs.
+- Infrastructure & data: PostgreSQL, Apache Kafka, Apache Spark, DuckDB, Redis, Docker, AWS (EC2, S3, Lambda), CI/CD with GitHub Actions, Linux, distributed systems.
+
+## Links
+
+- Website: https://rahulchalla.com
+- Resume (PDF): https://rahulchalla.com/assets/Resume/Rahul%20Challa.pdf
+- LinkedIn: https://www.linkedin.com/in/rahulchalla13/
+- GitHub: https://github.com/rahul-challa
+- LeetCode: https://leetcode.com/u/Rahul_Challa/
+- Instagram: https://www.instagram.com/rahul_challa_13/
+- Email: challaviswanadhrahul@gmail.com

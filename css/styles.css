@@ -93,7 +93,8 @@ button { cursor: pointer; }
 /* Roll-on-hover text (created by interactions.js) */
 .roll { position: relative; display: inline-block; overflow: hidden; vertical-align: top; }
 .roll > span { display: block; transition: transform 0.4s var(--ease-roll); }
-.roll > span + span { position: absolute; top: 0; left: 0; transform: translateY(100%); }
+.roll > span + span { position: absolute; top: 0; left: 0; right: 0; transform: translateY(100%); }
+.roll > span + span::before { content: attr(data-t); }
 a:hover .roll > span:first-child, button:hover .roll > span:first-child,
 .roll:hover > span:first-child { transform: translateY(-100%); }
 a:hover .roll > span + span, button:hover .roll > span + span,
@@ -379,10 +380,11 @@ a:hover .roll > span + span, button:hover .roll > span + span,
     cursor: default;
 }
 
-.ch-roll .ch-a,
-.ch-roll .ch-b { display: block; }
+.ch-roll .ch-a { display: inline-block; }
 
-.ch-roll .ch-b {
+/* Rolling copy: a pseudo-element, so the letter isn't duplicated in the text */
+.ch-roll::after {
+    content: attr(data-c);
     position: absolute;
     left: 0;
     top: 0.08em;
@@ -390,7 +392,7 @@ a:hover .roll > span + span, button:hover .roll > span + span,
 }
 
 .ch-roll.is-rolling .ch-a { animation: ch-roll-out 0.6s var(--ease-roll) both; }
-.ch-roll.is-rolling .ch-b { animation: ch-roll-in 0.6s var(--ease-roll) both; }
+.ch-roll.is-rolling::after { animation: ch-roll-in 0.6s var(--ease-roll) both; }
 
 @keyframes ch-roll-out { from { transform: translateY(0); } to { transform: translateY(-110%); } }
 @keyframes ch-roll-in { from { transform: translateY(110%); } to { transform: translateY(0); } }

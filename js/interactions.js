@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (animate) gsap.registerPlugin(ScrollTrigger);
 
     const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const escAttr = s => esc(s).replace(/"/g, '&quot;');
 
     /*=============== SPLIT TEXT ===============*/
     // chars: every word is a clipped box whose letters slide up
@@ -43,7 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function makeRollable(ch) {
         const c = ch.textContent;
         ch.classList.add('ch-roll');
-        ch.innerHTML = `<span class="ch-a">${esc(c)}</span><span class="ch-b" aria-hidden="true">${esc(c)}</span>`;
+        // The rolling copy is a CSS ::after (from data-c), so crawlers and
+        // screen readers read each letter once and words stay intact.
+        ch.dataset.c = c;
+        ch.innerHTML = `<span class="ch-a">${esc(c)}</span>`;
         ch.addEventListener('animationend', e => {
             if (e.animationName === 'ch-roll-in') ch.classList.remove('is-rolling');
         });
@@ -93,7 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function applyRoll(scope) {
         scope.querySelectorAll('[data-roll]:not([data-rolled])').forEach(el => {
             el.dataset.rolled = '';
-            el.innerHTML = `<span class="roll"><span>${el.innerHTML}</span><span aria-hidden="true">${el.innerHTML}</span></span>`;
+            // Copy is CSS-generated (see .roll in styles.css) so the text isn't duplicated in the DOM
+            el.innerHTML = `<span class="roll"><span>${el.innerHTML}</span><span aria-hidden="true" data-t="${escAttr(el.textContent.trim())}"></span></span>`;
         });
     }
     applyRoll(document);
