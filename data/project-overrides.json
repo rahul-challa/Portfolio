@@ -1,23 +1,61 @@
 {
-  "Private-Credit-Portfolio-Engine": {
-    "displayName": "Private Credit Portfolio Engine",
-    "description": "Built REST microservices for managing credit facilities, borrowers, and covenants with Spring Boot, PostgreSQL, and Flyway-managed schema migrations. Secured all API endpoints with stateless OAuth2/JWT authentication via Spring Security, and ensured business-logic correctness with a layered JUnit 5, Mockito, and Cucumber test suite wired into CI/CD.",
-    "tech": ["Java", "Spring Boot", "PostgreSQL", "Docker", "Flyway", "OAuth2/JWT"],
-    "icon": "briefcase"
-  },
-  "TexMex": {
-    "displayName": "TexMex – A LaTeX Editor for VS Code",
-    "description": "Reached 1,100+ active users with a VS Code extension delivering real-time LaTeX preview and auto-sync for .tex files. Cut scroll latency to under 100ms for 10K+ line documents, and built a WebSocket-based peer collaboration server for live multi-user editing—shipped as a fully self-contained, zero-dependency extension with a 4.5 rating.",
-    "tech": ["TypeScript", "VS Code API", "Node.js", "WebSockets"],
-    "extraLinks": [
-      { "label": "Marketplace", "url": "https://marketplace.visualstudio.com/items?itemName=RahulChalla.texmex", "icon": "external-link" }
-    ],
-    "logo": "assets/images/TexMex.png"
-  },
   "wild-fire-twin": {
     "displayName": "Wildfire Twin – Digital Twin Disaster Simulation",
-    "description": "Built a Kafka-to-Spark streaming pipeline cross-referencing live fire-event streams against 11.5M building footprints, sustaining a sub-30s processing SLA at 1K concurrent events. Cut P95 latency by 91% by rewriting Python UDFs as native Java (Apache Sedona) expressions with broadcast spatial joins, then indexed the data with Uber's H3 library and served it through a DuckDB-backed Streamlit dashboard.",
-    "tech": ["Kafka", "Spark", "Apache Sedona", "Docker", "DuckDB", "Streamlit"],
-    "icon": "activity"
+    "description": "Scaled a live disaster simulation to a sub-30s SLA at 1K concurrent events with a Kafka-to-Spark pipeline. Cut P95 spatial-join latency by 91% across 11.5M building footprints by rewriting Python UDFs to Apache Sedona, and powered a live Streamlit dashboard by indexing geospatial data with Uber's H3 and DuckDB.",
+    "tech": [
+      "Kafka",
+      "Spark",
+      "Apache Sedona",
+      "Docker",
+      "DuckDB",
+      "Streamlit"
+    ],
+    "icon": "activity",
+    "image": "assets/images/projects/wildfire-twin.svg"
+  },
+  "TexMex": {
+    "displayName": "TexMex – Live LaTeX Editor for VS Code",
+    "description": "Enabled real-time distributed editing for 1,200+ users by scaling a zero-dependency LaTeX extension and architecting a fault-tolerant WebSocket server for instant state synchronization. Achieved sub-100ms latency on 10K+ line documents by embedding pdf.js and optimizing the TypeScript event loop.",
+    "tech": [
+      "TypeScript",
+      "Node.js",
+      "WebSocket",
+      "VS Code API"
+    ],
+    "extraLinks": [
+      {
+        "label": "Marketplace",
+        "url": "https://marketplace.visualstudio.com/items?itemName=RahulChalla.texmex",
+        "icon": "external-link"
+      }
+    ],
+    "logo": "assets/images/TexMex.png",
+    "image": "assets/images/projects/texmex.svg"
+  },
+  "Private-Credit-Portfolio-Engine": {
+    "displayName": "Private Credit Portfolio Engine",
+    "description": "Built REST microservices for managing credit facilities, borrowers, and covenants with Spring Boot, PostgreSQL, and Flyway-managed schema migrations. Secured every endpoint with stateless OAuth2/JWT authentication via Spring Security, and ensured business-logic correctness with a layered JUnit 5 & Mockito unit suite plus a Cucumber integration suite wired into CI/CD.",
+    "tech": [
+      "Java",
+      "Spring Boot",
+      "PostgreSQL",
+      "Docker",
+      "Flyway",
+      "OAuth2/JWT"
+    ],
+    "icon": "briefcase",
+    "image": "assets/images/projects/private-credit.svg"
+  },
+  "Gubernator---Distributed-API-Rate-limiter": {
+    "displayName": "Distributed API Rate Limiter",
+    "description": "Secured high-traffic endpoints processing 100K+ requests per second with a distributed Go-based architecture. Cut API abuse by 99% with a highly concurrent Token Bucket algorithm, and sustained sub-millisecond latency by optimizing dual-protocol payload routing for both gRPC and REST.",
+    "tech": [
+      "Go",
+      "gRPC",
+      "REST",
+      "Token Bucket"
+    ],
+    "icon": "shield",
+    "image": "assets/images/projects/rate-limiter.svg"
   }
 }

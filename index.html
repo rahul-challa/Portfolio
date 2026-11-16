@@ -4,436 +4,449 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Rahul Challa - Software Engineer specializing in performance systems, backend infrastructure, and developer tools. M.S. Computer Science candidate at UC Riverside.">
+    <meta name="description" content="Rahul Challa - Software Engineer building AI and backend systems: LLM routing and inference, reinforcement learning, distributed data pipelines, and developer tools.">
     <meta name="keywords" content="Rahul Challa, Software Engineer, Portfolio, Backend Development, Distributed Systems, Performance Engineering">
     <meta name="author" content="Rahul Challa">
+    <meta name="theme-color" content="#0a0a0d">
     <meta property="og:title" content="Rahul Challa | Software Engineer">
-    <meta property="og:description" content="Portfolio showcasing systems research, backend projects, and developer tools.">
+    <meta property="og:description" content="AI and backend engineering, systems research, and developer tools by Rahul Challa.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://rahulchalla.com/">
     <title>Rahul Challa | Software Engineer</title>
 
-    <!-- Favicon -->
     <link rel="icon" href="assets/images/code.svg" type="image/svg+xml">
 
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/styles.css?v=5">
-
-    <!-- Feather Icons -->
-    <script src="https://unpkg.com/feather-icons"></script>
-
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css?v=8">
+
+    <!-- Motion libraries (optional: the page is fully usable if these fail to load) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
 </head>
 
 <body>
-    <!-- Scroll progress indicator -->
-    <div class="scroll-progress" id="scroll-progress"></div>
+    <!-- Preloader -->
+    <div class="loader" id="loader" aria-hidden="true">
+        <span class="loader-name mono">Rahul Challa &mdash; Portfolio</span>
+        <span class="loader-count" id="loader-count">0</span>
+    </div>
 
-    <!-- Header Section -->
-    <header class="header" id="header">
-        <div class="container header-container">
-            <a href="#home" class="logo">Rahul<span class="logo-accent">.</span>Challa</a>
-            <nav class="nav-menu" id="nav-menu">
-                <ul class="nav-list">
-                    <li class="nav-item"><a href="#home" class="nav-link active"><span class="nav-index">00</span>Home</a></li>
-                    <li class="nav-item"><a href="#about" class="nav-link"><span class="nav-index">01</span>About</a></li>
-                    <li class="nav-item"><a href="#education" class="nav-link"><span class="nav-index">02</span>Education</a></li>
-                    <li class="nav-item"><a href="#experience" class="nav-link"><span class="nav-index">03</span>Experience</a></li>
-                    <li class="nav-item"><a href="#skills" class="nav-link"><span class="nav-index">04</span>Skills</a></li>
-                    <li class="nav-item"><a href="#projects" class="nav-link"><span class="nav-index">05</span>Projects</a></li>
-                    <li class="nav-item"><a href="#profiles" class="nav-link"><span class="nav-index">06</span>LeetCode</a></li>
-                    <li class="nav-item"><a href="#contact" class="nav-link"><span class="nav-index">07</span>Contact</a></li>
-                </ul>
-            </nav>
-            <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </button>
-        </div>
+    <!-- "View" bubble that follows the cursor over project images -->
+    <div class="cursor-view" aria-hidden="true"><span>View &#8599;</span></div>
+
+    <!-- Header (scrolls away with the hero) -->
+    <header class="site-header">
+        <span class="site-role">Software Engineer, AI &amp; Backend</span>
+        <nav class="site-nav" aria-label="Primary">
+            <a href="#services" data-roll>Services</a>
+            <a href="#works" data-roll>Works</a>
+            <a href="#about" data-roll>About</a>
+            <a href="#contact" data-roll>Contact</a>
+        </nav>
     </header>
 
-    <!-- Home Section -->
-    <section class="home section" id="home">
-        <div class="container home-content">
-            <div class="home-text">
-                <p class="greeting">Hello, I'm</p>
-                <h1 class="name">Rahul<br>Challa</h1>
-                <h2 class="profession" data-text="Software Engineer">Software Engineer</h2>
-                <p class="brief-intro">
-                    I build performance-critical systems and developer tools&mdash;from a reinforcement-learning
-                    CPU autotuning framework to a VS&nbsp;Code extension used by 1,100+ developers. Currently an
-                    M.S. Computer Science candidate at UC&nbsp;Riverside.
-                </p>
-                <div class="home-buttons">
-                    <a href="assets/Resume/Rahul%20Challa.pdf" class="btn primary-btn" target="_blank" rel="noopener noreferrer">
-                        <i data-feather="download"></i> Resume
+    <!-- Floating menu button + full-screen menu -->
+    <button class="menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span>
+    </button>
+    <div class="menu" id="menu" aria-hidden="true">
+        <nav class="menu-links" aria-label="Menu">
+            <a href="#home"><span class="mono">01</span><span data-roll>Home</span></a>
+            <a href="#services"><span class="mono">02</span><span data-roll>Services</span></a>
+            <a href="#experience"><span class="mono">03</span><span data-roll>Experience</span></a>
+            <a href="#works"><span class="mono">04</span><span data-roll>Works</span></a>
+            <a href="#about"><span class="mono">05</span><span data-roll>About</span></a>
+            <a href="#contact"><span class="mono">06</span><span data-roll>Contact</span></a>
+        </nav>
+        <div class="menu-foot mono">
+            <a href="mailto:challaviswanadhrahul@gmail.com">challaviswanadhrahul@gmail.com</a>
+            <span>Local time <span class="js-time">--:--</span></span>
+        </div>
+    </div>
+
+    <!-- HERO: pinned while the dark panels slide over it -->
+    <div class="hero-wrap">
+        <section class="hero" id="home">
+            <div class="hero-inner">
+                <h1 class="hero-name" aria-label="Rahul Challa">
+                    <span class="hero-line"><span data-split="hero">Rahul</span></span>
+                    <span class="hero-line"><span data-split="hero">Challa</span></span>
+                </h1>
+
+                <div class="hero-grid">
+                    <div class="hero-left">
+                        <p class="hero-intro" data-split="hero-words">I build fast, reliable AI and backend systems, from LLM routing at 630+ tokens/sec to a VS Code extension used by 1,200+ developers.</p>
+                        <div class="hero-actions">
+                            <a href="#contact" class="pill-btn hero-fade" data-magnetic>
+                                <span class="pill-fill"></span>
+                                <span class="pill-text" data-roll>Contact &#8599;</span>
+                            </a>
+                            <a href="assets/Resume/Rahul%20Challa.pdf" class="pill-btn pill-outline hero-fade" target="_blank" rel="noopener noreferrer" data-magnetic>
+                                <span class="pill-fill"></span>
+                                <span class="pill-text" data-roll>Resume &#8599;</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="hero-media" data-cursor="Hello!">
+                        <img src="assets/images/main%20page%20image.jpg" alt="Rahul Challa in Yosemite Valley">
+                    </div>
+
+                    <div class="hero-right">
+                        <span class="mono hero-fade">Based in the</span>
+                        <span class="hero-loc hero-fade">Bay Area</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <main class="panels">
+        <!-- SERVICES -->
+        <section class="panel panel-first" id="services">
+            <div class="sec-intro">
+                <h2 class="sec-title" data-split="chars">What I Do /</h2>
+                <div class="sec-desc">
+                    <span class="sec-label mono">(Services)</span>
+                    <p data-split="words">I specialize in building fast, reliable and measurable software. I turn research ideas and real workloads into systems that hold up in production.</p>
+                </div>
+            </div>
+
+            <div class="services">
+                <article class="service" style="--i:0">
+                    <div class="service-head">
+                        <span class="service-num">(01)</span>
+                        <h3>AI &amp; Machine Learning</h3>
+                    </div>
+                    <div class="service-body">
+                        <p>From LLM routing and inference optimization to reinforcement learning and robotics data evaluation, I build ML systems that are measurable, efficient and ready to deploy.</p>
+                        <ol class="service-list">
+                            <li><span class="mono">01</span>LLM routing &amp; inference optimization (TTFT)</li>
+                            <li><span class="mono">02</span>Reinforcement learning &amp; zero-shot classification</li>
+                            <li><span class="mono">03</span>Human-in-the-loop evaluation &amp; data QA</li>
+                        </ol>
+                    </div>
+                </article>
+
+                <article class="service" style="--i:1">
+                    <div class="service-head">
+                        <span class="service-num">(02)</span>
+                        <h3>Backend Engineering</h3>
+                    </div>
+                    <div class="service-body">
+                        <p>From REST microservices to LLM-serving APIs, I design and ship backend services with clean APIs, solid tests and CI/CD baked in.</p>
+                        <ol class="service-list">
+                            <li><span class="mono">01</span>Python, Java, Go, TypeScript</li>
+                            <li><span class="mono">02</span>Flask, FastAPI, Spring Boot, gRPC</li>
+                            <li><span class="mono">03</span>PostgreSQL, Redis, Docker, AWS</li>
+                        </ol>
+                    </div>
+                </article>
+
+                <article class="service" style="--i:2">
+                    <div class="service-head">
+                        <span class="service-num">(03)</span>
+                        <h3>Performance &amp; Systems</h3>
+                    </div>
+                    <div class="service-body">
+                        <p>I profile, measure and tune, from CPU microarchitecture (IPC, CPI, cache behaviour) to streaming pipelines and services handling 100K+ requests per second.</p>
+                        <ol class="service-list">
+                            <li><span class="mono">01</span>Cross-platform profiling across 30 workloads</li>
+                            <li><span class="mono">02</span>Kafka, Spark &amp; Apache Sedona pipelines</li>
+                            <li><span class="mono">03</span>Distributed systems &amp; telemetry</li>
+                        </ol>
+                    </div>
+                </article>
+
+                <article class="service" style="--i:3">
+                    <div class="service-head">
+                        <span class="service-num">(04)</span>
+                        <h3>Developer Tools</h3>
+                    </div>
+                    <div class="service-body">
+                        <p>I build tools developers actually use, like TexMex, a zero-dependency LaTeX editor for VS Code with live preview and real-time collaboration for 1,200+ users.</p>
+                        <ol class="service-list">
+                            <li><span class="mono">01</span>VS Code extensions, TypeScript</li>
+                            <li><span class="mono">02</span>WebSockets &amp; real-time sync</li>
+                            <li><span class="mono">03</span>Sub-100ms on 10K+ line documents</li>
+                        </ol>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section class="panel" id="experience">
+            <div class="sec-intro">
+                <h2 class="sec-title" data-split="chars">Experience /</h2>
+                <div class="sec-desc">
+                    <span class="sec-label mono">(Journey)</span>
+                    <p data-split="words">Industry, research and everything in between. A few places where I've shipped real work.</p>
+                </div>
+            </div>
+
+            <div class="xp-list">
+                <article class="xp" data-reveal>
+                    <span class="xp-num mono">(01)</span>
+                    <div class="xp-main">
+                        <h3>Robotics AI Data &amp; Evaluation Specialist</h3>
+                        <p class="xp-org mono">Google DeepMind &middot; Contract via Adecco</p>
+                        <ul class="xp-points">
+                            <li>Cut manual QA overhead by 15% by building and testing internal operator scripts, UI workflows and telemetry tools.</li>
+                            <li>Reduced downtime by 15% by debugging terminal-level faults, process bottlenecks and sensor issues via log analysis.</li>
+                            <li>Sustained a 95% data yield across training pipelines with automated session validation and anomaly detection.</li>
+                        </ul>
+                    </div>
+                    <span class="xp-date mono">Nov 2026 &mdash; Now</span>
+                </article>
+                <article class="xp" data-reveal>
+                    <span class="xp-num mono">(02)</span>
+                    <div class="xp-main">
+                        <h3>Software Engineer, AI &amp; Backend</h3>
+                        <p class="xp-org mono">Saayam for All</p>
+                        <ul class="xp-points">
+                            <li>Achieved sub-second latency at 630+ tokens/sec by engineering a Flask backend to route multiple LLMs.</li>
+                            <li>Reached sub-500ms latency for a P1 platform search by deploying a schema-agnostic PostgreSQL index.</li>
+                            <li>Reduced inference delays by 94% with a telemetry pipeline benchmarking TTFT and token efficiency.</li>
+                            <li>Automated semantic prompt routing with a zero-shot classification model that predicts categories.</li>
+                        </ul>
+                    </div>
+                    <span class="xp-date mono">Aug 2026 &mdash; Nov 2026</span>
+                </article>
+                <article class="xp" data-reveal>
+                    <span class="xp-num mono">(03)</span>
+                    <div class="xp-main">
+                        <h3>Graduate Researcher</h3>
+                        <p class="xp-org mono">UC Riverside &middot; Autotuning Framework</p>
+                        <ul class="xp-points">
+                            <li>Achieved 90% parameter-matching accuracy for unknown CPUs with a sequential reinforcement-learning model.</li>
+                            <li>Optimized convergence to under 0.5% of a 500M+ configuration space by evaluating IPC, CPI and cache-level metrics.</li>
+                            <li>Reduced prediction error to within 5% of ground truth with a cross-platform profiler across 30 workloads.</li>
+                        </ul>
+                    </div>
+                    <span class="xp-date mono">Jul 2025 &mdash; Mar 2026</span>
+                </article>
+                <article class="xp" data-reveal>
+                    <span class="xp-num mono">(04)</span>
+                    <div class="xp-main">
+                        <h3>Undergraduate Researcher</h3>
+                        <p class="xp-org mono">SOA University &middot; ASL Translation System</p>
+                        <ul class="xp-points">
+                            <li>Achieved 98% real-time accuracy with an ensemble Random Forest classifier on spatial coordinate arrays.</li>
+                            <li>Improved reliability by 95% over static ROI baselines with an OpenCV pipeline tracking 21 hand landmarks.</li>
+                            <li>Delivered sub-500ms latency with &lt;5% error by processing lightweight serialized arrays instead of raw frames.</li>
+                        </ul>
+                    </div>
+                    <span class="xp-date mono">Feb 2024 &mdash; Jun 2024</span>
+                </article>
+            </div>
+        </section>
+
+        <!-- SELECTED WORKS -->
+        <section class="panel" id="works">
+            <div class="sec-intro">
+                <h2 class="sec-title" data-split="chars">Selected Works /</h2>
+                <div class="sec-desc">
+                    <span class="sec-label mono">(Projects)</span>
+                    <p data-split="words">Things I've designed and built, synced straight from GitHub.</p>
+                </div>
+            </div>
+
+            <div class="works">
+                <div class="works-counter" aria-hidden="true">
+                    <span>0</span>
+                    <span class="works-digit"><span class="works-digit-col" id="works-digits"><span>1</span></span></span>
+                </div>
+                <div class="works-list" id="featured-projects">
+                    <!-- Featured project cards rendered by main.js from data/projects.json -->
+                </div>
+            </div>
+
+            <div class="more">
+                <div class="more-head">
+                    <h3 class="more-title">More on GitHub</h3>
+                    <span class="mono more-note" id="projects-synced">Auto-synced nightly</span>
+                </div>
+                <div class="repo-list" id="more-projects-list"></div>
+                <div class="gh" id="github-strip"></div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section class="panel" id="about">
+            <div class="about-words" aria-label="Engineer, Researcher, Builder">
+                <span data-split="chars">Engineer</span>
+                <span data-split="chars">Researcher</span>
+                <span data-split="chars">Builder</span>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-media" data-reveal="img" data-cursor="Me">
+                    <img src="assets/images/Graduation.jpg" alt="Rahul Challa at his UC Riverside graduation">
+                </div>
+                <div class="about-body">
+                    <span class="sec-label mono">(About)</span>
+                    <p class="about-lead" data-split="words">I'm a software engineer and graduate of UC Riverside's M.S. in Computer Science, driven by a simple question: what can I build next, and how far can it scale?</p>
+                    <p class="about-text" data-reveal>My work spans LLM serving and evaluation, reinforcement learning, distributed data pipelines and production backend services. Right now I'm working on robotics AI data and evaluation at Google DeepMind. Off the keyboard you'll find me making art, experimenting in the kitchen, or chasing a great cup of coffee.</p>
+
+                    <div class="stats">
+                        <div class="stat" data-reveal>
+                            <span class="stat-num" data-counter="1200" data-suffix="+">0</span>
+                            <span class="stat-label mono">VS Code extension users</span>
+                        </div>
+                        <div class="stat" data-reveal>
+                            <span class="stat-num" data-counter="630" data-suffix="+">0</span>
+                            <span class="stat-label mono">Tokens/sec LLM routing</span>
+                        </div>
+                        <div class="stat" data-reveal>
+                            <span class="stat-num" data-counter="11.5" data-suffix="M">0</span>
+                            <span class="stat-label mono">Footprints in live spatial joins</span>
+                        </div>
+                    </div>
+
+                    <div class="edu">
+                        <span class="sec-label mono">(Education)</span>
+                        <div class="edu-row" data-reveal>
+                            <div>
+                                <h4>M.S. Computer Science</h4>
+                                <p class="mono">UC Riverside &middot; HEST Scholarship (2025) &middot; Top 3 @ UCRPC (2024)</p>
+                            </div>
+                            <span class="mono">2024 &mdash; 2026</span>
+                        </div>
+                        <div class="edu-row" data-reveal>
+                            <div>
+                                <h4>B.Tech Computer Science</h4>
+                                <p class="mono">SOA University &middot; Top 10 @ Byte Verse, NIT Patna (2023) &middot; Top 10 @ Xperiments, UST (2022) &middot; Google Cloud Facilitator (2022)</p>
+                            </div>
+                            <span class="mono">2020 &mdash; 2024</span>
+                        </div>
+                    </div>
+
+                    <a href="assets/Resume/Rahul%20Challa.pdf" class="pill-btn pill-clay" target="_blank" rel="noopener noreferrer" data-magnetic>
+                        <span class="pill-fill"></span>
+                        <span class="pill-text" data-roll>Resume &#8599;</span>
                     </a>
-                    <a href="#projects" class="btn secondary-btn">View My Work</a>
-                    <a href="#contact" class="btn secondary-btn">Contact Me</a>
-                </div>
-                <div class="home-socials">
-                    <a href="https://github.com/rahul-challa" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i data-feather="github"></i></a>
-                    <a href="https://www.linkedin.com/in/rahulchalla13/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i data-feather="linkedin"></i></a>
-                    <a href="mailto:challaviswanadhrahul@gmail.com" aria-label="Email"><i data-feather="mail"></i></a>
                 </div>
             </div>
-            <div class="home-img">
-                <div class="home-img-card">
-                    <img src="assets/images/Main.jpg" alt="Rahul Challa at the Golden Gate Bridge" class="home-img-photo" />
-                </div>
-            </div>
-        </div>
-        <div class="scroll-down">
-            <a href="#about" class="mouse-wrapper">
-                <span class="mouse"><span class="wheel"></span></span>
-                <span class="mouse-label">Scroll Down</span>
-            </a>
-        </div>
-    </section>
 
-    <!-- About Section -->
-    <section class="about section" id="about">
-        <div class="container about-container-new">
-            <div class="about-img-card">
-                <img src="assets/images/About.jpeg" alt="Rahul Challa" class="about-img" />
-            </div>
-            <div class="about-content-new">
-                <span class="section-eyebrow"><span class="eyebrow-index">01</span>About Me</span>
-                <h2 class="about-tagline">Turning research and real workloads into reliable software</h2>
-                <p class="about-intro">
-                    I'm <span class="highlight">Rahul Challa</span>, a software engineer and graduate researcher at UC
-                    Riverside. My work spans micro-architectural profiling and reinforcement learning, distributed
-                    data pipelines, and production-grade backend services&mdash;always with an eye on measurable
-                    performance and correctness.
-                </p>
-                <div class="about-stats-row">
-                    <div class="about-stat-card">
-                        <div class="info-title" data-counter="1100" data-suffix="+">0</div>
-                        <div class="stat-label">Active users on my VS&nbsp;Code extension</div>
+            <!-- Skills -->
+            <div class="skills" id="skills">
+                <h3 class="skills-title" data-split="chars">Skills</h3>
+                <div class="skills-grid">
+                    <div class="skill-col" data-reveal>
+                        <h4 class="mono">AI / ML &amp; Evaluation</h4>
+                        <ul>
+                            <li data-roll>LLM Routing</li><li data-roll>Inference Optimization</li><li data-roll>Reinforcement Learning</li><li data-roll>Zero-Shot Classification</li><li data-roll>Human-in-the-Loop</li><li data-roll>PyTorch</li><li data-roll>Scikit-learn</li><li data-roll>OpenCV</li>
+                        </ul>
                     </div>
-                    <div class="about-stat-card">
-                        <div class="info-title" data-counter="90" data-suffix="%">0</div>
-                        <div class="stat-label">Parameter-match accuracy in CPU autotuning research</div>
+                    <div class="skill-col" data-reveal>
+                        <h4 class="mono">Languages</h4>
+                        <ul>
+                            <li data-roll>Python</li><li data-roll>C++</li><li data-roll>TypeScript</li><li data-roll>Java</li><li data-roll>Go</li><li data-roll>SQL</li>
+                        </ul>
                     </div>
-                    <div class="about-stat-card">
-                        <div class="info-title" data-counter="11.5" data-suffix="M">0</div>
-                        <div class="stat-label">Building footprints processed in a live streaming pipeline</div>
+                    <div class="skill-col" data-reveal>
+                        <h4 class="mono">Frameworks</h4>
+                        <ul>
+                            <li data-roll>FastAPI</li><li data-roll>Flask</li><li data-roll>Node.js</li><li data-roll>Spring Boot</li><li data-roll>gRPC</li><li data-roll>RESTful APIs</li>
+                        </ul>
+                    </div>
+                    <div class="skill-col" data-reveal>
+                        <h4 class="mono">Infrastructure &amp; Data</h4>
+                        <ul>
+                            <li data-roll>PostgreSQL</li><li data-roll>Apache Kafka</li><li data-roll>Apache Spark</li><li data-roll>DuckDB</li><li data-roll>Redis</li><li data-roll>Docker</li><li data-roll>AWS (EC2, S3, Lambda)</li><li data-roll>GitHub Actions</li><li data-roll>Linux</li>
+                        </ul>
                     </div>
                 </div>
-                <div class="about-funfact">
-                    <i data-feather="coffee"></i> When I'm not coding, I'm creating art, experimenting in the kitchen, or enjoying a great cup of coffee!
+                <div class="concepts" data-reveal>
+                    <span class="mono">Core concepts</span>
+                    <span class="tag">Distributed Systems</span>
+                    <span class="tag">Data QA &amp; Pipelines</span>
+                    <span class="tag">Telemetry &amp; Benchmarking</span>
+                    <span class="tag">CI/CD</span>
                 </div>
-                <a href="assets/Resume/Rahul%20Challa.pdf" class="btn primary-btn download-cv" target="_blank" rel="noopener noreferrer">
-                    <i data-feather="download"></i> Download Resume
-                </a>
             </div>
-        </div>
-        <div class="scroll-down">
-            <a href="#education" class="mouse-wrapper">
-                <span class="mouse"><span class="wheel"></span></span>
-                <span class="mouse-label">Scroll Down</span>
-            </a>
-        </div>
-    </section>
+        </section>
 
-    <!-- Education Section -->
-    <section class="education section" id="education">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-eyebrow"><span class="eyebrow-index">02</span>Education</span>
-                <h2 class="section-title">Academic Background</h2>
-            </div>
-            <div class="education-layout">
-                <div class="education-img-card">
-                    <img src="assets/images/Graduation.jpg" alt="Rahul Challa at his UC Riverside graduation" class="education-img" />
-                </div>
-                <div class="education-container">
-                    <div class="education-row">
-                        <img src="assets/images/logos/ucr.png?v=3" alt="University of California, Riverside logo" class="education-mark" />
-                        <div class="education-body">
-                            <div class="education-title-row">
-                                <h3 class="education-degree">Master of Science, Computer Science</h3>
-                                <span class="education-date">Sep 2024 &ndash; Mar 2026</span>
-                            </div>
-                            <p class="education-school">University of California, Riverside &middot; In Progress</p>
-                            <ul class="education-honors">
-                                <li>HEST Scholarship Awardee (2025)</li>
-                                <li>Top 3 @ UCRPC (2024)</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="education-row">
-                        <img src="assets/images/logos/iter.png?v=3" alt="Institute of Technical Education &amp; Research logo" class="education-mark" />
-                        <div class="education-body">
-                            <div class="education-title-row">
-                                <h3 class="education-degree">Bachelor of Technology, Computer Science &amp; Engineering</h3>
-                                <span class="education-date">Nov 2020 &ndash; Jul 2024</span>
-                            </div>
-                            <p class="education-school">Institute of Technical Education &amp; Research &middot; 3.7 GPA</p>
-                            <ul class="education-honors">
-                                <li>Merit Scholarship Awardee</li>
-                                <li>Top 15 @ Byte Verse Hackathon (2023)</li>
-                                <li>Top 10 @ Xperiments by UST (2022)</li>
-                                <li>Google Cloud Facilitator (2022)</li>
-                            </ul>
-                        </div>
-                    </div>
+        <!-- LEETCODE -->
+        <section class="panel" id="profiles">
+            <div class="sec-intro">
+                <h2 class="sec-title" data-split="chars">Problem Solving /</h2>
+                <div class="sec-desc">
+                    <span class="sec-label mono">(LeetCode)</span>
+                    <p data-split="words">Sharpening the fundamentals, one problem at a time.</p>
                 </div>
             </div>
-        </div>
-        <div class="scroll-down">
-            <a href="#experience" class="mouse-wrapper">
-                <span class="mouse"><span class="wheel"></span></span>
-                <span class="mouse-label">Scroll Down</span>
-            </a>
-        </div>
-    </section>
+            <div class="lc" id="leetcode-profile"></div>
+        </section>
 
-    <!-- Experience Section -->
-    <section class="experience section" id="experience">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-eyebrow"><span class="eyebrow-index">03</span>Experience</span>
-                <h2 class="section-title">My Professional Journey</h2>
-            </div>
-            <div class="experience-container">
-                <div class="experience-row">
-                    <div class="experience-header-flex">
-                        <img src="assets/images/logos/saayam.png?v=3" alt="Saayam For All logo" class="experience-logo" />
-                        <div class="experience-header">
-                            <div class="experience-title-row">
-                                <h3 class="experience-title">Software Engineer</h3>
-                                <span class="experience-date">Sep 2026 &ndash; Present</span>
-                            </div>
-                            <p class="experience-company">Saayam For All &middot; Part-time &middot; Remote</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="experience-row">
-                    <div class="experience-header-flex">
-                        <img src="assets/images/logos/ucr.png?v=3" alt="University of California, Riverside logo" class="experience-logo" />
-                        <div class="experience-header">
-                            <div class="experience-title-row">
-                                <h3 class="experience-title">Graduate Researcher, Autotuning Framework for CPU Model Validation</h3>
-                                <span class="experience-date">Sep 2025 &ndash; Mar 2026</span>
-                            </div>
-                            <p class="experience-company">University of California, Riverside &middot; Part-time</p>
-                            <p class="experience-secondary-role">Concurrently: Student Assistant (STDT), UCR Auxiliary Services</p>
-                        </div>
-                    </div>
-                    <ul class="experience-bullets">
-                        <li>Developing an autotuning framework for CPU model validation using reinforcement learning and microarchitectural simulators (MacSim, Sniper, Z-Sim).</li>
-                        <li>Implementing multi-armed bandit algorithms to minimize simulation error across workloads.</li>
-                        <li>Building scalable pipelines in Python on Google Cloud Platform for long-latency experiments.</li>
-                    </ul>
-                </div>
-
-                <div class="experience-row">
-                    <div class="experience-header-flex">
-                        <img src="assets/images/logos/iter.png?v=3" alt="Institute of Technical Education &amp; Research logo" class="experience-logo" />
-                        <div class="experience-header">
-                            <div class="experience-title-row">
-                                <h3 class="experience-title">Undergraduate Student Researcher, ASL Translation System</h3>
-                                <span class="experience-date">Feb 2024 &ndash; Jun 2024</span>
-                            </div>
-                            <p class="experience-company">Institute of Technical Education &amp; Research &middot; Internship</p>
-                        </div>
-                    </div>
-                    <ul class="experience-bullets">
-                        <li>Created a real-time ASL-to-text translation system using OpenCV and MediaPipe.</li>
-                        <li>Built a Random Forest Classifier on a dataset of 13K+ gesture images with 98.9% accuracy.</li>
+        <!-- CONTACT -->
+        <section class="panel panel-last" id="contact">
+            <div class="contact-grid">
+                <h2 class="contact-title" aria-label="Let's make it happen">
+                    <span data-split="chars">Let's</span>
+                    <span data-split="chars">Make it</span>
+                    <span data-split="chars">Happen</span>
+                </h2>
+                <div class="contact-side" data-reveal>
+                    <p class="contact-lead">Have a role, a project or an interesting problem in mind?</p>
+                    <form class="contact-form" id="contact-form">
+                        <label class="sr-only" for="contact-msg">Your message</label>
+                        <input id="contact-msg" name="message" type="text" placeholder="Tell me about it&hellip;" autocomplete="off">
+                        <button type="submit" class="pill-btn pill-clay" data-magnetic>
+                            <span class="pill-fill"></span>
+                            <span class="pill-text" data-roll>Send &#8599;</span>
+                        </button>
+                    </form>
+                    <ul class="contact-list">
+                        <li><span class="mono">Email</span><a href="mailto:challaviswanadhrahul@gmail.com" data-roll>challaviswanadhrahul@gmail.com</a></li>
+                        <li><span class="mono">LinkedIn</span><a href="https://www.linkedin.com/in/rahulchalla13/" target="_blank" rel="noopener noreferrer" data-roll>@rahulchalla13</a></li>
+                        <li><span class="mono">GitHub</span><a href="https://github.com/rahul-challa" target="_blank" rel="noopener noreferrer" data-roll>@rahul-challa</a></li>
+                        <li><span class="mono">Instagram</span><a href="https://www.instagram.com/rahul_challa_13/" target="_blank" rel="noopener noreferrer" data-roll>@rahul_challa_13</a></li>
                     </ul>
                 </div>
             </div>
-        </div>
-        <div class="scroll-down">
-            <a href="#skills" class="mouse-wrapper">
-                <span class="mouse"><span class="wheel"></span></span>
-                <span class="mouse-label">Scroll Down</span>
-            </a>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Skills Section -->
-    <section class="skills section" id="skills">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-eyebrow"><span class="eyebrow-index">04</span>Skills</span>
-                <h2 class="section-title">What I Work With</h2>
+    <!-- FOOTER: revealed underneath the last panel -->
+    <footer class="site-footer">
+        <div class="foot-grid">
+            <div class="foot-col">
+                <span class="mono">(Menu)</span>
+                <a href="#home" data-roll>Home</a>
+                <a href="#services" data-roll>Services</a>
+                <a href="#works" data-roll>Works</a>
+                <a href="#about" data-roll>About</a>
+                <a href="#contact" data-roll>Contact</a>
             </div>
-            <div class="skills-list-new">
-                <div class="skill-group">
-                    <span class="skill-label">Languages</span>
-                    <div class="skill-items-list">
-                        <span class="skill-item">Java</span>
-                        <span class="skill-item">Python</span>
-                        <span class="skill-item">TypeScript</span>
-                        <span class="skill-item">Go</span>
-                        <span class="skill-item">SQL</span>
-                        <span class="skill-item">JavaScript</span>
-                        <span class="skill-item">C++</span>
-                        <span class="skill-item">Bash</span>
-                    </div>
-                </div>
-                <div class="skill-group">
-                    <span class="skill-label">Backend &amp; APIs</span>
-                    <div class="skill-items-list">
-                        <span class="skill-item">Spring Boot</span>
-                        <span class="skill-item">Spring MVC</span>
-                        <span class="skill-item">Spring Data JPA</span>
-                        <span class="skill-item">Spring Security</span>
-                        <span class="skill-item">RESTful API</span>
-                        <span class="skill-item">FastAPI</span>
-                        <span class="skill-item">Node.js</span>
-                        <span class="skill-item">gRPC</span>
-                    </div>
-                </div>
-                <div class="skill-group">
-                    <span class="skill-label">Cloud &amp; DevOps</span>
-                    <div class="skill-items-list">
-                        <span class="skill-item">AWS (Lambda, EC2, S3)</span>
-                        <span class="skill-item">Docker</span>
-                        <span class="skill-item">CI/CD (GitHub Actions)</span>
-                        <span class="skill-item">12-Factor App Methodology</span>
-                        <span class="skill-item">Linux</span>
-                        <span class="skill-item">Git</span>
-                        <span class="skill-item">Vercel</span>
-                        <span class="skill-item">Render</span>
-                    </div>
-                </div>
-                <div class="skill-group">
-                    <span class="skill-label">Data &amp; Messaging</span>
-                    <div class="skill-items-list">
-                        <span class="skill-item">PostgreSQL</span>
-                        <span class="skill-item">MongoDB</span>
-                        <span class="skill-item">Redis</span>
-                        <span class="skill-item">Apache Kafka</span>
-                        <span class="skill-item">Apache Spark</span>
-                        <span class="skill-item">DuckDB</span>
-                        <span class="skill-item">Supabase</span>
-                        <span class="skill-item">DynamoDB</span>
-                    </div>
-                </div>
-                <div class="skill-group">
-                    <span class="skill-label">Systems</span>
-                    <div class="skill-items-list">
-                        <span class="skill-item">Distributed Systems</span>
-                        <span class="skill-item">Microservices Architecture</span>
-                        <span class="skill-item">Performance Profiling (Intel VTune)</span>
-                    </div>
-                </div>
+            <div class="foot-col">
+                <span class="mono">(Socials)</span>
+                <a href="https://www.linkedin.com/in/rahulchalla13/" target="_blank" rel="noopener noreferrer" data-roll>LinkedIn</a>
+                <a href="https://github.com/rahul-challa" target="_blank" rel="noopener noreferrer" data-roll>GitHub</a>
+                <a href="https://www.instagram.com/rahul_challa_13/" target="_blank" rel="noopener noreferrer" data-roll>Instagram</a>
+                <a href="https://leetcode.com/" id="footer-leetcode" target="_blank" rel="noopener noreferrer" data-roll>LeetCode</a>
+            </div>
+            <div class="foot-col">
+                <span class="mono">(Local time)</span>
+                <span class="foot-time"><span class="js-time">--:--</span> PT</span>
+            </div>
+            <div class="foot-col foot-col-end">
+                <a href="#home" class="foot-top" aria-label="Back to top" data-magnetic>&#8593;</a>
             </div>
         </div>
-        <div class="scroll-down">
-            <a href="#projects" class="mouse-wrapper">
-                <span class="mouse"><span class="wheel"></span></span>
-                <span class="mouse-label">Scroll Down</span>
-            </a>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section class="projects section" id="projects">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-eyebrow"><span class="eyebrow-index">05</span>Projects</span>
-                <h2 class="section-title">My Recent Work</h2>
-                <p class="section-note" id="projects-synced"></p>
-            </div>
-
-            <div class="github-strip" id="github-strip">
-                <!-- GitHub identity + contribution heatmap rendered here by main.js -->
-            </div>
-
-            <div class="projects-grid" id="featured-projects">
-                <!-- Featured (curated) project cards are rendered here by main.js from data/projects.json -->
-            </div>
-
-            <div class="more-projects">
-                <h3 class="more-projects-title">More on GitHub</h3>
-                <p class="more-projects-subtitle">Auto-synced nightly from my GitHub repos&mdash;nothing here is hand-edited.</p>
-                <div class="repo-list" id="more-projects-list">
-                    <!-- Compact auto-generated repo rows are rendered here by main.js -->
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Profiles Section -->
-    <section class="profiles section" id="profiles">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-eyebrow"><span class="eyebrow-index">06</span>LeetCode</span>
-                <h2 class="section-title">Problem Solving</h2>
-            </div>
-            <div class="leetcode-profile" id="leetcode-profile">
-                <!-- LeetCode profile info will be loaded here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact section" id="contact">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-eyebrow"><span class="eyebrow-index">07</span>Contact</span>
-                <h2 class="section-title">Let's Connect</h2>
-            </div>
-            <div class="contact-info contact-tiles-row">
-                <div class="contact-card">
-                    <i data-feather="mail" class="contact-icon"></i>
-                    <h3 class="contact-title">Email</h3>
-                    <span class="contact-data">challaviswanadhrahul@gmail.com</span>
-                    <a href="mailto:challaviswanadhrahul@gmail.com" class="contact-link">Write to me</a>
-                </div>
-                <div class="contact-card">
-                    <i data-feather="linkedin" class="contact-icon"></i>
-                    <h3 class="contact-title">LinkedIn</h3>
-                    <span class="contact-data">@rahulchalla13</span>
-                    <a href="https://www.linkedin.com/in/rahulchalla13/" class="contact-link" target="_blank" rel="noopener noreferrer">Connect</a>
-                </div>
-                <div class="contact-card">
-                    <i data-feather="github" class="contact-icon"></i>
-                    <h3 class="contact-title">GitHub</h3>
-                    <span class="contact-data">@rahul-challa</span>
-                    <a href="https://github.com/rahul-challa" class="contact-link" target="_blank" rel="noopener noreferrer">View Profile</a>
-                </div>
-                <div class="contact-card">
-                    <i data-feather="map-pin" class="contact-icon"></i>
-                    <h3 class="contact-title">Location</h3>
-                    <span class="contact-data">San Francisco Bay Area</span>
-                    <a href="https://www.google.com/maps/place/San+Francisco+Bay+Area" class="contact-link" target="_blank" rel="noopener noreferrer">View on map</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer Section -->
-    <footer class="footer thankyou-footer-alt">
-        <div class="container">
-            <p class="thankyou-message-alt">Thanks for stopping by!</p>
-            <p class="footer-copyright">&copy; <span id="footer-year"></span> Rahul Challa. Built from scratch with HTML, CSS &amp; JS.</p>
+        <div class="foot-name" aria-hidden="true" data-split="roll">Rahul Challa</div>
+        <div class="foot-bottom mono">
+            <span>&copy; <span id="footer-year"></span> Rahul Challa</span>
+            <span>Built from scratch with HTML, CSS &amp; JS</span>
         </div>
     </footer>
 
-    <!-- Scroll Top Button -->
-    <a href="#" class="scrollup" id="scroll-up" aria-label="Scroll to top">
-        <i data-feather="arrow-up" class="scrollup-icon"></i>
-    </a>
-
-    <!-- Scripts -->
-    <script src="js/main.js?v=6" defer></script>
-    <script src="js/animations.js?v=3" defer></script>
-
-    <!-- Initialize Feather Icons -->
-    <script>
-        feather.replace();
-        document.getElementById('footer-year').textContent = new Date().getFullYear();
-    </script>
+    <script src="js/main.js?v=9" defer></script>
+    <script src="js/interactions.js?v=5" defer></script>
 </body>
 </html>

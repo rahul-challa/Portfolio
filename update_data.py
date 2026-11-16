@@ -316,6 +316,7 @@ def update_projects_data():
             'extraLinks': override.get('extraLinks', []),
             'logo': override.get('logo'),
             'icon': override.get('icon'),
+            'image': override.get('image'),
             'stars': repo.get('stargazers_count', 0),
             'language': repo.get('language'),
             'updatedAt': repo.get('pushed_at'),

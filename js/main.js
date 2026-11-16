@@ -1,87 +1,10 @@
 /*=============== MAIN JAVASCRIPT ===============*/
+// Data-driven sections: projects (GitHub), GitHub strip, LeetCode, counters.
+// Motion and interaction live in interactions.js.
 
 document.addEventListener('DOMContentLoaded', function () {
-    /*=============== MENU SHOW/HIDE ===============*/
-    const hamburger = document.getElementById('hamburger');
-    const navMenu = document.getElementById('nav-menu');
-
-    if (hamburger && navMenu) {
-        hamburger.addEventListener('click', () => {
-            const isOpen = navMenu.classList.toggle('show-menu');
-            hamburger.classList.toggle('active', isOpen);
-            hamburger.setAttribute('aria-expanded', String(isOpen));
-        });
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('show-menu');
-                hamburger.classList.remove('active');
-                hamburger.setAttribute('aria-expanded', 'false');
-            });
-        });
-    }
-
-    /*=============== SCROLL SECTIONS ACTIVE LINK + PROGRESS BAR ===============*/
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-menu .nav-link');
-    const scrollProgress = document.getElementById('scroll-progress');
-
-    function onScroll() {
-        const scrollY = window.pageYOffset;
-
-        sections.forEach(current => {
-            const sectionHeight = current.offsetHeight;
-            const sectionTop = current.offsetTop - 80;
-            const sectionId = current.getAttribute('id');
-            const link = document.querySelector(`.nav-menu a[href="#${sectionId}"]`);
-            if (!link) return;
-
-            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                navLinks.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-            }
-        });
-
-        if (scrollProgress) {
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
-            scrollProgress.style.width = `${Math.min(progress, 100)}%`;
-        }
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    /*=============== SCROLL UP BUTTON ===============*/
-    const scrollUpBtn = document.getElementById('scroll-up');
-    if (scrollUpBtn) {
-        window.addEventListener('scroll', () => {
-            scrollUpBtn.classList.toggle('show-scroll', window.scrollY >= 480);
-        }, { passive: true });
-
-        scrollUpBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
-
-    /*=============== SCROLL REVEAL ===============*/
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in');
-                revealObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.12 });
-
-    function observeReveal(root = document) {
-        root.querySelectorAll(
-            '.section-header, .github-strip, .leetcode-strip, .project-card, .experience-row, .education-row, .contact-card, .about-stat-card, .repo-row'
-        ).forEach(el => {
-            if (!el.classList.contains('fade-in')) revealObserver.observe(el);
-        });
-    }
-    observeReveal();
+    const year = document.getElementById('footer-year');
+    if (year) year.textContent = new Date().getFullYear();
 
     /*=============== NUMBER COUNTERS ===============*/
     const counterObserver = new IntersectionObserver((entries) => {
@@ -98,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const target = parseFloat(el.dataset.counter);
         const suffix = el.dataset.suffix || '';
         const isDecimal = String(el.dataset.counter).includes('.');
-        const duration = 1200;
+        const duration = 1400;
         const start = performance.now();
 
         function tick(now) {
@@ -111,22 +34,20 @@ document.addEventListener('DOMContentLoaded', function () {
         requestAnimationFrame(tick);
     }
 
-    /*=============== PROJECTS + PROFILES ===============*/
-    const leetcodeProfileContainer = document.querySelector('.leetcode-profile');
-    if (leetcodeProfileContainer) {
-        leetcodeProfileContainer.innerHTML = `<div class="profile-loading">Loading LeetCode stats&hellip;</div>`;
-    }
+    const lc = document.getElementById('leetcode-profile');
+    if (lc) lc.innerHTML = `<p class="lc-loading mono">Loading LeetCode stats&hellip;</p>`;
 
-    // loadTexMexBadges() targets #texmex-installs/version/rating elements
-    // that only exist once loadProjects() has rendered the TexMex card, so
-    // it's chained after that render rather than fired independently.
+    // loadTexMexBadges() targets #texmex-* elements that only exist once
+    // loadProjects() has rendered the TexMex card, so it's chained after it.
     loadProjects();
     loadGitHubData();
     loadLeetCodeData();
-
-    // expose for the reveal observer once dynamic content lands
-    window.__observeReveal = observeReveal;
 });
+
+// Lets interactions.js animate content that arrives after page load.
+function announceRender(root) {
+    document.dispatchEvent(new CustomEvent('content:rendered', { detail: { root } }));
+}
 
 /*=============== TEXMEX BADGES ===============*/
 function setBadgePill(id, label, value) {
@@ -135,19 +56,16 @@ function setBadgePill(id, label, value) {
 }
 
 function hideTexMexBadges() {
-    const container = document.querySelector('.project-badges');
+    const container = document.querySelector('.work-badges');
     if (container) container.style.display = 'none';
 }
 
 async function loadTexMexBadges() {
     try {
-        const cacheBuster = Date.now();
-        const response = await fetch(`./data/texmex-badges.json?t=${cacheBuster}`, { cache: 'no-store' });
+        const response = await fetch(`./data/texmex-badges.json?t=${Date.now()}`, { cache: 'no-store' });
         if (!response.ok) throw new Error('Failed to load TexMex data');
 
-        const texmexData = await response.json();
-        const data = texmexData.data;
-
+        const data = (await response.json()).data;
         if (data.installs && data.version && data.rating) {
             setBadgePill('texmex-installs', 'Installs', data.installs.toLocaleString());
             setBadgePill('texmex-version', 'Version', data.version);
@@ -164,8 +82,7 @@ async function loadTexMexBadges() {
 /*=============== PROJECTS (auto-generated from GitHub, daily) ===============*/
 function timeAgo(isoDate) {
     if (!isoDate) return '';
-    const diffMs = Date.now() - new Date(isoDate).getTime();
-    const days = Math.floor(diffMs / 86400000);
+    const days = Math.floor((Date.now() - new Date(isoDate).getTime()) / 86400000);
     if (days < 1) return 'today';
     if (days < 30) return `${days}d ago`;
     const months = Math.floor(days / 30);
@@ -173,58 +90,63 @@ function timeAgo(isoDate) {
     return `${Math.floor(months / 12)}y ago`;
 }
 
-function projectCardHTML(project, index) {
-    const media = project.logo
-        ? `<img src="${project.logo}" alt="${project.displayName} Logo" class="project-logo" />`
-        : `<div class="project-icon"><i data-feather="${project.icon || 'code'}"></i></div>`;
+// Generic placeholder until real screenshots are added. To use your own,
+// add an "image" field to the project in data/projects.json.
+function projectImage(project) {
+    return project.image || `https://picsum.photos/seed/${encodeURIComponent(project.name)}/1200/900`;
+}
 
-    // shields.io retired its "visual-studio-marketplace" badge type (it now
-    // returns a literal "retired badge" image for every extension), so these
+function projectCardHTML(project) {
+    // shields.io retired its "visual-studio-marketplace" badge type, so these
     // are rendered from our own data/texmex-badges.json instead of an <img>.
-    const isTexMex = project.name === 'TexMex';
-    const badgesHTML = isTexMex ? `
-        <div class="project-badges">
-          <span class="badge-pill" id="texmex-installs">Installs: &hellip;</span>
-          <span class="badge-pill" id="texmex-version">Version: &hellip;</span>
-          <span class="badge-pill" id="texmex-rating">Rating: &hellip;</span>
+    const badgesHTML = project.name === 'TexMex' ? `
+        <div class="work-badges">
+          <span class="tag" id="texmex-installs">Installs: &hellip;</span>
+          <span class="tag" id="texmex-version">Version: &hellip;</span>
+          <span class="tag" id="texmex-rating">Rating: &hellip;</span>
         </div>` : '';
 
-    const techHTML = project.tech.map(t => `<span class="tech-tag">${t}</span>`).join('');
-
     const extraLinksHTML = (project.extraLinks || []).map(l =>
-        `<a href="${l.url}" class="project-link" target="_blank" rel="noopener noreferrer"><i data-feather="${l.icon || 'external-link'}"></i> ${l.label}</a>`
+        `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label} &#8599;</a>`
     ).join('');
 
+    const year = project.updatedAt ? new Date(project.updatedAt).getFullYear() : '';
+
     return `
-      <div class="project-card">
-        <span class="project-index">${String(index + 1).padStart(2, '0')}</span>
-        <div class="project-info">
-          <div class="project-header-flex">
-            ${media}
-            <h3 class="project-title">${project.displayName}</h3>
+      <article class="work" data-reveal>
+        <a class="work-frame" href="${project.githubUrl}" target="_blank" rel="noopener noreferrer" data-cursor="View &#8599;" aria-label="${project.displayName} on GitHub">
+          <div class="work-img"><img src="${projectImage(project)}" alt="" loading="lazy"></div>
+        </a>
+        <div class="work-meta">
+          <div>
+            <span class="work-sub mono">${project.tech.slice(0, 3).join(' &middot; ')}</span>
+            <h3 class="work-title">${project.displayName}</h3>
           </div>
-          ${badgesHTML}
-          <p class="project-description">${project.description}</p>
-          <div class="project-tech">${techHTML}</div>
-          <div class="project-links">
-            <a href="${project.githubUrl}" class="project-link" target="_blank" rel="noopener noreferrer"><i data-feather="github"></i> Code</a>
-            ${extraLinksHTML}
+          <div class="work-tags">
+            <span class="tag">${project.language || 'Development'}</span>
+            ${year ? `<span class="tag tag-solid">${year}</span>` : ''}
           </div>
         </div>
-      </div>
+        ${badgesHTML}
+        <p class="work-desc">${project.description}</p>
+        <div class="work-links">
+          <a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer">Code &#8599;</a>
+          ${extraLinksHTML}
+        </div>
+      </article>
     `;
 }
 
 function repoRowHTML(project) {
+    const desc = project.description !== 'No description yet.' ? project.description : '';
     return `
       <a class="repo-row" href="${project.githubUrl}" target="_blank" rel="noopener noreferrer">
-        <span class="repo-row-lang" data-lang="${project.language || ''}"></span>
-        <span class="repo-row-name">${project.displayName}</span>
-        <span class="repo-row-desc">${project.description !== 'No description yet.' ? project.description : ''}</span>
-        <span class="repo-row-meta">
-          ${project.stars ? `<span class="repo-row-stars"><i data-feather="star"></i>${project.stars}</span>` : ''}
-          <span class="repo-row-updated">${timeAgo(project.updatedAt)}</span>
-          <i data-feather="arrow-up-right" class="repo-row-arrow"></i>
+        <span class="repo-name">${project.displayName}</span>
+        <span class="repo-desc">${desc}</span>
+        <span class="repo-meta mono">
+          ${project.language ? `<span>${project.language}</span>` : ''}
+          <span>${timeAgo(project.updatedAt)}</span>
+          <span class="repo-arrow">&#8599;</span>
         </span>
       </a>
     `;
@@ -233,11 +155,11 @@ function repoRowHTML(project) {
 async function loadProjects() {
     const featuredContainer = document.getElementById('featured-projects');
     const moreContainer = document.getElementById('more-projects-list');
+    const digits = document.getElementById('works-digits');
     const syncedLabel = document.getElementById('projects-synced');
 
     try {
-        const cacheBuster = Date.now();
-        const response = await fetch(`./data/projects.json?t=${cacheBuster}`, { cache: 'no-store' });
+        const response = await fetch(`./data/projects.json?t=${Date.now()}`, { cache: 'no-store' });
         if (!response.ok) throw new Error('Failed to load projects data');
 
         const data = await response.json();
@@ -245,69 +167,49 @@ async function loadProjects() {
         const featured = projects.filter(p => p.curated);
         const more = projects.filter(p => !p.curated);
 
-        if (featuredContainer) {
-            featuredContainer.innerHTML = featured.map((p, i) => projectCardHTML(p, i)).join('');
-        }
-        if (moreContainer) {
-            moreContainer.innerHTML = more.map(repoRowHTML).join('');
-        }
+        if (featuredContainer) featuredContainer.innerHTML = featured.map(projectCardHTML).join('');
+        if (digits) digits.innerHTML = featured.map((_, i) => `<span>${i + 1}</span>`).join('');
+        if (moreContainer) moreContainer.innerHTML = more.map(repoRowHTML).join('');
         if (syncedLabel && data.lastUpdated) {
-            syncedLabel.textContent = `Auto-synced from GitHub — last updated ${timeAgo(data.lastUpdated)}`;
+            syncedLabel.textContent = `Auto-synced from GitHub · updated ${timeAgo(data.lastUpdated)}`;
         }
 
-        feather.replace();
-        if (window.__observeReveal) window.__observeReveal(document.getElementById('projects'));
+        announceRender(document.getElementById('works'));
         if (featured.some(p => p.name === 'TexMex')) loadTexMexBadges();
     } catch (error) {
         console.error('Error loading projects:', error);
-        if (featuredContainer) {
-            featuredContainer.innerHTML = `<div class="profile-loading">Unable to load projects right now.</div>`;
-        }
+        if (featuredContainer) featuredContainer.innerHTML = `<p class="lc-loading mono">Unable to load projects right now.</p>`;
     }
 }
 
-/*=============== GITHUB INTRO STRIP (top of Projects) ===============*/
-// Lives at the top of the Projects section rather than as a separate
-// "profile" card, since every project below - featured or auto-listed - is
-// literally sourced from this same GitHub account.
+/*=============== GITHUB STRIP ===============*/
 function renderGitHubStrip(login, avatarUrl, repos, followers, htmlUrl) {
     const el = document.getElementById('github-strip');
     if (!el) return;
-    // The heatmap SVG is fetched and recolored for the dark theme at build
-    // time (see update_data.py -> data/github-heatmap.svg) because
-    // ghchart.rshah.org sends no CORS headers, so it can't be fetched and
-    // recolored client-side - only plain <img> loading works cross-origin.
-    const cacheBuster = Date.now();
+    // The heatmap SVG is recolored for the dark theme at build time (see
+    // update_data.py -> data/github-heatmap.svg) because ghchart.rshah.org
+    // sends no CORS headers, so it can only be loaded as a plain <img>.
     el.innerHTML = `
-      <div class="github-strip-identity">
-        <img src="${avatarUrl}" alt="${login}" class="github-strip-avatar" />
-        <div class="github-strip-meta">
-          <div class="github-strip-name-row">
-            <i data-feather="github"></i>
-            <span class="github-strip-username">${login}</span>
-          </div>
-          <p class="github-strip-note">Everything below is sourced straight from GitHub&mdash;${repos} repositories, ${followers} followers, synced nightly.</p>
-          <a href="${htmlUrl}" target="_blank" rel="noopener noreferrer" class="github-strip-link">
-            View full profile <i data-feather="arrow-up-right"></i>
-          </a>
-        </div>
-      </div>
-      <div class="github-strip-heatmap">
-        <img src="./data/github-heatmap.svg?t=${cacheBuster}" alt="GitHub contribution heatmap" class="github-heatmap"/>
+      <a class="gh-id" href="${htmlUrl}" target="_blank" rel="noopener noreferrer">
+        <img src="${avatarUrl}" alt="${login}">
+        <span>
+          <strong>@${login}</strong>
+          <span class="mono">${repos} repos &middot; ${followers} followers &middot; synced nightly</span>
+        </span>
+      </a>
+      <div class="gh-map">
+        <img src="./data/github-heatmap.svg?t=${Date.now()}" alt="GitHub contribution heatmap">
       </div>
     `;
-    feather.replace();
-    if (window.__observeReveal) window.__observeReveal(document.getElementById('projects'));
+    announceRender(el);
 }
 
 async function loadGitHubData() {
     try {
-        const cacheBuster = Date.now();
-        const response = await fetch(`./data/github-profile.json?t=${cacheBuster}`, { cache: 'no-store' });
+        const response = await fetch(`./data/github-profile.json?t=${Date.now()}`, { cache: 'no-store' });
         if (!response.ok) throw new Error('Failed to load GitHub data');
 
-        const githubData = await response.json();
-        const data = githubData.data;
+        const data = (await response.json()).data;
         renderGitHubStrip(data.login, data.avatar_url, data.public_repos, data.followers, data.html_url);
     } catch (error) {
         console.error('Error loading GitHub data:', error);
@@ -315,238 +217,140 @@ async function loadGitHubData() {
     }
 }
 
-/*=============== LEETCODE PROFILE ===============*/
+/*=============== LEETCODE ===============*/
 const LEETCODE_DISPLAY_NAME = 'Rahul Challa';
 const LEETCODE_LOGO = 'https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png';
 
 async function loadLeetCodeData() {
-    const leetcodeProfileContainer = document.querySelector('.leetcode-profile');
+    const container = document.getElementById('leetcode-profile');
     try {
-        const cacheBuster = Date.now();
-        const response = await fetch(`./data/leetcode-profile.json?t=${cacheBuster}`, { cache: 'no-store' });
+        const response = await fetch(`./data/leetcode-profile.json?t=${Date.now()}`, { cache: 'no-store' });
         if (!response.ok) throw new Error('Failed to load LeetCode data');
-
-        const data = await response.json();
-        renderLeetCodeProfile(data);
+        renderLeetCodeProfile(await response.json());
     } catch (error) {
         console.error('Error loading LeetCode data:', error);
-        if (leetcodeProfileContainer) {
-            leetcodeProfileContainer.innerHTML = `<div class="profile-loading">Unable to load LeetCode data at the moment. Please try again later.</div>`;
-        }
+        if (container) container.innerHTML = `<p class="lc-loading mono">Unable to load LeetCode data at the moment.</p>`;
     }
 }
 
 function renderLeetCodeProfile(data) {
-    const leetcodeProfileContainer = document.querySelector('.leetcode-profile');
-    if (!leetcodeProfileContainer) return;
+    const container = document.getElementById('leetcode-profile');
+    if (!container) return;
 
-    const badge = data.contest && data.contest.badge;
+    const contest = data.contest || {};
+    const badge = contest.badge;
     const badgeCount = (data.badges || []).length;
-    const rating = data.contest && data.contest.rating != null ? data.contest.rating : 'N/A';
-    const contests = data.contest && data.contest.attendedContestsCount != null ? data.contest.attendedContestsCount : 'N/A';
-    const globalRank = data.contest && data.contest.globalRanking != null ? data.contest.globalRanking.toLocaleString() : 'N/A';
-    const topPct = data.contest && data.contest.topPercentage != null ? data.contest.topPercentage.toFixed(1) + '%' : 'N/A';
+    const rating = contest.rating != null ? contest.rating : 'N/A';
+    const contests = contest.attendedContestsCount != null ? contest.attendedContestsCount : 'N/A';
+    const globalRank = contest.globalRanking != null ? contest.globalRanking.toLocaleString() : 'N/A';
+    const topPct = contest.topPercentage != null ? contest.topPercentage.toFixed(1) + '%' : 'N/A';
 
-    // Same "identity strip" component as the GitHub strip atop Projects,
-    // then an About-style hairline stat row, a compact difficulty
-    // breakdown, and a full-width heatmap - no boxed dashboard cards.
-    const leetcodeProfileHTML = `
-      <div class="leetcode-strip">
-        <div class="leetcode-strip-identity">
-          <img src="${LEETCODE_LOGO}" alt="LeetCode Logo" class="leetcode-strip-avatar" />
-          <div class="leetcode-strip-meta">
-            <div class="leetcode-strip-name-row">
-              <span class="leetcode-strip-username">${LEETCODE_DISPLAY_NAME}</span>
-              ${badge ? `
-                <span class="leetcode-strip-badge">
-                  <img src="assets/images/Knight.gif" alt="${badge} badge" /> ${badge}
-                </span>
-              ` : ''}
-            </div>
-            <p class="leetcode-strip-note">Rating ${rating} &middot; ${data.totalSolved.toLocaleString()} problems solved${badgeCount ? ` &middot; ${badgeCount} badges earned` : ''}</p>
-            <a href="https://leetcode.com/${data.username}" target="_blank" rel="noopener noreferrer" class="leetcode-strip-link">
-              View LeetCode <i data-feather="arrow-up-right"></i>
-            </a>
+    const diff = (label, pct) => `
+      <div>
+        <div class="lc-diff-head"><span class="mono">${label}</span><span class="mono">${pct}%</span></div>
+        <div class="lc-track"><div class="lc-fill" style="width:${pct}%"></div></div>
+      </div>`;
+
+    container.innerHTML = `
+      <div class="lc-top">
+        <div class="lc-id">
+          <img src="${LEETCODE_LOGO}" alt="LeetCode logo">
+          <div>
+            <strong>${LEETCODE_DISPLAY_NAME}
+              ${badge ? `<span class="tag lc-badge"><img src="assets/images/Knight.gif" alt=""> ${badge}</span>` : ''}
+            </strong>
+            <span class="mono">Rating ${rating} &middot; ${data.totalSolved.toLocaleString()} solved${badgeCount ? ` &middot; ${badgeCount} badges` : ''}</span>
           </div>
         </div>
+        <a href="https://leetcode.com/${data.username}" target="_blank" rel="noopener noreferrer" class="pill-btn pill-clay">
+          <span class="pill-fill"></span><span class="pill-text">View LeetCode &#8599;</span>
+        </a>
       </div>
 
-      <div class="leetcode-stats-row">
-        <div class="about-stat-card">
-          <div class="info-title">${data.totalSolved.toLocaleString()}</div>
-          <div class="stat-label">Problems Solved</div>
-        </div>
-        <div class="about-stat-card">
-          <div class="info-title">${contests}</div>
-          <div class="stat-label">Contests Attended</div>
-        </div>
-        <div class="about-stat-card">
-          <div class="info-title">${globalRank}</div>
-          <div class="stat-label">Global Rank</div>
-        </div>
-        <div class="about-stat-card">
-          <div class="info-title">${topPct}</div>
-          <div class="stat-label">Top Percentile</div>
-        </div>
+      <div class="lc-stats">
+        <div class="stat" data-reveal><span class="stat-num">${data.totalSolved.toLocaleString()}</span><span class="stat-label mono">Problems solved</span></div>
+        <div class="stat" data-reveal><span class="stat-num">${contests}</span><span class="stat-label mono">Contests</span></div>
+        <div class="stat" data-reveal><span class="stat-num">${globalRank}</span><span class="stat-label mono">Global rank</span></div>
+        <div class="stat" data-reveal><span class="stat-num">${topPct}</span><span class="stat-label mono">Top percentile</span></div>
       </div>
 
-      <div class="leetcode-difficulty-row">
-        <div>
-          <div class="leetcode-difficulty-header">
-            <span>Easy</span>
-            <span class="difficulty-easy-text">${data.easyPercentage}%</span>
-          </div>
-          <div class="difficulty-bar-compact-track">
-            <div class="difficulty-bar-compact-fill difficulty-easy" style="width: ${data.easyPercentage}%"></div>
-          </div>
-        </div>
-        <div>
-          <div class="leetcode-difficulty-header">
-            <span>Medium</span>
-            <span class="difficulty-medium-text">${data.mediumPercentage}%</span>
-          </div>
-          <div class="difficulty-bar-compact-track">
-            <div class="difficulty-bar-compact-fill difficulty-medium" style="width: ${data.mediumPercentage}%"></div>
-          </div>
-        </div>
-        <div>
-          <div class="leetcode-difficulty-header">
-            <span>Hard</span>
-            <span class="difficulty-hard-text">${data.hardPercentage}%</span>
-          </div>
-          <div class="difficulty-bar-compact-track">
-            <div class="difficulty-bar-compact-fill difficulty-hard" style="width: ${data.hardPercentage}%"></div>
-          </div>
-        </div>
+      <div class="lc-diff">
+        ${diff('Easy', data.easyPercentage)}
+        ${diff('Medium', data.mediumPercentage)}
+        ${diff('Hard', data.hardPercentage)}
       </div>
 
-      <div class="leetcode-strip-heatmap">
-        <div class="leetcode-heatmap-svg"></div>
-      </div>
+      <div class="lc-heat" id="lc-heat"></div>
     `;
 
-    leetcodeProfileContainer.innerHTML = leetcodeProfileHTML;
-    feather.replace();
-    if (window.__observeReveal) window.__observeReveal(document.getElementById('profiles'));
+    const footerLeetCode = document.getElementById('footer-leetcode');
+    if (footerLeetCode && data.username) footerLeetCode.href = `https://leetcode.com/${data.username}`;
+
     renderLeetCodeHeatmap(data.submissionCalendar || {});
+    announceRender(container);
 }
 
 /*=============== LEETCODE ACTIVITY HEATMAP (SVG) ===============*/
 function renderLeetCodeHeatmap(calendarData) {
-    const heatmapCard = document.querySelector('.leetcode-strip-heatmap');
-    if (!heatmapCard) return;
+    const target = document.getElementById('lc-heat');
+    if (!target) return;
 
     try {
         const rows = 7;
+        const cell = 11;
+        const gap = 3;
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        const oneYearAgo = new Date(today);
-        oneYearAgo.setDate(oneYearAgo.getDate() - 364);
-        oneYearAgo.setHours(0, 0, 0, 0);
+        const start = new Date(today);
+        start.setDate(start.getDate() - 364);
 
-        const daysDiff = Math.floor((today - oneYearAgo) / 86400000) + 1;
-        const weeks = Math.ceil(daysDiff / 7);
+        const weeks = Math.ceil(365 / rows);
         const days = weeks * rows;
-
-        const isMobile = window.innerWidth < 768;
-        const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
-        const cell = isMobile ? 8 : isTablet ? 9 : 11;
-        const gap = isMobile ? 1.5 : 2;
-
-        let activity = Array(days).fill(0);
-        let totalSubmissions = 0;
+        const activity = Array(days).fill(0);
+        let total = 0;
 
         for (const ts in calendarData) {
             const day = new Date(parseInt(ts, 10) * 1000);
             day.setHours(0, 0, 0, 0);
-            const diff = Math.floor((day - oneYearAgo) / 86400000);
-            if (diff >= 0 && diff < days) {
-                activity[diff] = calendarData[ts];
-                totalSubmissions += calendarData[ts];
+            const idx = Math.floor((day - start) / 86400000);
+            if (idx >= 0 && idx < days) {
+                activity[idx] = calendarData[ts];
+                total += calendarData[ts];
             }
         }
 
-        const svgWidth = weeks * (cell + gap);
-        const svgHeight = rows * (cell + gap) + (isMobile ? 16 : 18);
+        // Terracotta ramp to match the site palette
+        const shade = n => n === 0 ? '#1b1c22' : n === 1 ? '#5a3326' : n <= 2 ? '#8a4a33' : n <= 4 ? '#b85f40' : '#d97757';
 
-        let monthLabels = [];
-        const monthPositions = new Map();
-        let lastSeenMonth = null;
+        const top = 16;
+        const width = weeks * (cell + gap);
+        const height = rows * (cell + gap) + top;
+        let svg = `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LeetCode submissions heatmap">`;
 
+        let lastMonth = -1;
         for (let w = 0; w < weeks; w++) {
-            const weekDate = new Date(oneYearAgo);
-            weekDate.setDate(oneYearAgo.getDate() + w * rows);
-            const month = weekDate.toLocaleString('default', { month: 'short' });
-            if (month !== lastSeenMonth || w === 0) {
-                monthPositions.set(month, w * (cell + gap));
-                lastSeenMonth = month;
+            const weekDate = new Date(start);
+            weekDate.setDate(start.getDate() + w * rows);
+            if (weekDate.getMonth() !== lastMonth && w < weeks - 2) {
+                lastMonth = weekDate.getMonth();
+                svg += `<text x="${w * (cell + gap)}" y="10" font-size="9" fill="#686b78" font-family="Geist Mono, monospace">${weekDate.toLocaleString('en-US', { month: 'short' })}</text>`;
             }
-        }
-
-        monthLabels = Array.from(monthPositions.entries()).map(([label, x]) => ({ label, x })).sort((a, b) => a.x - b.x);
-
-        const currentMonth = today.toLocaleString('default', { month: 'short' });
-        const rightmostX = (weeks - 1) * (cell + gap);
-        monthLabels = monthLabels.filter(m => Math.abs(m.x - rightmostX) > 10);
-        monthLabels.push({ x: rightmostX, label: currentMonth });
-        monthLabels.sort((a, b) => a.x - b.x);
-
-        const monthMap = new Map();
-        for (const label of monthLabels) {
-            if (!monthMap.has(label.label) || label.x > monthMap.get(label.label).x) {
-                monthMap.set(label.label, label);
-            }
-        }
-        monthLabels = Array.from(monthMap.values()).sort((a, b) => a.x - b.x);
-
-        let svg = `<svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="xMidYMid meet" style="max-width:100%;height:auto;">`;
-        svg += `<defs><style>
-          .heatmap-cell { transition: all 0.2s ease; cursor: pointer; }
-          .heatmap-cell:hover { stroke: #fff; stroke-width: 1.5; filter: brightness(1.2); }
-        </style></defs>`;
-
-        for (let w = 0; w < weeks; w++) {
             for (let d = 0; d < rows; d++) {
                 const idx = w * rows + d;
-                if (idx >= activity.length) continue;
-
-                const x = w * (cell + gap);
-                const y = d * (cell + gap) + (isMobile ? 14 : 12);
+                const date = new Date(start);
+                date.setDate(start.getDate() + idx);
+                if (date > today) continue;
                 const count = activity[idx];
-
-                const cellDate = new Date(oneYearAgo);
-                cellDate.setDate(oneYearAgo.getDate() + idx);
-                const dateStr = cellDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-
-                let color = '#161b22';
-                if (count > 0) color = '#9be9a8';
-                if (count > 1) color = '#40c463';
-                if (count > 2) color = '#30a14e';
-                if (count > 4) color = '#216e39';
-
-                svg += `<rect class="heatmap-cell" x="${x}" y="${y}" width="${cell}" height="${cell}" rx="2" fill="${color}"
-                  data-count="${count}" data-date="${dateStr}"><title>${dateStr}: ${count} ${count === 1 ? 'submission' : 'submissions'}</title></rect>`;
+                const label = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                svg += `<rect x="${w * (cell + gap)}" y="${top + d * (cell + gap)}" width="${cell}" height="${cell}" rx="2" fill="${shade(count)}"><title>${label}: ${count} ${count === 1 ? 'submission' : 'submissions'}</title></rect>`;
             }
         }
-
-        const fontSize = isMobile ? 8 : 9;
-        monthLabels.forEach((label, idx) => {
-            if (isMobile && idx > 0 && idx < monthLabels.length - 1 && idx % 2 !== 0) return;
-            svg += `<text x="${label.x + 2}" y="10" font-size="${fontSize}" fill="#bbb">${label.label}</text>`;
-        });
         svg += '</svg>';
 
-        const displaySubmissions = totalSubmissions.toLocaleString();
-        heatmapCard.querySelector('.leetcode-heatmap-svg').innerHTML = `
-          <div style="color:#bbb;font-size:${isMobile ? '0.9rem' : '1.05rem'};margin-bottom:0.5rem;text-align:center;width:100%;">
-            <span style="color:#fff;font-size:${isMobile ? '1.1rem' : '1.2rem'};font-weight:700;">${displaySubmissions}</span> submissions in the last year
-          </div>
-          <div style="display:flex;justify-content:center;width:100%;overflow-x:auto;">${svg}</div>
-        `;
+        target.innerHTML = `<p class="lc-heat-total mono"><strong>${total.toLocaleString()}</strong> submissions in the last year</p>${svg}`;
     } catch (error) {
         console.error('Error rendering LeetCode heatmap:', error);
-        const target = heatmapCard.querySelector('.leetcode-heatmap-svg') || heatmapCard;
-        target.innerHTML = '<div style="color:#bbb;text-align:center;padding:1rem;">Unable to load activity data</div>';
+        target.innerHTML = '<p class="lc-loading mono">Unable to load activity data</p>';
     }
 }
