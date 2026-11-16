@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-15T08:48:27.909023",
+  "lastUpdated": "2026-11-16T08:58:56.779885",
   "projects": [
     {
       "name": "wild-fire-twin",
@@ -17,11 +17,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": "activity",
+      "image": "assets/images/projects/wildfire-twin.svg",
       "stars": 0,
       "language": "Python",
       "updatedAt": "2026-06-19T19:37:27Z",
-      "curated": true,
-      "image": "assets/images/projects/wildfire-twin.svg"
+      "curated": true
     },
     {
       "name": "TexMex",
@@ -43,11 +43,11 @@
       ],
       "logo": "assets/images/TexMex.png",
       "icon": null,
+      "image": "assets/images/projects/texmex.svg",
       "stars": 1,
       "language": "TypeScript",
       "updatedAt": "2026-09-19T00:52:16Z",
-      "curated": true,
-      "image": "assets/images/projects/texmex.svg"
+      "curated": true
     },
     {
       "name": "Private-Credit-Portfolio-Engine",
@@ -65,11 +65,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": "briefcase",
+      "image": "assets/images/projects/private-credit.svg",
       "stars": 0,
       "language": "Java",
       "updatedAt": "2026-08-31T21:53:30Z",
-      "curated": true,
-      "image": "assets/images/projects/private-credit.svg"
+      "curated": true
     },
     {
       "name": "Gubernator---Distributed-API-Rate-limiter",
@@ -85,11 +85,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": "shield",
+      "image": "assets/images/projects/rate-limiter.svg",
       "stars": 0,
       "language": "Go",
       "updatedAt": "2026-04-17T16:27:17Z",
-      "curated": true,
-      "image": "assets/images/projects/rate-limiter.svg"
+      "curated": true
     },
     {
       "name": "Digital-Finance-Analytics-Gateway",
@@ -102,11 +102,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 0,
       "language": "Java",
       "updatedAt": "2026-08-31T21:50:53Z",
-      "curated": false,
-      "image": null
+      "curated": false
     },
     {
       "name": "LLM-Inference-Engine",
@@ -119,11 +119,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 0,
       "language": "C++",
       "updatedAt": "2026-06-20T01:20:16Z",
-      "curated": false,
-      "image": null
+      "curated": false
     },
     {
       "name": "Raft-KV-Store",
@@ -136,11 +136,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 0,
       "language": "Go",
       "updatedAt": "2026-06-19T22:03:48Z",
-      "curated": false,
-      "image": null
+      "curated": false
     },
     {
       "name": "FireMen",
@@ -153,11 +153,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 0,
       "language": "TypeScript",
       "updatedAt": "2026-05-09T21:00:35Z",
-      "curated": false,
-      "image": null
+      "curated": false
     },
     {
       "name": "MS_Project-Autotuning_Framework",
@@ -170,11 +170,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 1,
       "language": "Python",
       "updatedAt": "2026-03-17T22:06:41Z",
-      "curated": false,
-      "image": null
+      "curated": false
     },
     {
       "name": "Stock-Sentiment",
@@ -187,11 +187,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 0,
       "language": "Python",
       "updatedAt": "2025-09-14T22:22:16Z",
-      "curated": false,
-      "image": null
+      "curated": false
     },
     {
       "name": "Enterpise-Metrics-Dashboard",
@@ -204,11 +204,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 0,
       "language": "Python",
       "updatedAt": "2025-08-14T22:29:47Z",
-      "curated": false,
-      "image": null
+      "curated": false
     },
     {
       "name": "ML-Runtime-Profiler",
@@ -221,11 +221,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 0,
       "language": "Python",
       "updatedAt": "2025-07-19T17:17:22Z",
-      "curated": false,
-      "image": null
+      "curated": false
     },
     {
       "name": "linux-char-device-driver",
@@ -238,11 +238,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 0,
       "language": "C",
       "updatedAt": "2025-07-19T17:09:42Z",
-      "curated": false,
-      "image": null
+      "curated": false
     },
     {
       "name": "MLFlow-Monitoring-Churn-Deployment",
@@ -253,11 +253,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 0,
       "language": null,
       "updatedAt": "2025-07-02T04:14:28Z",
-      "curated": false,
-      "image": null
+      "curated": false
     },
     {
       "name": "Payments-Fraud-NLP-Detector",
@@ -268,11 +268,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 0,
       "language": null,
       "updatedAt": "2025-07-02T04:13:26Z",
-      "curated": false,
-      "image": null
+      "curated": false
     },
     {
       "name": "Distributed-Training-Framework-with-gRPC",
@@ -285,11 +285,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 0,
       "language": "Python",
       "updatedAt": "2025-06-20T02:17:47Z",
-      "curated": false,
-      "image": null
+      "curated": false
     },
     {
       "name": "lettucecook",
@@ -302,11 +302,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 0,
       "language": "TypeScript",
       "updatedAt": "2025-05-12T04:18:37Z",
-      "curated": false,
-      "image": null
+      "curated": false
     },
     {
       "name": "Stock-Dashboard",
@@ -319,11 +319,11 @@
       "extraLinks": [],
       "logo": null,
       "icon": null,
+      "image": null,
       "stars": 0,
       "language": "TypeScript",
       "updatedAt": "2025-05-04T19:22:05Z",
-      "curated": false,
-      "image": null
+      "curated": false
     }
   ]
 }
