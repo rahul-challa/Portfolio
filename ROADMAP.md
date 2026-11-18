@@ -53,4 +53,6 @@ These are built into the site and switch on as soon as the key or account exists
 - **Static project cards**: `index.html` has a hard-coded copy of the featured cards so crawlers that don't run JavaScript still see them; `main.js` replaces it on load. After changing the overrides, regenerate that block so it doesn't drift.
 - **Project illustrations**: `python tools/make_project_art.py` (run from the repo root) rewrites `assets/images/projects/*.svg`.
 - **Share image and icons**: `python tools/make_seo_images.py` rewrites `og-image.jpg`, the icons and `favicon.ico`. It uses Windows system fonts.
-- **Resume or content changes**: update `index.html`, the Person data in its JSON-LD block, and `llms.txt` together so search and AI see consistent facts. Bump `dateModified` in the JSON-LD and `lastmod` in `sitemap.xml`.
+- **Resume or content changes**: update `index.html`, the Person data in its JSON-LD block, and `llms.txt` together so search and AI see consistent facts. Bump `dateModified` in the JSON-LD and `lastmod` in `sitemap.xml`. `dateModified` must be a full date-time with timezone (e.g. `2026-11-18T00:00:00-08:00`); a bare date triggers a Search Console "Invalid datetime" warning.
+- **TexMex rating in the JSON-LD** (`aggregateRating`, currently 5.0 from 3 ratings) is hard-coded. Update it occasionally from `data/texmex-badges.json` so it matches the Marketplace.
+- **After any structured-data change**, paste the page into https://validator.schema.org and Google's Rich Results Test (https://search.google.com/test/rich-results) before pushing.
