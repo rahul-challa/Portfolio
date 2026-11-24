@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-23T10:16:36.292272",
+  "lastUpdated": "2026-11-24T11:58:59.359047",
   "projects": [
     {
       "name": "wild-fire-twin",
@@ -90,6 +90,23 @@
       "language": "Go",
       "updatedAt": "2026-04-17T16:27:17Z",
       "curated": true
+    },
+    {
+      "name": "collab-docs-demo",
+      "displayName": "collab docs demo",
+      "description": "No description yet.",
+      "tech": [
+        "JavaScript"
+      ],
+      "githubUrl": "https://github.com/rahul-challa/collab-docs-demo",
+      "extraLinks": [],
+      "logo": null,
+      "icon": null,
+      "image": null,
+      "stars": 0,
+      "language": "JavaScript",
+      "updatedAt": "2026-11-23T17:37:09Z",
+      "curated": false
     },
     {
       "name": "Digital-Finance-Analytics-Gateway",
