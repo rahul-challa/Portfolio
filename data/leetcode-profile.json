@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-25T10:51:20.602893",
+  "lastUpdated": "2026-11-26T10:26:56.818461",
   "username": "Rahul_Challa",
   "ranking": 445905,
   "totalSolved": 334,
@@ -16,8 +16,8 @@
   "contest": {
     "attendedContestsCount": 17,
     "rating": 2051,
-    "globalRanking": 17209,
-    "topPercentage": 2.0,
+    "globalRanking": 17261,
+    "topPercentage": 2.01,
     "badge": "Knight"
   },
   "badges": [
@@ -60,7 +60,6 @@
     "1785542400": 4,
     "1788652800": 4,
     "1789171200": 3,
-    "1764028800": 1,
     "1764115200": 1,
     "1764201600": 1,
     "1764288000": 1,
